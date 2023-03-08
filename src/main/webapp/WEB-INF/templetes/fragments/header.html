@@ -1,0 +1,72 @@
+<html xmlns:th = "http://www.thymeleaf.org">
+<th:block th:fragment="header">
+	<div class="header">
+		<div class="header_content">
+			<img src="static/img/neon_1.png" alt="네온led배경">
+			<div class="content">
+				<h1>
+					<a href="/">
+						<img class="logo" src="static/img/logo.png" alt="로고">
+					</a>
+				</h1>
+				<ul class="lnb">
+					<li th:if="${session.m}==null">
+						<a href = "/login">로그인</a>
+					</li>
+					<li th:unless="${session.m}==null">
+						<a href = "#" id = "btnlogout">로그아웃</a>
+					</li>
+					<li th:if="${session.m}==null">
+						<a href="/joinready">회원가입</a>
+					</li>
+<!--					<li>-->
+<!--						<a href="/mypage">MyPage</a></li>-->
+					<li>
+						<a href="/notice">고객센터</a></li>
+					<li th:unless="${session.m}==null">
+						<p style="font-size: 14px;display: inline;"><a href="/mypage"><span style="color: wheat; font-weight: bold;" th:text="${session.m.mem_aka}" /></a>님 반갑습니다.</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="gnb">
+			<div class="gnb_contents">
+				<ul class="gnb_menu">
+					<li>
+						<a href="/">
+							<span class="menu_span">공연</span>
+						</a>
+					</li>
+					<li>
+						<a href="/">
+							<span class="menu_span">이벤트</span>
+						</a>
+					</li>
+<!--					<li>-->
+<!--						<a href="/board">-->
+<!--							<span class="menu_span">커뮤니티</span>-->
+<!--						</a>-->
+<!--						<div class="gnb_menu_sub_wrap">-->
+<!--							<ul class="gnb_menu_sub">-->
+<!--								<li><a href="/board">자유게시판</a></li>-->
+<!--								<li><a href="/">극단원 모집</a></li>-->
+<!--								<li><a href="/">오디션 정보</a></li>-->
+<!--								<li><a href="/">새 공연 소식</a></li>-->
+<!--							</ul>-->
+<!--						</div>-->
+<!--					</li>-->
+					<li>
+						<a href="/notice">
+							<span class="menu_span">공지사항</span>
+						</a>
+					</li>
+				</ul>
+				<div class="search_box">
+					<input type="text" placeholder="찾으실 공연을 입력해주세요.">
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+</html>

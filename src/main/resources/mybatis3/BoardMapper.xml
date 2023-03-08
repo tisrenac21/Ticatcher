@@ -1,0 +1,67 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+    <select id="selectNoticeBoard" statementType="PREPARED"
+            parameterType="Map"
+            resultType="co.kr.ticatcher.vo.BoardVO">
+        select board_idx, board_conidx, board_name, board_regdate from tcc_board where board_config='notice'
+        order by board_conidx desc limit #{snum}, 10
+    </select>
+
+    <select id="selectCountNoticeBoard" statementType="PREPARED"
+                parameterType="Map"
+                resultType="int">
+        select ceil(count(board_conidx)/10) pages from tcc_board where board_config='notice' <if test="fkey != ''"> and ${fkey} like #{fval} </if>
+    </select>
+    <select id="selectFAQBoard" statementType="PREPARED"
+            parameterType="Map"
+            resultType="co.kr.ticatcher.vo.BoardVO">
+        select board_idx, board_conidx, board_name, board_regdate from tcc_board where board_config='FAQ'
+        order by board_conidx desc limit #{snum}, 10
+    </select>
+
+    <select id="selectCountFAQBoard" statementType="PREPARED"
+            parameterType="Map"
+            resultType="int">
+        select ceil(count(board_conidx)/10) pages from tcc_board where board_config='FAQ' <if test="fkey != ''"> and ${fkey} like #{fval} </if>
+    </select>
+
+    <update id="viewBoard" statementType="PREPARED"
+            parameterType="String">
+        update tcc_board set board_readcount = board_readcount + 1 where board_idx = #{board_idx}
+    </update>
+
+    <select id="selectOneBoard" statementType="PREPARED"
+            parameterType="String"
+            resultType="co.kr.ticatcher.vo.BoardVO">
+        select * from tcc_board where board_idx = #{board_idx}
+    </select>
+    <insert id="registerQnaPost" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.QnaVO">
+        insert into tcc_qna (qna_memidx, qna_name, qna_contents, qna_attachName, qna_attachPath, mem_idx) values (#{qna_memidx}, #{qna_name}, #{qna_contents}, #{qna_attachName}, #{qna_attachPath}, #{mem_idx})
+    </insert>
+    <select id="selectMyQna" statementType="PREPARED"
+            parameterType="Map"
+            resultType="co.kr.ticatcher.vo.QnaVO">
+        select * from tcc_qna where mem_idx=#{mem_idx}
+        order by qna_memidx desc limit #{snum}, 10
+    </select>
+    <select id="selectCountMyQna" statementType="PREPARED"
+            parameterType="long"
+            resultType="int">
+        select ceil(count(qna_memidx)/10) pages from tcc_qna where mem_idx=#{mem_idx}
+    </select>
+    <select id="readOneQna" statementType="PREPARED"
+            parameterType="long"
+            resultType="co.kr.ticatcher.vo.QnaVO">
+        select * from tcc_qna where qna_idx = #{qna_idx}
+    </select>
+    <select id="countMemidx" statementType="PREPARED"
+            parameterType="long"
+            resultType="int">
+        select max(qna_memidx) from tcc_qna where mem_idx=#{mem_idx}
+    </select>
+
+</mapper>

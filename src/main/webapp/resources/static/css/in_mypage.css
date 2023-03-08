@@ -1,0 +1,99 @@
+p {
+    font-size: 20px;
+}
+
+.left_wrap {
+    float: left;
+    width: 150px;
+    padding-left: 10px;
+}
+
+.left_wrap p {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e2e2;
+}
+
+.left_wrap_btn {
+    margin: 10px 0;
+}
+
+.left_wrap_btn span {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.left_wrap_btn:hover span {
+    color: #FEF1AB;
+}
+
+.select_btn {
+    color: #FEF1AB !important;
+}
+
+.right_wrap {
+    /* float: left;
+    width: 700px;
+    padding-left: 60px; */
+    float: right;
+    width: 780px;
+    padding-left: 10px;
+}
+
+.right_list {
+    margin-top: 15px;
+}
+
+.mypageTable {
+    width: 100%;
+}
+
+.mypageTable tbody {
+    display: table-row-group;
+    vertical-align: middle;
+}
+
+.mypageTable th,
+.mypageTable td {
+    text-align: left;
+    padding: 15px 0 15px 15px;
+    height: 60px;
+    /* outline: 1px solid red; */
+}
+
+.mypageTable th {
+    width: 20%;
+}
+
+.mypageTable tr {
+    border-bottom: 1px solid #e2e2e2a2;
+}
+
+.ch_pw {
+    /* margin-top: -20px; */
+    display: inline-block;
+    border-radius: 10px;
+    line-height: 40px;
+    height: 40px;
+    padding: 0 15px;
+    font-size: 16px;
+    border: none;
+    color: #fff;
+    background: #741300;
+    cursor: pointer;
+}
+
+
+.mypageBtn {
+    margin-top: 15px;
+    cursor: pointer;
+    background: #FEF1AB;
+    border: none;
+    color: rgb(120, 120, 120);
+    width: 150px;
+    border-radius: 10px;
+    height: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+}

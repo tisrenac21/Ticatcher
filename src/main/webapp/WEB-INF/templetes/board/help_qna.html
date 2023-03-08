@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/help.css">
+    <link rel="stylesheet" href="static/css/help_qna.css">
+</th:block>
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>고객센터</p>
+                <ul>
+                    <a href="/notice">
+                        <li class="left_wrap_btn">
+                            <span>공지사항</span>
+                        </li>
+                    </a>
+                    <a href="/faq">
+                        <li class="left_wrap_btn">
+                            <span>자주 찾는 질문</span>
+                        </li>
+                    </a>
+                    <a href="/writeqna">
+                        <li class="left_wrap_btn">
+                            <span>1:1 문의</span>
+                        </li>
+                    </a>
+                    <a href="/myqna">
+                        <li class="left_wrap_btn">
+                            <span class="select_btn">1:1 문의내역</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap">
+                <p class="right_title">
+                    1:1 문의내역
+                </p>
+                <div class="right_list">
+                    <ul class="list_header">
+                        <li>
+                            번호
+                        </li>
+                        <li>
+                            제목
+                        </li>
+                        <li>
+                            이름
+                        </li>
+                        <li>
+                            작성일
+                        </li>
+                        <li>
+                            처리상태
+                        </li>
+                    </ul>
+                    <ul class="list_contents">
+                        <table width="100%">
+                            <tbody>
+                            <tr th:each="qna: ${qna}">
+                                <td valign="top" align="center">
+                                    <li th:text="${qna.qna_memidx}"></li>
+                                    <li><a th:text="${qna.qna_name}" th:href="@{/qnaView(qna_idx=${qna.qna_idx})}"></a></li>
+                                    <li th:text="${member.mem_name}"></li>
+                                    <li th:text="${qna.qna_regdate}"></li>
+                                    <li th:if="${(qna.qna_answer == null or #strings.equals(qna.qna_answer, ''))}">
+                                        접수 중
+                                    </li>
+                                    <li th:unless="${(qna.qna_answer == null or #strings.equals(qna.qna_answer, ''))}">
+                                        답변 완료
+                                    </li>
+                                </td>
+                            </tr>
+<!--                            <tr>-->
+<!--                                <td valign="top" align="center">-->
+<!--                                    <a href="">-->
+<!--                                        <li>-->
+<!--                                            1-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            문의-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            정원진-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            2023-01-01-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            처리 중-->
+<!--                                        </li>-->
+<!--                                    </a>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td valign="top" align="center">-->
+<!--                                    <a href="">-->
+<!--                                        <li>-->
+<!--                                            1-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            문의-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            정원진-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            2023-01-01-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            처리완료-->
+<!--                                        </li>-->
+<!--                                    </a>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+                            </tbody>
+                        </table>
+                    </ul>
+                    <!-- <div class="list_pager">
+                        <button class="btn_pager first" type="button" onclick="">처음</button>
+                        <button class="btn_pager prev" type="button" onclick="">이전</button>
+                        <ul>
+                            <li>
+                                <a href="" title="1 페이지 선택" class="on">1</a>
+                            </li>
+                            <li>
+                                <a href="">2</a>
+                            </li>
+                            <li>
+                                <a href="">3</a>
+                            </li>
+                            <li>
+                                <a href="">4</a>
+                            </li>
+                            <li>
+                                <a href="">5</a>
+                            </li>
+                            <li>
+                                <a href="">6</a>
+                            </li>
+                            <li>
+                                <a href="">7</a>
+                            </li>
+                            <li>
+                                <a href="">8</a>
+                            </li>
+                            <li>
+                                <a href="">9</a>
+                            </li>
+                            <li>
+                                <a href="">10</a>
+                            </li>
+                        </ul>
+
+                        <button class="btn_pager next" type="button" onclick="">다음</button>
+                        <button class="btn_pager end" type="button" onclick="">끝</button>
+                    </div> -->
+                </div>
+                <div>
+                    <a href="/writeqna">
+                        <div class="write_btn">
+                            문의하기
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

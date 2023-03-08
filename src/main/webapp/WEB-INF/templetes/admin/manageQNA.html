@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/adminLayout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/manageQNA.css">
+</th:block>
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>게시판 관리</p>
+                <ul>
+                    <a href="/manageNotice">
+                        <li class="left_wrap_btn">
+                            <span>공지사항 관리</span>
+                        </li>
+                    </a>
+                    <a href="/manageFAQ">
+                        <li class="left_wrap_btn">
+                            <span>자주 찾는 질문 관리</span>
+                        </li>
+                    </a>
+                    <a href="/manageQNA">
+                        <li class="left_wrap_btn">
+                            <span class="select_btn">문의 관리</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap" th:with="cpg=${(param.cpg == null or #strings.equals(param.cpg,''))? 1: T(java.lang.Integer).parseInt(param.cpg)}">
+                <p class="right_title">
+                    문의 관리
+                </p>
+                <div class="right_list">
+                    <ul class="list_header">
+                        <li>
+                            번호
+                        </li>
+                        <li>
+                            제목
+                        </li>
+                        <li>
+                            이름
+                        </li>
+                        <li>
+                            작성일
+                        </li>
+                        <li>
+                            처리상태
+                        </li>
+                    </ul>
+                    <ul class="list_contents">
+                        <table width="100%">
+                            <tbody>
+                            <tr th:each="qna : ${qna}">
+                                <td valign="top" align="center">
+                                    <li th:text="${qna.qna_idx}"></li>
+                                    <li>
+                                        <a th:text="${qna.qna_name}" th:href="@{/manageQNAView(qna_idx=${qna.qna_idx})}"></a>
+<!--                                        <a th:text="${qna.qna_name}"></a>-->
+                                    </li>
+                                    <li th:text="${qna.memberVO.mem_name}"></li>
+                                    <li th:text="${qna.qna_regdate}"></li>
+                                    <li th:if="${(qna.qna_answer == null or #strings.equals(qna.qna_answer, ''))}">
+                                        접수 중
+                                    </li>
+                                    <li th:unless="${(qna.qna_answer == null or #strings.equals(qna.qna_answer, ''))}">
+                                        답변 완료
+                                    </li>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </ul>
+                    <div class="list_pager">
+                        <a th:if="${cpg > 1}" th:href="@{'/manageQNA?cpg=1'}"><button class="btn_pager first" type="button">처음</button></a>
+                        <a th:if="${cpg > 1}" th:href="@{'/manageQNA?cpg=' + ${cpg - 1}}"><button class="btn_pager prev" type="button">이전</button></a>
+                        <ul>
+                            <th:block th:each="i: ${#numbers.sequence(0, 9)}">
+                                <th:block th:if="${(stpgn + i) <= pages}">
+                                    <li>
+                                        <span th:text="${stpgn + i}" th:if="${cpg == (stpgn + i)}" class="on"></span>
+                                        <span th:unless="${cpg == (stpgn + i)}">
+                                            <a th:href="@{/manageQNA(cpg=${stpgn+i})}">[[${stpgn + i}]]</a>
+                                        </span>
+                                    </li>
+                                </th:block>
+                            </th:block>
+
+                        </ul>
+
+                        <a th:if="${cpg < pages}" th:href="@{'/manageQNA?cpg=' + ${cpg + 1}}"><button class="btn_pager next" type="button">다음</button></a>
+                        <a th:if="${cpg < pages}" th:href="@{'/manageQNA?cpg='+${pages}}"><button class="btn_pager end" type="button">끝</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

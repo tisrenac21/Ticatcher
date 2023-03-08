@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/help.css">
+    <link rel="stylesheet" href="static/css/help_new_qna.css">
+</th:block>
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>고객센터</p>
+                <ul>
+                    <a href="/notice">
+                        <li class="left_wrap_btn">
+                            <span>공지사항</span>
+                        </li>
+                    </a>
+                    <a href="/faq">
+                        <li class="left_wrap_btn">
+                            <span>자주 찾는 질문</span>
+                        </li>
+                    </a>
+                    <a href="/writeqna">
+                        <li class="left_wrap_btn">
+                            <span class="select_btn">1:1 문의</span>
+                        </li>
+                    </a>
+                    <a href="/myqna">
+                        <li class="left_wrap_btn">
+                            <span>1:1 문의내역</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap">
+                <p class="right_title">
+                    1:1 문의
+                </p>
+                <div class="right_list">
+                    <div class="qna_box">
+                        <div class="notice_box">
+                            &#183; 티켓 환불은
+                            <span class="highlight">MyPage</span>의 <span class="highlight">환불신청 버튼</span>을 이용해주세요.
+                            <br>
+                            &#183; 공연 티켓은 환불규정에 의거하여 <span class="highlight">관람 당일 환불/취소 및 일정 변경이 불가</span>합니다.
+                            <br>
+                            &#183; 답변은 업무시간(평일 10:00~18:00) 기준 24시간 내로 완료되며, 주말/공휴일은 답변이 지연될 수 있습니다.
+                        </div>
+                        <div class="check_info">
+                            <table style="width: 100%;">
+                                <tbody>
+                                <tr>
+                                    <th
+                                            style="width: 15%; display:block; float: left; padding: 20px 10px; text-align: left; border-bottom: 1px solid #e2e2e2; color: rgba(255, 255, 255, 0.8);">
+                                        이름
+                                    </th>
+                                    <td
+                                            style="width: 85%; display:block;float: right; border-bottom: 1px solid #e2e2e2; height: 65px; padding: 18px 10px 20px 10px;">
+                                        <strong th:text="${session.m.mem_name}"></strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th
+                                            style="width: 15%; display:block; float: left; padding: 20px 10px; text-align: left; color: rgba(255, 255, 255, 0.8);">
+                                        휴대폰
+                                    </th>
+                                    <td
+                                            style="width: 35%; display:block;float: left; height: 65px; padding: 18px 10px 20px 10px;">
+                                        <strong th:text="${session.m.mem_tel}"></strong>
+                                    </td>
+                                    <th
+                                            style="width: 15%; display:block; float: left; padding: 20px 10px; text-align: left; color: rgba(255, 255, 255, 0.8);">
+                                        이메일
+                                    </th>
+                                    <td
+                                            style="width: 35%; display:block;float: left; height: 65px; padding: 18px 10px 20px 10px;">
+                                        <strong th:text="${session.m.mem_email}"></strong>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="check_info_txt">
+                            <span> ※ 문의에 대한 빠른 답변을 위해 회원 가입 시
+                                입력하신
+                                연락처를 확인해주세요.</span>
+                            <a href="/chkuptmem">
+                                <div class="write_btn" style="width:55px; height: 30px; line-height: 30px;">
+                                    수정
+                                </div>
+                            </a>
+                        </div>
+                        <p class="info_title">체크(
+                            <em>
+                                <img src="static/img/ico_star.png" alt="필수">
+                            </em>
+                            )된 항목은 필수 입력 사항입니다.
+                        </p>
+                        <div class="title_box">
+                            <form name = "qnaform" id="qnaform" enctype="multipart/form-data">
+                                <table style="width: 100%;">
+                                    <tbody>
+                                    <tr>
+                                        <th
+                                                style="width: 15%; display:block; float: left; padding: 20px 10px; text-align: left; border-bottom: 1px solid #e2e2e2;">
+                                            <label for="inp_title">
+                                                제목
+                                                <em>
+                                                    <img src="static/img/ico_star.png" alt="필수">
+                                                </em>
+                                            </label>
+                                        </th>
+                                        <td
+                                                style="width: 85%; display:block;float: right; border-bottom: 1px solid #e2e2e2; height: 65px; padding: 18px 10px 20px 10px;">
+                                            <input type="text" id="inp_title" name="qna_name"
+                                                   style="width:100%; border:1px solid #e2e2e2; height: 30px; padding: 10px 10px;"
+                                                   placeholder="제목을 입력해주세요.">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                                style="width: 15%; height: 239px; display:block; float: left; padding: 20px 10px; text-align: left;  border-bottom: 1px solid #e2e2e2; ">
+                                            <label for="inp_txt">
+                                                내용
+                                                <em>
+                                                    <img src="static/img/ico_star.png" alt="필수">
+                                                </em>
+                                            </label>
+                                        </th>
+                                        <td
+                                                style="width: 85%; display:block;float: left; padding: 18px 10px 20px 10px;  border-bottom: 1px solid #e2e2e2;">
+                                            <textarea id="inp_txt" name="qna_contents" cols="60" rows="5"
+                                                      style="width:100%; height: 200px; border:1px solid #e2e2e2; padding: 10px 10px;float: left; vertical-align: top; resize: none;"
+                                                      placeholder="문의하실 내용을 입력해주세요."></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                                style="width: 15%; display:block; float: left; padding: 20px 10px; text-align: left;">
+                                            <label for="inp_file">
+                                                첨부 이미지
+                                            </label>
+                                        </th>
+                                        <td
+                                                style="width: 85%; display:block;float: right; height: 65px; padding: 18px 10px 20px 10px;">
+                                            <input type="file" id="inp_file" name="file"
+                                                   onclick="javascript:alert('주민등록번호 등 개인정보가 포함된 파일이 첨부되지 않도록 유의하시기 바랍니다.');"
+                                                   style="width:100%; height: 30px; padding: 3px 0px;">
+                                            <input type="hidden" name="mem_idx" th:value="${session.m.mem_idx}">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="okbtn" class="write_btn">
+                        등록
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="myscript">
+    <script>
+        let okbtn = document.getElementById("okbtn");
+        let frm = document.qnaform;
+        let qna_name = frm.qna_name;
+        let qna_contents = frm.qna_contents;
+
+        okbtn.addEventListener("click", insertqna);
+
+        function insertqna(){
+            if(qna_name.value == ''){
+                alert('제목을 입력해주세요.');
+            }else if(qna_contents.value == ''){
+                alert('내용을 입력해주세요.');
+            }else{
+                if(confirm('문의를 등록하시겠습니까?')){
+                    frm.method = 'post';
+                    frm.submit();
+                }
+
+            }
+        }
+    </script>
+</th:block>
+</html>

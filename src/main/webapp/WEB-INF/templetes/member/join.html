@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 | Ticatcher</title>
+    <!-- 구글 웹폰트 -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- bx slider css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <!-- 스타일시트 -->
+    <link rel="stylesheet" href="static/css/reset.css">
+    <link rel="stylesheet" href="static/css/join.css">
+    <!-- 제이쿼리 -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- bx slider -->
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <!-- images loded -->
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <!-- 외부 스크립트 -->
+    <script src="static/js/main.js"></script>
+    <script src="static/js/join.js"></script>
+</head>
+
+<body>
+<div class="header">
+    <div class="header_content">
+        <div class="content">
+            <h1>
+                <a href="/">
+                    <img class="logo" src="static/img/logo_join3.png" alt="로고">
+                </a>
+            </h1>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="position:relative;">
+    <form name="signupForm" onsubmit="return false;">
+        <input type="hidden" id="isUser" name="isUser" value="F">
+        <input type="hidden" id="duinfo" name="duinfo">
+        <input type="hidden" name="idKey" id="idKey">
+        <div class="join_row">
+            <h6>아이디</h6>
+            <input type="text" id="uid" class="uid input_txt" name="mem_id" size=15
+                   placeholder="4~20자 영문, 숫자, 특수문자( _ ) 사용 가능">
+            <p class="msg" style="margin-top: 3px;"><span id="chkmsg"></span></p>
+        </div>
+        <div class="join_row">
+            <h6>비밀번호</h6>
+            <input type="password" class="passwd input_box" name="mem_pw" size=15 id = "pwd"
+                   placeholder="8~16자 영문, 숫자, 특수문자 조합">
+            <p class="msg" style="margin-top: 3px;"><span class="msg" id = "pwdchkmsg"></span></p>
+        </div>
+        <div class="join_row">
+            <h6>비밀번호 확인</h6>
+            <input type="password" class="passwd input_box" name="pwdchk" size=15 id = "rpw"
+                   placeholder="비밀번호 재입력" style="margin-top: 0px;">
+            <p class="msg" style="margin-top: 3px;"><span class="msg" id = "pwdmsg"></span></p>
+        </div>
+        <div class="join_row">
+            <h6>이름</h6>
+            <input style="background-color: gainsboro" type="text" id = "nm" class="name input_box" name="mem_name" size=15
+                   th:value="${mbr.mem_name}" readonly="readonly">
+        </div>
+        <input type="hidden" id = "bt" name="mem_birth" th:value="${mbr.mem_birth}" readonly="readonly">
+        <div class="join_row" style="margin-bottom: 15px">
+            <h6>성별</h6>
+            <div class="genderdiv">
+                <label for = "gendermale">
+                    <input type="radio" class="gender" name="mem_gen" size=15 value="male" id="gendermale" checked>
+                    &nbsp;&nbsp;남성
+                </label>
+            </div>
+            <div class="genderdiv" style="margin-left: 20px">
+                <label for = "genderfemale">
+                    <input type="radio" class="gender" name="mem_gen" size=15 value="female" id="genderfemale">
+                    &nbsp;&nbsp;여성
+                </label>
+            </div>
+        </div>
+        <div class="join_row">
+            <h6>닉네임</h6>
+            <input type="text" class="name input_box" name="mem_aka" size=15 placeholder="10자 이하로 입력해주세요">
+            <p class="msg" style="margin-top: 3px;"><span class="msg" id = "akaregmsg"></span></p>
+        </div>
+        <div class="join_row">
+            <h6>이메일</h6>
+            <input type="email" class="email_fr input_box" name="mem_email" size=15 placeholder="abcde@ticatcher.com">
+            <p class="msg" style="margin-top: 3px;"><span class="msg" id = "emailmsg"></span></p>
+        </div>
+        <div class="join_row">
+            <h6>휴대폰</h6>
+            <input style="background-color: gainsboro; width: 70%" type="text" class="phone_num input_box" name="mem_tel"
+                   size=15 id = "to" th:value="${mbr.mem_tel}" readonly="readonly">
+            <button type="button" class="phone_send" id = "send">인증번호 받기</button>
+        </div>
+        <div class="join_row" id="codeinput" style="display: none">
+            <input type="text" name="phone_con" id="userNum" style="width: 70%" placeholder="인증번호를 입력하세요">
+            <button type="button" class="phone_send" id = "enterBtn">인증번호 확인</button>
+        </div>
+        <div class="join_row" style="margin-top: 5px;">
+            <button type="button" id="joinbtn" style="margin-bottom: 35px">가입하기</button>
+        </div>
+        <input type="hidden" name="chkuid" value="no">
+        <input type="hidden" name="uidreg" value="no">
+        <input type="hidden" name="chkpwd" value="no">
+        <input type="hidden" name="chktel" value="no">
+        <input type="hidden" name="pwdreg" value="no">
+        <input type="hidden" name="akareg" value="no">
+        <input type="hidden" name="chkeml" value="no">
+    </form>
+</div>
+</body>
+
+<script>
+    <!-- 정규식 -->
+    var akaRegx = /^.{0,10}$/;
+    var idRegx = /^[a-zA-Z0-9_]{4,20}$/;
+    var pwRegx = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/;
+    var emailRegx = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+
+    <!-- 비밀번호 및 비밀번호 재확인 그룹 -->
+    const cols = document.querySelectorAll(".passwd");
+
+    <!-- 안내 메시지 -->
+    let msg = document.getElementById("pwdmsg");
+    let chkmsg = document.getElementById("chkmsg");
+    let pwdchkmsg = document.getElementById("pwdchkmsg");
+    let akaregmsg = document.getElementById("akaregmsg");
+    let emailmsg = document.getElementById("emailmsg");
+
+    <!-- 버튼 -->
+    let joinbtn = document.getElementById("joinbtn");
+
+    <!-- form -->
+    var frm = document.signupForm;
+    let mem_id = frm.mem_id;
+    let mem_pw = frm.mem_pw;
+    let pwdchk = frm.pwdchk;
+    let mem_name = frm.mem_name;
+    let mem_aka = frm.mem_aka;
+    let mem_email = frm.mem_email;
+    let mem_tel = frm.mem_tel;
+
+    <!-- 유효성 검사 -->
+    let chkuid = frm.chkuid;
+    let uidreg = frm.uidreg;
+    let chkpwd = frm.chkpwd;
+    let chktel = frm.chktel;
+    let pwdreg = frm.pwdreg;
+    let akareg = frm.akareg;
+    let chkeml = frm.chkeml;
+
+    <!-- 인증번호 Ajax -->
+    $('#send').click(function() {
+        const to = $('#to').val();
+
+        $.ajax({
+            url: '/sendsms',
+            type: 'get',
+            data:{
+                "to" : to
+            },
+            success: function (data){
+                const checkNum = data;
+                alert('인증번호를 발송하였습니다.');
+                document.getElementById('codeinput').style.display = '';
+
+
+                $('#enterBtn').click(function() {
+                    const userNum = $('#userNum').val();
+
+                    if(checkNum === userNum) {
+                        alert('인증 성공하였습니다.');
+                        $('#userNum').style.backgroundColor = 'gainsboro';
+                        $('#userNum').readOnly=true;
+                        document.signupForm.chktel.value = 'yes';
+                    }
+                    else {
+                        alert('인증 실패하였습니다. 다시 입력해주세요.');
+                        document.signupForm.chktel.value = 'no';
+                    }
+                });
+            }
+        });
+    });
+
+    <!-- 아이디 중복확인 Ajax -->
+    mem_id.addEventListener('keyup', () => {
+        let qry = "?uid="+mem_id.value
+        let req = new XMLHttpRequest();
+        req.onreadystatechange = () => {
+            if(req.readyState == XMLHttpRequest.DONE){
+                if(req.status == 200){
+                    let text = req.response;
+                    chkid(text);
+                }
+            }
+        }
+        req.open('get','/checkid'+qry);
+        req.send();
+    });
+
+    // <!-- 탈퇴한 아이디와 중복확인 -->
+    // mem_id.addEventListener('keyup', () => {
+    //     let qry = "?uid="+mem_id.value;
+    //     let req = new XMLHttpRequest();
+    //     req.onreadystatechange = () => {
+    //         if(req.readyState == XMLHttpRequest.DONE){
+    //             if(req.status == 200){
+    //                 let text = req.response;
+    //                 chkid(text);
+    //             }
+    //         }
+    //     }
+    //     req.open('get','/checkDeleteId'+qry);
+    //     req.send();
+    // });
+
+    <!-- 함수 호출 -->
+    [].forEach.call(cols,function(col){
+        col.addEventListener("keyup",checkpassword);
+    });
+
+    joinbtn.addEventListener('click', joinform);
+
+    mem_pw.addEventListener('keyup', checkpwdreg);
+
+    mem_pw.addEventListener('keyup',RegPwd);
+
+    pwdchk.addEventListener('keyup',RegPwd);
+
+    mem_aka.addEventListener('keyup', checknickname);
+
+    mem_email.addEventListener('keyup', checkEmailRegx);
+
+    <!-- 엔터키 작업 -->
+    document.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            joinform();
+        }
+    });
+
+    <!-- 함수 -->
+    // <!-- 아이디 유효성 검사 (중복 / 정규식) -->
+    function chkid(result) {
+        if(mem_id.value == ''){
+            chkmsg.innerHTML = null;
+            mem_id.style.border = '1px solid #ccc';
+            chkuid.value = 'no';
+        }else if (result == '1') {
+            chkmsg.innerHTML = '중복된 아이디입니다.';
+            chkmsg.style.color = 'red';
+            mem_id.style.border = '1px solid red';
+            chkuid.value = 'no';
+        }else if(result == '3'){
+            chkmsg.innerHTML = '삭제된 아이디입니다.';
+            chkmsg.style.color = 'red';
+            mem_id.style.border = '1px solid red';
+            chkuid.value = 'no';
+        }else if(!idRegx.test(mem_id.value)){
+            chkmsg.innerHTML = '4~20자의 영문, 숫자, 특수기호(_)만 사용할 수 있어요.';
+            chkmsg.style.color = 'red';
+            mem_id.style.border = '1px solid red';
+            uidreg.value = 'no';
+        }else{
+            chkmsg.innerHTML = '사용 가능한 아이디입니다.';
+            chkmsg.style.color = 'blue';
+            mem_id.style.border = '1px solid #ccc';
+            chkuid.value = 'yes';
+            uidreg.value = 'yes';
+        }
+    }
+
+    // <!-- 비밀번호 확인 검사 -->
+    function checkpassword(){
+        if((pwdchk.value == '') || (mem_pw.value == '')){
+            msg.innerHTML = null;
+            chkpwd.value = "no";
+            pwdchk.style.border = '1px solid #ccc';
+        }else if (pwdchk.value != mem_pw.value){
+            msg.innerHTML = '비밀번호가 일치하지 않습니다.'
+            msg.style.color = 'red';
+            pwdchk.style.border = '1px solid red';
+            chkpwd.value = 'no';
+        }else {
+            msg.innerHTML = '비밀번호가 확인되었습니다.'
+            msg.style.color = 'blue';
+            pwdchk.style.border = '1px solid #ccc';
+            chkpwd.value = 'yes';
+        }
+    }
+
+    // <!-- 비밀번호 한글 및 공백 입력 방지 -->
+    function RegPwd(){
+        // var regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+        // $(this).val($(this).val().replace(regExp, ''));
+        // $(this).val($(this).val().replace(regExp, ''));
+        // $(this).val($(this).val().replace(regExp, ''));
+
+        var korean = /[ㄱ-ㅎㅏ-ㅣ가-힣\s]/;
+        $(this).val($(this).val().replace(korean, ''));
+        $(this).val($(this).val().replace(korean, ''));
+        $(this).val($(this).val().replace(korean, ''));
+
+        $(this).val($(this).val().replace(' ', ''));
+    }
+
+    // <!-- 비밀번호 유효성 검사 (정규식) -->
+    function checkpwdreg(){
+        if(mem_pw.value == ''){
+            pwdchkmsg.innerHTML = null;
+            mem_pw.style.border = '1px solid #ccc';
+            pwdreg.value = 'no';
+        }
+        else if(!pwRegx.test(mem_pw.value)){
+            pwdchkmsg.innerHTML = '8~16자 이내로 영문, 숫자, 특수문자를 조합해 설정해주세요.'
+            pwdchkmsg.style.color = 'red';
+            mem_pw.style.border = '1px solid red';
+            pwdreg.value = 'no';
+        }
+        else{
+            pwdchkmsg.innerHTML = null;
+            mem_pw.style.border = '1px solid #ccc';
+            pwdreg.value = 'yes';
+        }
+    }
+
+    // <!-- 닉네임 유효성 검사 -->
+    function checknickname(){
+        if(mem_aka.value == ''){
+            akaregmsg.innerHTML = null;
+            mem_aka.style.border = '1px solid #ccc';
+            akareg.value = 'no';
+        }else if(!akaRegx.test(mem_aka.value)){
+            akaregmsg.innerHTML = '10자 이하의 닉네임을 설정해주세요.'
+            akaregmsg.style.color = 'red';
+            mem_aka.style.border = '1px solid red';
+            akareg.value = 'no';
+        }else{
+            akaregmsg.innerHTML = null;
+            mem_aka.style.border = '1px solid #ccc';
+            akareg.value = 'yes';
+        }
+    }
+
+    //<!-- 이메일 유효성 검사 -->
+    function checkEmailRegx(){
+        if(mem_email.value == ''){
+            emailmsg.innerHTML = null;
+            mem_email.style.border = '1px solid #ccc';
+            chkeml.value = 'no';
+        }else if(!emailRegx.test(mem_email.value)){
+            emailmsg.innerHTML = '이메일 형식이 올바르지 않습니다.'
+            emailmsg.style.color = 'red';
+            mem_email.style.border = '1px solid red';
+            chkeml.value = 'no';
+        }else{
+            emailmsg.innerHTML = null;
+            mem_email.style.border = '1px solid #ccc';
+            chkeml.value = 'yes';
+        }
+    }
+
+    <!-- 제출 -->
+    function joinform(){
+     if(mem_id.value == ''){
+         alert('아이디를 입력하세요.');
+     }else if(uidreg.value=='no'){
+         alert('아이디는 4~20자의 영문, 숫자, 특수기호(_)만 사용해서 설정해주세요.')
+     }else if(chkuid.value == 'no'){
+         alert('아이디 중복확인을 해주세요.');
+     }else if(mem_pw.value == ''){
+         alert('비밀번호를 입력하세요.');
+     }else if(pwdreg.value == 'no'){
+         alert('비밀번호는 8~16자 이내로 영문, 숫자, 특수문자를 조합해 설정해주세요.')
+     }else if(pwdchk.value != mem_pw.value){
+         alert('비밀번호를 확인해주세요.');
+     }else if(mem_name.value == ''){
+         alert('이름이 입력되지 않았습니다. 처음부터 다시 시도해주세요.');
+     }else if(mem_aka.value == ''){
+         alert('닉네임을 입력하세요.');
+     }else if(akareg.value == 'no'){
+         alert('닉네임은 10자 이하로 설정해주세요.')
+     }else if(mem_email.value == ''){
+         alert('이메일을 입력하세요.');
+     }else if(chkeml.value == 'no'){
+         alert('이메일 형식이 올바르지 않습니다.`')
+     }else if(mem_tel.value == ''){
+         alert('휴대전화 번호가 입력되지 않았습니다. 처음부터 다시 시도해주세요.');
+     }else if(chktel.value == 'no'){
+         alert('휴대전화 번호를 인증해주세요.')
+     }else {
+         frm.method = 'post';
+         frm.submit();
+     }
+    }
+
+</script>
+</html>

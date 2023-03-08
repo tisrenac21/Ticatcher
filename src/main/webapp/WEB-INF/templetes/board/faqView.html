@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/notice.css">
+</th:block>
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>고객센터</p>
+                <ul>
+                    <a href="/notice">
+                        <li class="left_wrap_btn">
+                            <span>공지사항</span>
+                        </li>
+                    </a>
+                    <a href="/faq">
+                        <li class="left_wrap_btn">
+                            <span class="select_btn">자주 찾는 질문</span>
+                        </li>
+                    </a>
+                    <a href="/writeqna">
+                        <li class="left_wrap_btn">
+                            <span>1:1 문의</span>
+                        </li>
+                    </a>
+                    <a href="/myqna">
+                        <li class="left_wrap_btn">
+                            <span>1:1 문의내역</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap">
+                <p class="right_title">
+                    자주 찾는 질문
+                </p>
+                <div class="right_list">
+                    <div class="notice_wrap">
+                        <ul class="notice_header">
+                            <li th:text="${bd.getBoard_name()}"></li>
+                            <li></li>
+                        </ul>
+                        <div class="notice_body">
+                            <span style="white-space: pre-wrap !important" th:text="${bd.getBoard_contents()}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <a href="/faq">
+                        <div class="write_btn">
+                            목록
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+
+</html>

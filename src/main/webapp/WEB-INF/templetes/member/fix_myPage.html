@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/fix_mypage.css">
+</th:block>
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>MyPage</p>
+                <ul>
+                    <a href="/mypage">
+                        <li class="left_wrap_btn">
+                            <span>예매내역</span>
+                        </li>
+                    </a>
+                    <a href="/refund">
+                        <li class="left_wrap_btn">
+                            <span>환불/취소내역</span>
+                        </li>
+                    </a>
+                    <a href="/chkuptmem">
+                        <li class="left_wrap_btn">
+                            <span class="select_btn">회원정보수정</span>
+                        </li>
+                    </a>
+                    <a href="#">
+                        <li class="left_wrap_btn">
+                            <span>활동관리</span>
+                        </li>
+                    </a>
+                    <a href="/readydelmem">
+                        <li class="left_wrap_btn">
+                            <span>회원탈퇴</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap">
+                <p class="right_title">
+                    회원정보수정
+                </p>
+                <div class="right_list">
+                    <form name="updateForm" onsubmit="return false;">
+                        <div class="reserve_wrap">
+                            <span>
+                                비밀번호를 입력해주세요.
+                            </span>
+                            <input type="password" class="pwd_chk input_box" name="mem_pw" size=15
+                                   placeholder="비밀번호 입력">
+                            <button type="button" id="btn">확인</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="myscript">
+    <script>
+        let mem_pw = document.updateForm.mem_pw;
+        let btn = document.getElementById("btn");
+
+        mem_pw.addEventListener("keyup", RegPwd);
+        btn.addEventListener("click", chkupdatemember);
+
+        document.addEventListener("keyup", function(event) {
+            if (event.keyCode === 13) {
+                chkupdatemember();
+            }
+        })
+
+
+        function RegPwd(){
+            var korean = /[ㄱ-ㅎㅏ-ㅣ가-힣\s]/;
+            $(this).val($(this).val().replace(korean, ''));
+            $(this).val($(this).val().replace(korean, ''));
+            $(this).val($(this).val().replace(korean, ''));
+
+            $(this).val($(this).val().replace(' ', ''));
+        }
+
+        function chkuptmember(text){
+            if(text == 0){
+                alert('비밀번호가 일치하지 않습니다.');
+                mem_pw.value='';
+            }else if(text == 1){
+                location.href = "/uptmember";
+            }
+        }
+
+        function chkupdatemember(){
+            if(mem_pw.value == ''){
+                alert('비밀번호를 입력하세요.');
+            }else{
+                let data = '?mem_pw='+mem_pw.value;
+                let req = new XMLHttpRequest();
+                req.onreadystatechange = () => {
+                    if(req.readyState == XMLHttpRequest.DONE){
+                        if(req.status == 200){
+                            let text = req.response;
+                            chkuptmember(text);
+                        }
+                    }
+                }
+                req.open('post', '/chkuptmem'+data);
+                req.send();
+            }
+        }
+    </script>
+</th:block>
+</html>

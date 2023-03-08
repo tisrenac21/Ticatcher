@@ -1,0 +1,34 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Noto Sans KR', sans-serif;
+  /* overflow: hidden; */
+  /* overflow-x: hidden; */
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.txt_div {
+  color: #ccc;
+  font-size: 14px;
+  margin: 5px 10px;
+}
+
+input:focus::placeholder {
+  color: transparent;
+}
+
+.highlight {
+  color: #FEF1AB;
+}
+
+.highlight2 {
+  color: #741300;
+}

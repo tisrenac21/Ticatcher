@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 | Ticatcher</title>
+    <!-- 구글 웹폰트 -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- bx slider css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <!-- 스타일시트 -->
+    <link rel="stylesheet" href="static/css/reset.css">
+    <link rel="stylesheet" href="static/css/login.css">
+    <!-- 제이쿼리 -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- bx slider -->
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <!-- images loded -->
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <!-- 외부 스크립트 -->
+    <script src="static/js/main.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header_content">
+            <div class="content">
+                <h1>
+                    <a href="/">
+                        <img class="logo" src="static/img/logo_join3.png" alt="로고">
+                    </a>
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <form name="signupForm" onsubmit="return false;">
+            <div class="join_row">
+                <input type="text" class="uid input_box" name="mem_id" size=15 placeholder="아이디">
+            </div>
+            <div class="join_row" style="clear: both;">
+                <input type="password" class="pwd input_box" name="mem_pw" size=15 placeholder="비밀번호"
+                    style=" margin-bottom: 0px;">
+            </div>
+            <div class="enter_login" style="margin-top: 20px;">
+                <button type="button" id = "chklogin">로그인</button>
+            </div>
+            <p class="msg" style="margin-top: 3px;"><span id="msgid" style="
+                position: fixed;
+                color: red;
+                margin-top: -9px;
+                "></span></p>
+        </form>
+        <div class="find_btn">
+            <a href="/findinfo">
+                <span>아이디 찾기</span>
+            </a>
+            <span class="txt_div">|</span>
+            <a href="/findinfo">
+                <span>비밀번호 찾기</span>
+            </a>
+            <span class="txt_div">|</span>
+            <a href="/joinready">
+                <span>회원가입</span>
+            </a>
+        </div>
+    </div>
+</body>
+<script>
+    let msgid = document.getElementById("msgid");
+
+    let chklogin = document.getElementById("chklogin");
+    let frm = document.signupForm;
+    let mem_id = frm.mem_id;
+    let mem_pw = frm.mem_pw;
+
+    mem_pw.addEventListener('keyup', RegPwd);
+
+    chklogin.addEventListener('click', checkloginform);
+
+    document.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            checkloginform();
+        }
+    })
+
+    function RegPwd(){
+        var korean = /[ㄱ-ㅎㅏ-ㅣ가-힣\s]/;
+        $(this).val($(this).val().replace(korean, ''));
+        $(this).val($(this).val().replace(korean, ''));
+        $(this).val($(this).val().replace(korean, ''));
+
+        $(this).val($(this).val().replace(' ', ''));
+    }
+
+    function login(text){
+        if(text == 0){
+            msgid.innerHTML = '아이디 혹은 비밀번호가 일치하지 않습니다.';
+            mem_pw.value='';
+        }else if(text == 1){
+            location.href = document.referrer;
+        }
+    }
+
+    function checkloginform() {
+
+        if(mem_id.value == '') {
+            alert('아이디를 입력하세요.');
+        } else if(mem_pw.value == '') {
+            alert('비밀번호를 입력하세요.');
+        } else {
+
+            let data = "?mem_id="+mem_id.value+"&mem_pw="+mem_pw.value;
+            let req = new XMLHttpRequest();
+            req.onreadystatechange = () => {
+                if(req.readyState == XMLHttpRequest.DONE){
+                    if(req.status == 200){
+                        let text = req.response;
+                        login(text);
+                    }
+                }
+            }
+            req.open('post','/login'+data);
+            req.send();
+        }
+    }
+</script>
+</html>

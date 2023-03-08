@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/mypage.css">
+</th:block>
+
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>MyPage</p>
+                <ul>
+                    <a href="/mypage">
+                        <li class="left_wrap_btn">
+                                <span class="select_btn">예매내역</span>
+                        </li>
+                    </a>
+                    <a href="/refund">
+                        <li class="left_wrap_btn">
+                            <span>환불/취소내역</span>
+                        </li>
+                    </a>
+                    <a href="/chkuptmem">
+                        <li class="left_wrap_btn">
+                            <span>회원정보수정</span>
+                        </li>
+                    </a>
+                    <a href="#">
+                        <li class="left_wrap_btn">
+                            <span>활동관리</span>
+                        </li>
+                    </a>
+                    <a href="/readydelmem">
+                        <li class="left_wrap_btn">
+                            <span>회원탈퇴</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap">
+                <p class="right_title">예매내역</p>
+                <div class="right_list">
+                    <div class="reserve_wrap">
+                        <div class="buy_info_top">
+                            <span>무통장입금 대기중</span>
+                            <span style="float: right;">2023-02-01</span>
+                        </div>
+                        <div class="buy_info_detail">
+                            <div class="buy_info_img">
+                                <a href="">
+                                    <img src="https://timeticket.co.kr/wys2/file_attach_thumb/2022/01/27/1643271898-98-0_wonbon_N_7_226x316_90_2.jpg"
+                                         alt="공연 썸네일">
+                                </a>
+                            </div>
+                            <div class="buy_info_txt">
+                                <div class="buy_info_txt_title">
+                                    <a href="">한 뼘 사이</a>
+                                </div>
+                                <div class="buy_info_txt_date">
+                                    2.02[목] 19:30 일반 (1매)
+                                    <br>
+                                </div>
+                                <div class="buy_info_txt_cnt">
+                                    총 1매 / 13,500원
+                                </div>
+                                <div class="buy_info_txt_how">
+                                    무통장입금
+                                </div>
+                                <div class="buy_info_txt_ct">
+                                    <p>&#183; 입금기한 : 2023-02-02 20:37:00 까지</p>
+                                    <p>&#183; 입금계좌 : [신한] 123-456-7891011</p>
+                                    <p>&#183;
+                                        <span style="color: rgba(255, 0, 0, 0.8);">신청 후 24시간 내 미입금시 자동취소</span>
+                                            됩니다.
+                                        <br>
+                                            &#183; 은행 점검시간 중엔 가상계좌 입금이 되지 않습니다.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reserve_wrap">
+                        <div class="buy_info_top">
+                            <span>결제완료</span>
+                            <span style="float: right;">2023-02-01</span>
+                        </div>
+                        <div class="buy_info_detail">
+                            <div class="buy_info_img">
+                                <a href="">
+                                    <img src="https://timeticket.co.kr/wys2/file_attach_thumb/2022/01/27/1643271898-98-0_wonbon_N_7_226x316_90_2.jpg"
+                                            alt="공연 썸네일">
+                                </a>
+                            </div>
+                            <div class="buy_info_txt">
+                                <div class="buy_info_txt_title">
+                                    <a href="">한 뼘 사이</a>
+                                </div>
+                                <div class="buy_info_txt_date">
+                                    2.02[목] 19:30 일반 (1매)
+                                    <br>
+                                </div>
+                                <div class="buy_info_txt_cnt">
+                                    총 1매 / 13,500원
+                                </div>
+                                <div class="buy_info_txt_how">
+                                    무통장입금
+                                </div>
+                                <div class="buy_info_txt_ct">
+                                    <p>&#183; 입금기한 : 2023-02-02 20:37:00 까지</p>
+                                    <p>&#183; 입금계좌 : [신한] 123-456-7891011</p>
+                                    <p>&#183;
+                                        <span style="color: rgba(255, 0, 0, 0.8);">신청 후 24시간 내 미입금시 자동취소</span>
+                                            됩니다.
+                                        <br>
+                                        &#183; 은행 점검시간 중엔 가상계좌 입금이 되지 않습니다.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list_pager">
+                        <button class="btn_pager first hidden" type="button" onclick="">처음</button>
+                        <button class="btn_pager prev hidden" type="button" onclick="">이전</button>
+                        <ul>
+                            <li>
+                                <a href="" title="1 페이지 선택" class="on">1</a>
+                            </li>
+                        </ul>
+                        <button class="btn_pager next hidden" type="button" onclick="">다음</button>
+                        <button class="btn_pager end hidden" type="button" onclick="">끝</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/adminLayout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/writeNotice.css">
+</th:block>
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>게시판 관리</p>
+                <ul>
+                    <a href="/manageNotice">
+                        <li class="left_wrap_btn">
+                            <span class="select_btn">공지사항 관리</span>
+                        </li>
+                    </a>
+                    <a href="/manageFAQ">
+                        <li class="left_wrap_btn">
+                            <span>자주 찾는 질문 관리</span>
+                        </li>
+                    </a>
+                    <a href="/manageQNA">
+                        <li class="left_wrap_btn">
+                            <span>문의 관리</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap">
+                <p class="right_title">
+                    공지사항 작성
+                </p>
+                <div class="right_list">
+                    <div class="qna_box">
+                        <div class="title_box">
+                            <form name = "boardform" id="boardform" enctype="multipart/form-data" onsubmit="return false">
+                                <table style="width: 100%;">
+                                    <tbody>
+                                    <tr>
+                                        <th
+                                                style="width: 15%; display:block; float: left; padding: 20px 10px; text-align: left; border-bottom: 1px solid #e2e2e2;">
+                                            <label for="inp_title">
+                                                제목
+                                                <em>
+                                                    <img src="static/img/ico_star.png" alt="필수">
+                                                </em>
+                                            </label>
+                                        </th>
+                                        <td
+                                                style="width: 85%; display:block;float: right; border-bottom: 1px solid #e2e2e2; height: 65px; padding: 18px 10px 20px 10px;">
+                                            <input type="text" id="inp_title" name="board_name"
+                                                   style="width:100%; border:1px solid #e2e2e2; height: 30px; padding: 10px 10px;"
+                                                   placeholder="제목을 입력해주세요.">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                                style="width: 15%; height: 239px; display:block; float: left; padding: 20px 10px; text-align: left;  border-bottom: 1px solid #e2e2e2; ">
+                                            <label for="inp_txt">
+                                                내용
+                                                <em>
+                                                    <img src="static/img/ico_star.png" alt="필수">
+                                                </em>
+                                            </label>
+                                        </th>
+                                        <td
+                                                style="width: 85%; display:block;float: left; padding: 18px 10px 20px 10px;  border-bottom: 1px solid #e2e2e2;">
+                                            <textarea id="inp_txt" name="board_contents" cols="60" rows="5"
+                                                      style="width:100%; height: 200px; border:1px solid #e2e2e2; padding: 10px 10px;float: left; vertical-align: top; resize: none;"
+                                                      placeholder="내용을 입력해주세요."></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                                style="width: 15%; display:block; float: left; padding: 20px 10px; text-align: left;">
+                                            <label for="inp_file">
+                                                첨부 이미지
+                                            </label>
+                                        </th>
+                                        <td
+                                                style="width: 85%; display:block;float: right; height: 65px; padding: 18px 10px 20px 10px;">
+                                            <input type="file" id="inp_file" name="file"
+                                                   onclick="javascript:alert('주민등록번호 등 개인정보가 포함된 파일이 첨부되지 않도록 유의하시기 바랍니다.');"
+                                                   style="width:100%; height: 30px; padding: 3px 0px;">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id="okbtn" class="write_btn">등록</div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="myscript">
+    <script>
+        let okbtn = document.getElementById("okbtn");
+        let frm = document.boardform;
+        let board_name = frm.board_name;
+        let board_contents = frm.board_contents;
+
+        okbtn.addEventListener("click", insertBoard);
+
+        function insertBoard(){
+            if(board_name.value == ''){
+                alert('제목을 입력해주세요.');
+            }else if(board_contents.value == ''){
+                alert('내용을 입력해주세요.');
+            }else{
+                if(confirm('공지를 등록하시겠습니까?')){
+                    frm.method = 'post';
+                    frm.submit();
+                }
+
+            }
+        }
+    </script>
+</th:block>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticatcher - 비밀번호 변경</title>
+    <!-- 구글 웹폰트 -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- 스타일시트 -->
+    <link rel="stylesheet" href="static/css/reset.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/change_pw.css">
+    <!-- 제이쿼리 -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- images loded -->
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <!-- 외부 스크립트 -->
+    <script src="static/js/main.js"></script>
+
+</head>
+
+<body>
+    <div class="header">
+        <div class="header_content">
+            <div class="content pw_page">
+                <img class="logo" src="static/img/logo_join3.png" alt="로고">
+            </div>
+        </div>
+    </div>
+
+    <div class="popup_area" style="position:relative;">
+        <div class="pw_txt">
+            <p>
+                비밀번호는 8~16자 이내로
+                <br>
+                영문, 숫자, 특수문자를 조합해 설정해주세요.
+            </p>
+        </div>
+        <form name="changePwForm" onsubmit="return false;">
+            <div class="join_row" style="">
+                <input type="hidden" name="mem_name" th:value="${mbr.mem_name}">
+                <input type="hidden" name="mem_tel" th:value="${mbr.mem_tel}">
+                <input type="hidden" name="mem_id" th:value="${mbr.mem_id}">
+                <input type="hidden" id="pwdregchk" value="no">
+                <div class="msgdiv">
+                    <input type="password" id="user_pass" class="passwd input_txt" name="mem_pw" size=15
+                        placeholder="신규 비밀번호">
+                    <p class="msg"><span class="msg" id = "reqmsg"></span></p>
+                </div>
+                <div class="msgdiv">
+                    <input type="password" class="passwd input_box" name="mem_pw_chk" size=15
+                        placeholder="신규 비밀번호 재확인" style="margin-top: 0px;">
+                    <p class="msg"><span class="msg" id = "chkmsg"></span></p>
+                </div>
+
+            </div>
+            <input type="hidden" name="pwdchk" value="0">
+            <div class="confirm_box">
+                <button type="button" id="btn">변경하기</button>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    history.replaceState({}, null, location.pathname);
+
+    let pwRegx = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/;
+    let koreanRegx = /[ㄱ-ㅎㅏ-ㅣ가-힣\s]/;
+
+    const cols = document.querySelectorAll(".passwd");
+
+    let fm = document.changePwForm;
+    let mem_name = fm.mem_name;
+    let mem_tel = fm.mem_tel;
+    let mem_id = fm.mem_id;
+    let mem_pw = fm.mem_pw;
+    let mem_pw_chk = fm.mem_pw_chk;
+
+    let pwdregchk = document.getElementById('pwdregchk');
+
+    let btn = document.getElementById('btn');
+
+    let reqmsg = document.getElementById('reqmsg');
+    let chkmsg = document.getElementById('chkmsg');
+
+    btn.addEventListener("click", changePwForFind);
+
+    [].forEach.call(cols,function(col){
+        col.addEventListener("keyup",checkpassword);
+    });
+
+    [].forEach.call(cols,function(col){
+        col.addEventListener("keyup",RegPwd);
+    });
+
+    mem_pw.addEventListener('keyup',checkPwdReg);
+
+    <!-- 엔터키 작업 -->
+    document.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            changePwForFind();
+        }
+    });
+
+
+    function RegPwd(){
+        $(this).val($(this).val().replace(koreanRegx, ''));
+        $(this).val($(this).val().replace(koreanRegx, ''));
+        $(this).val($(this).val().replace(koreanRegx, ''));
+
+        $(this).val($(this).val().replace(' ', ''));
+    }
+
+    function checkpassword(){
+        if((mem_pw.value == '') || (mem_pw_chk.value == '')){
+            chkmsg.innerHTML = null;
+            mem_pw_chk.style.border = '1px solid #ccc';
+        }else if (mem_pw.value != mem_pw_chk.value){
+            chkmsg.innerHTML = '비밀번호가 일치하지 않습니다.'
+            chkmsg.style.color = 'red';
+            mem_pw_chk.style.border = '1px solid red';
+        }else {
+            chkmsg.innerHTML = '비밀번호가 확인되었습니다.'
+            chkmsg.style.color = 'blue';
+            mem_pw_chk.style.border = '1px solid #ccc';
+        }
+    }
+
+    function checkPwdReg(){
+        if(mem_pw.value == ''){
+            reqmsg.innerHTML = null;
+            mem_pw.style.border = '1px solid #ccc';
+            pwdregchk.value = 'no';
+        }
+        else if(!pwRegx.test(mem_pw.value)){
+            reqmsg.innerHTML = '8~16자 이내로 영문, 숫자, 특수문자를 조합해 설정해주세요.'
+            reqmsg.style.color = 'red';
+            mem_pw.style.border = '1px solid red';
+            pwdregchk.value = 'no';
+        }
+        else{
+            reqmsg.innerHTML = null;
+            mem_pw.style.border = '1px solid #ccc';
+            pwdregchk.value = 'yes';
+        }
+    }
+
+
+    function result(text){
+        if(text == 1){
+            alert('비밀번호 변경이 완료되었습니다.');
+        }else {
+            alert('비밀번호 변경이 실패하였습니다.');
+        }
+
+        if(opener.document.getElementById("pInput") != null){
+            opener.document.getElementById("pInput").value = text;
+        }
+        window.close();
+    }
+
+    function changePwForFind(){
+        if(mem_pw.value == ''){
+            alert('수정할 비밀번호를 입력하세요');
+        }else if(mem_pw_chk.value != mem_pw.value){
+            alert('비밀번호를 확인해 주세요.');
+        }else if(pwdregchk.value == 'no'){
+            alert('비밀번호는 8~16자 이내로 영문, 숫자, 특수문자를 조합해 설정해주세요.');
+        }else {
+            let data = "?mem_name="+mem_name.value+"&mem_tel="+mem_tel.value+"&mem_id="+mem_id.value+"&mem_pw="+mem_pw.value;
+            let req = new XMLHttpRequest();
+            req.onreadystatechange = () => {
+                if(req.readyState == XMLHttpRequest.DONE){
+                    if(req.status == 200){
+                        let text = req.response;
+                        result(text);
+                    }
+                }
+            }
+            req.open('post', '/changePw'+data);
+            req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            req.send();
+        }
+    }
+
+
+
+
+
+</script>
+</html>

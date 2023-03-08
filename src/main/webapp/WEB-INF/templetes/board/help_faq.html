@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/help_faq.css">
+</th:block>
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>고객센터</p>
+                <ul>
+                    <a href="/notice">
+                        <li class="left_wrap_btn">
+                            <span>공지사항</span>
+                        </li>
+                    </a>
+                    <a href="/faq">
+                        <li class="left_wrap_btn">
+                            <span class="select_btn">자주 찾는 질문</span>
+                        </li>
+                    </a>
+                    <a href="/writeqna">
+                        <li class="left_wrap_btn">
+                            <span>1:1 문의</span>
+                        </li>
+                    </a>
+                    <a href="/myqna">
+                        <li class="left_wrap_btn">
+                            <span>1:1 문의내역</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap" th:with="cpg=${(param.cpg == null or #strings.equals(param.cpg,''))? 1: T(java.lang.Integer).parseInt(param.cpg)}">
+                <p class="right_title">
+                    자주 찾는 질문
+                </p>
+                <div class="right_list">
+                    <ul class="list_header">
+                        <li>
+                            번호
+                        </li>
+                        <li>
+                            제목
+                        </li>
+                    </ul>
+                    <ul class="list_contents">
+                        <table width="100%">
+                            <tbody th:each="faq: ${faq}">
+                            <tr>
+                                <td valign="top" align="center">
+                                    <li th:text="${faq.board_conidx}"></li>
+                                    <li>
+                                        <a th:text="${faq.board_name}" th:href="@{/faqView(board_idx=${faq.board_idx})}"></a>
+                                    </li>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </ul>
+                    <div class="list_pager">
+                        <a th:if="${cpg > 1}" th:href="@{'/faq?cpg=1' + ${fqry}}"><button class="btn_pager first" type="button">처음</button></a>
+                        <a th:if="${cpg > 1}" th:href="@{'/faq?cpg=' + ${cpg - 1} + ${fqry}}"><button class="btn_pager prev" type="button">이전</button></a>
+                        <ul>
+                            <th:block th:each="i: ${#numbers.sequence(0, 9)}">
+                                <th:block th:if="${(stpgn + i) <= pages}">
+                                    <li>
+                                        <span th:text="${stpgn + i}" th:if="${cpg == (stpgn + i)}" class="on"></span>
+                                        <span th:unless="${cpg == (stpgn + i)}">
+                                            <a th:href="@{/faq(cpg=${stpgn+i},fkey=${param.fkey},fval=${param.fval})}">[[${stpgn + i}]]</a>
+                                        </span>
+                                    </li>
+                                </th:block>
+                            </th:block>
+
+                        </ul>
+
+                        <a th:if="${cpg < pages}" th:href="@{'/faq?cpg=' + ${cpg + 1} + ${fqry}}"><button class="btn_pager next" type="button">다음</button></a>
+                        <a th:if="${cpg != pages}" th:href="@{'/faq?cpg='+${pages} + ${fqry}}"><button class="btn_pager end" type="button">끝</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

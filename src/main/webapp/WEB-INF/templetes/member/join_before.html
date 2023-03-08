@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <style>
+        input:focus{
+            outline: none;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 | Ticatcher</title>
+    <!-- 구글 웹폰트 -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- bx slider css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <!-- 스타일시트 -->
+    <link rel="stylesheet" href="static/css/reset.css">
+    <link rel="stylesheet" href="static/css/join_before.css">
+    <!-- 제이쿼리 -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- bx slider -->
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <!-- images loded -->
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <!-- 외부 스크립트 -->
+    <script src="static/js/main.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header_content">
+            <div class="content">
+                <h1>
+                    <a href="/">
+                        <img class="logo" src="static/img/logo_join3.png" alt="로고">
+                    </a>
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="check_member_txt" style="width: 400px; float: left;">
+            <p>회원가입 여부 안내</p>
+            <ul>
+                <li>
+                    기존 회원가입 정보와 일치하는 정보를 입력하셔야 회원가입 여부를 정확하게 확인하실 수 있습니다.
+                    <p>
+                        <em>입력하신 정보는 회원가입 여부에만 사용되며 저장되지 않습니다.</em>
+                    </p>
+                </li>
+            </ul>
+        </div>
+        <form name="signupForm" style="width: 400px; float:right;">
+            <div class="per_info">
+                <input type="text" class="name input_box" name="mem_name" size=10 placeholder="이름을 입력해주세요.">
+            </div>
+            <div class="per_info">
+                <div class="jumin1">
+                    <input type="text" class="jumin_num1 input_box" name="mem_birth" maxlength=8
+                        placeholder="생년월일 8자리를 숫자만 입력해주세요." style="">
+                    <p class="msg" style="margin-top: 3px;"><span id="birthmsg"></span></p>
+                </div>
+            </div>
+            <div class="per_info">
+                <input type="text" class="phone_num input_box" name="mem_tel" maxlength="11"
+                    placeholder='휴대전화 번호를 입력해주세요. ("-" 생략)'>
+            </div>
+            <div class="confirm_box">
+                <input type="button" id="okbtn" value="가입여부 확인">
+            </div>
+
+            <input type="hidden" id="chkname" value="no">
+            <input type="hidden" id="chkbirth" value="no">
+            <input type="hidden" id="chktel" value="no">
+        </form>
+    </div>
+</body>
+<script>
+    var numberRegx = /^[0-9]+$/;
+
+    let okbtn = document.querySelector("#okbtn");
+
+    let fm = document.signupForm;
+    let mem_name = fm.mem_name;
+    let mem_birth = fm.mem_birth
+    let mem_tel = fm.mem_tel;
+
+    let chkname = document.getElementById("chkname");
+    let chkbirth = document.getElementById("chkbirth");
+    let chktel = document.getElementById("chktel");
+
+    let birthmsg = document.querySelector("#birthmsg");
+
+    document.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            checkForm();
+        }
+    })
+
+    okbtn.addEventListener('click', checkForm);
+
+    mem_birth.addEventListener('keyup', checkRegxForBirth);
+    mem_tel.addEventListener('keyup', checkRegxForTel);
+
+    function checkRegxForBirth(){
+        if(mem_birth.value == ''){
+            mem_birth.style.border = '1px solid darkgray';
+            chkbirth.value = 'no';
+        }else if(!numberRegx.test(mem_birth.value)){
+            mem_birth.style.border = '2px solid red';
+            chkbirth.value = 'no';
+        }else{
+            mem_birth.style.border = '1px solid darkgray';
+            chkbirth.value = 'yes';
+        }
+    }
+    function checkRegxForTel(){
+        if(mem_tel.value == ''){
+            mem_tel.style.border = '1px solid darkgray';
+            chktel.value = 'no';
+        }else if(!numberRegx.test(mem_tel.value)){
+            mem_tel.style.border = '2px solid red';
+            chktel.value = 'no';
+        }else{
+            mem_tel.style.border = '1px solid darkgray';
+            chktel.value = 'yes';
+        }
+    }
+
+    function checkForm(){
+        if(mem_name.value == ''){
+            alert('이름을 입력해주세요.');
+        }else if(chkbirth.value == 'no'){
+            alert('생년월일은 숫자만 입력해주세요.')
+        }else if((mem_birth.value == '')||(fm.mem_birth.value.length < 8)){
+            alert('생년월일 8자리를 입력해주세요.');
+        }else if(chktel.value == 'no'){
+            alert('휴대전화 번호는 숫자만 입력해주세요.')
+        }else if(mem_tel.value == ''){
+            alert('휴대전화 번호를 입력해주세요.');
+        }else{
+            fm.method = 'post';
+            fm.submit();
+        }
+    }
+</script>
+</html>

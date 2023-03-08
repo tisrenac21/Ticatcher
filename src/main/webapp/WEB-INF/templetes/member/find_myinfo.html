@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 정보 찾기 | Ticatcher</title>
+    <!-- 구글 웹폰트 -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- bx slider css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <!-- 스타일시트 -->
+    <link rel="stylesheet" href="static/css/reset.css">
+    <link rel="stylesheet" href="static/css/find_myinfo.css">
+    <!-- 제이쿼리 -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- bx slider -->
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <!-- images loded -->
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <!-- 외부 스크립트 -->
+    <script src="static/js/main.js"></script>
+</head>
+
+<body>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <p style="text-align: center;"><span style="font-size: 14pt;"><b><span style="font-size: 24pt;">아이디 찾기</span></b></span></p>
+        <p style="text-align: center; line-height: 1.5;"><br /></p>
+        <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;">고객님의 정보와</span></p>
+        <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="change1"></span></p>
+        <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="change2"></span></p>
+        <p style="text-align: center; line-height: 1.5;"><span style="font-size: 14pt;" id="change3"><br /></span></p>
+        <p style="text-align: center; line-height: 1.5;"><b><span id="idplace" style="color: rgb(0, 38, 255); font-size: 16pt;"></span></b></p>
+        <p style="text-align: center; line-height: 1.5;"><br /></p>
+        <p><br /></p>
+        <div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;"
+             onClick="close_pop();">
+            <span class="pop_bt" style="font-size: 13pt;" >닫기</span>
+        </div>
+    </div>
+</div>
+
+<div class="header">
+    <div class="header_content">
+        <div class="content">
+            <h1>
+                <a href="/"><img class="logo" src="static/img/logo_join3.png" alt="로고"></a>
+            </h1>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="find_id" style="width: 420px; float: left;">
+        <p>아이디 찾기</p>
+        <ul>
+            <li style="margin-bottom: 30px;">가입시 기재한 이름과 휴대폰 번호를 입력하면<br>회원님의 아이디를 확인할 수 있습니다.</li>
+        </ul>
+
+        <form name="find_id_form" style="width: 350px;" onsubmit="return false;">
+            <div class="per_info">
+                <input type="text" class="name input_box" name="mem_name" size=10 placeholder="이름"
+                       style="margin-bottom: 25px;">
+            </div>
+            <div class="per_info">
+                <input type="text" class="name input_box" name="mem_tel" maxlength="11"
+                       placeholder='가입 시 기재한 휴대전화 번호 ("-" 생략)' style="margin-bottom: 25px;">
+            </div>
+            <div class="confirm_box" style="">
+                <button type="button" id="idbtn" class="btn" s style="margin-top: 10px; width: 100%;">아이디 찾기</button>
+            </div>
+        </form>
+    </div>
+    <div class="find_pw" style="width: 420px; float: right;">
+        <p>비밀번호 찾기</p>
+        <ul>
+            <li>가입시 기재한 휴대폰 번호를 통해 본인인증을 하시면<br>새 비밀번호로 변경하실 수 있습니다.</li>
+        </ul>
+
+        <form name="find_pw_form" style="width: 350px;">
+            <div class="per_info">
+                <input type="text" class="input_box" name="mem_id" placeholder="아이디">
+            </div>
+            <div class="per_info">
+                <input type="text" class="name input_box" name="mem_name" size=10 placeholder="이름">
+            </div>
+            <div class="per_info">
+                <input type="text" class="name input_box" name="mem_tel" maxlength="11"
+                       placeholder='가입 시 기재한 휴대전화 번호 ("-" 생략)'>
+                <input type="hidden" id="pInput">
+            </div>
+            <div class="confirm_box" style="">
+                <button type="button" id="pwbtn" class="btn" style="margin-top: 10px; width: 100%;">비밀번호 변경</button>
+            </div>
+        </form>
+    </div>
+    <div class="gologinbtn" style="display: inline-block; width: 100%; text-align: center; margin-top: 20px;">
+        <a href="/login">
+            <button type="button" style="background-color: #DDDDDD; color: #6a6a6a; width: 100%; margin: auto;">
+                로그인 하러 가기</button>
+        </a>
+    </div>
+</div>
+</body>
+<script>
+    let fmForId = document.find_id_form;
+    let fmForPw = document.find_pw_form;
+
+    let nameForId = fmForId.mem_name;
+    let telForId = fmForId.mem_tel;
+    let nameForPw = fmForPw.mem_name;
+    let idForPw = fmForPw.mem_id;
+    let telForPw = fmForPw.mem_tel;
+
+    let btnForId = document.getElementById('idbtn');
+    let btnForPw = document.getElementById('pwbtn');
+
+    let pInput = document.getElementById('pInput');
+
+    <!-- 기본적인 엔터키 사용 금지 -->
+    $(document).keypress(function(e) {
+        if (e.keyCode == 13)
+            e.preventDefault();
+    });
+
+    <!-- 특수한 경우에만 엔터키 사용가능하도록 조정 -->
+    document.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            if(document.getElementById('myModal').style.display === 'block'){
+                close_pop();
+            }else {
+                let focused = document.activeElement;
+                if (focused.form.name == 'find_id_form') {
+                    findmyid();
+                } else if (focused.form.name == 'find_pw_form') {
+                    findmypw();
+                }
+            }
+        }
+    });
+
+
+    nameForId.addEventListener('blur', () => {
+        if(nameForId.value != ''){
+            nameForId.style.border = '1px solid #ccc';
+        }
+    });
+    telForId.addEventListener('blur',() => {
+        if(telForId.value != '') {
+            telForId.style.border = '1px solid #ccc';
+        }
+    });
+    idForPw.addEventListener('blur',() => {
+        if(idForPw.value != '') {
+            idForPw.style.border = '1px solid #ccc';
+        }
+    });
+    nameForPw.addEventListener('blur', () => {
+        if(nameForPw.value != '') {
+            nameForPw.style.border = '1px solid #ccc';
+        }
+    });
+    telForPw.addEventListener('blur',() => {
+        if(telForPw.value != '') {
+            telForPw.style.border = '1px solid #ccc';
+        }
+    });
+
+    btnForId.addEventListener('click',findmyid);
+    btnForPw.addEventListener('click',findmypw);
+
+
+    function showId(data){
+        let idplace = document.getElementById('idplace');
+        let change1 = document.getElementById('change1');
+        let change2 = document.getElementById('change2');
+        let change3 = document.getElementById('change3');
+        if(data != ''){
+            result = data.slice(0, data.length-3)+'***';
+            change1.innerHTML = '일치하는 아이디는';
+            change2.style.color = '';
+            change2.style.fontWeight = '';
+            change2.innerHTML = '다음과 같습니다.';
+            change3.style.display = '';
+            idplace.style.display = '';
+            idplace.innerHTML = result;
+        }else if(data == ''){
+            change1.innerHTML = '일치하는 아이디가';
+            change2.style.color = 'red';
+            change2.style.fontWeight = 'bold';
+            change2.innerHTML = '존재하지 않습니다.';
+            change3.style.display = 'none';
+            idplace.style.display = 'none';
+            idplace.innerText = '';
+        }
+
+
+        $('#myModal').show();
+
+    }
+
+    function pwchange(result, data){
+        if(result == 0){
+            alert('고객님의 정보에 일치하는 회원이 없습니다.');
+        }else{
+            let popWidth = 500;
+            let popHeight = 500;
+
+            let popX = Math.ceil((window.screen.width - popWidth) / 2);
+            let popY = Math.ceil((window.screen.height - popHeight) / 2);
+
+            alert('정보가 확인되었습니다.\n비밀번호를 변경해주세요.');
+            popup = window.open('/changePwForFind'+data, '비밀번호 변경', 'width=' + popWidth + ',height=' + popHeight + ',left=' + popX + ', top=' + popY)
+
+            popup.addEventListener('beforeunload', function (){
+                if(pInput.value == 1){
+                    location.href = '/login';
+
+                }
+            });
+        }
+    }
+
+    function close_pop(flag) {
+        $('#myModal').hide();
+    };
+
+    function findmyid(){
+        if(nameForId.value == ''){
+            alert('이름을 입력해주세요.');
+            nameForId.style.border = '2px solid red';
+        }else if(telForId.value == ''){
+            alert('전화번호를 입력해주세요.');
+            telForId.style.border = '2px solid red';
+        }else{
+            let data = "?mem_name="+nameForId.value+"&mem_tel="+telForId.value;
+            let req = new XMLHttpRequest();
+            req.onreadystatechange = () => {
+                if(req.readyState == XMLHttpRequest.DONE){
+                    if(req.status == 200){
+                        let text = req.response;
+                        showId(text);
+                    }
+                }
+            }
+            req.open('post', '/findid'+data);
+            req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            req.send();
+
+
+
+        }
+    }
+
+    function findmypw(){
+        if(idForPw.value == ''){
+            alert('아이디를 입력해주세요.');
+            idForPw.style.border = '2px solid red';
+        }else if(nameForPw.value == ''){
+            alert('이름을 입력해주세요.');
+            nameForPw.style.border = '2px solid red';
+        }else if(telForPw.value == ''){
+            alert('전화번호를 입력해주세요.');
+            telForPw.style.border = '2px solid red';
+        }else{
+            let data = "?mem_name="+nameForPw.value+"&mem_tel="+telForPw.value+"&mem_id="+idForPw.value;
+            let req = new XMLHttpRequest();
+            req.onreadystatechange = () => {
+                if(req.readyState == XMLHttpRequest.DONE){
+                    if(req.status == 200){
+                        let text = req.response;
+                        pwchange(text, data);
+                    }
+                }
+            }
+            req.open('post', '/findpw'+data);
+            req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            req.send();
+
+
+
+        }
+    }
+
+</script>
+
+</html>

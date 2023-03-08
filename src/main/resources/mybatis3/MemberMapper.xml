@@ -1,0 +1,62 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+    <select id="selectCountMember" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.MemberVO"
+            resultType="co.kr.ticatcher.vo.MemberVO">
+        select * from tcc_member where mem_id = #{mem_id} and mem_pw = #{mem_pw}
+    </select>
+    <select id="checkjoin" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.MemberVO"
+            resultType="int">
+        select count(mem_idx) cnt from tcc_member where mem_name = #{mem_name} and mem_birth = #{mem_birth} and mem_tel = #{mem_tel}
+    </select>
+    <insert id="joinMember" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.MemberVO">
+        insert into tcc_member(mem_id, mem_pw, mem_name, mem_gen, mem_aka, mem_email, mem_tel, mem_birth) values (#{mem_id}, #{mem_pw}, #{mem_name}, #{mem_gen}, #{mem_aka}, #{mem_email}, #{mem_tel}, #{mem_birth})
+    </insert>
+    <select id="checkid" statementType="PREPARED"
+            parameterType="String"
+            resultType="int">
+        select count(mem_idx) cnt from tcc_member where mem_id = #{uid}
+    </select>
+    <select id = "findId" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.MemberVO"
+            resultType="String">
+        select mem_id from tcc_member where mem_name = #{mem_name} and mem_tel = #{mem_tel}
+    </select>
+    <select id="selectCountMemberForFindPw" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.MemberVO"
+            resultType="int">
+        select count(mem_idx) cnt from tcc_member where mem_name = #{mem_name} and mem_tel = #{mem_tel} and mem_id = #{mem_id}
+    </select>
+    <update id="changePw" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.MemberVO">
+        update tcc_member set mem_pw = #{mem_pw} where mem_id = #{mem_id} and mem_tel = #{mem_tel} and mem_name = #{mem_name}
+    </update>
+    <update id="uptmember" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.MemberVO">
+        update tcc_member set mem_aka = #{mem_aka}, mem_email = #{mem_email} where mem_idx = #{mem_idx}
+    </update>
+    <delete id="deleteMember" statementType="PREPARED"
+            parameterType="long">
+        delete from tcc_member where mem_idx = #{mem_idx}
+    </delete>
+    <insert id="saveDeleteId" statementType="PREPARED"
+            parameterType="String">
+        insert into tcc_delete_id(delete_id) values (#{mem_id})
+    </insert>
+    <select id="checkDeleteId" statementType="PREPARED"
+            parameterType="String"
+            resultType="int">
+        select count(delete_id_idx) cnt from tcc_delete_id where delete_id = #{uid}
+    </select>
+    <select id="selectInfoByIdx" statementType="PREPARED"
+            parameterType="long"
+            resultType="co.kr.ticatcher.vo.MemberVO">
+        select * from tcc_member where mem_idx = #{mem_idx}
+    </select>
+
+</mapper>

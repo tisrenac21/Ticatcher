@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/adminLayout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/manageFAQView.css">
+</th:block>
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>게시판 관리</p>
+                <ul>
+                    <a href="/manageNotice">
+                        <li class="left_wrap_btn">
+                            <span>공지사항 관리</span>
+                        </li>
+                    </a>
+                    <a href="/manageFAQ">
+                        <li class="left_wrap_btn">
+                            <span class="select_btn">자주 찾는 질문 관리</span>
+                        </li>
+                    </a>
+                    <a href="/manageQNA">
+                        <li class="left_wrap_btn">
+                            <span>문의 관리</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap">
+                <p class="right_title">
+                    자주 찾는 질문 관리
+                </p>
+                <div class="right_list">
+                    <div class="FAQ_wrap">
+                        <ul class="FAQ_header">
+                            <li th:text="${detail.getBoard_name()}"></li>
+                        </ul>
+                        <div class="FAQ_body">
+                            <span style="white-space: pre-wrap !important" th:text="${detail.getBoard_contents()}"></span>
+                            <img style="margin-top: 10px; width: 100%;" th:src="${detail.getBoard_attachPath()}">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <a href="#">
+                        <div class="write_btn" id="dtbtn">
+                            삭제
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div class="write_btn" id="uptbtn">
+                            수정
+                        </div>
+                    </a>
+                    <a href="/manageFAQ">
+                        <div class="write_btn">
+                            목록
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="myscript">
+    <script>
+        let dtbtn = document.getElementById("dtbtn");
+        let uptbtn = document.getElementById("uptbtn");
+
+        dtbtn.addEventListener("click", deleteFAQ);
+        uptbtn.addEventListener("click", updateFAQ);
+
+        function deleteFAQ(){
+            if(confirm("해당 FAQ를 삭제하시겠습니까?")){
+                alert('삭제가 완료되었습니다.');
+                location.href = '/deleteFAQ?board_idx=[[${detail.getBoard_idx()}]]';
+            }
+        }
+
+        function updateFAQ(){
+            if(confirm("해당 FAQ를 수정하시겠습니까?")){
+                location.href = '/modifyFAQ?board_idx=[[${detail.getBoard_idx()}]]';
+            }
+        }
+    </script>
+</th:block>
+
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/quit_member.css">
+</th:block>
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>MyPage</p>
+                <ul>
+                    <a href="/mypage">
+                        <li class="left_wrap_btn">
+                            <span>예매내역</span>
+                        </li>
+                    </a>
+                    <a href="/refund">
+                        <li class="left_wrap_btn">
+                            <span>환불/취소내역</span>
+                        </li>
+                    </a>
+                    <a href="/chkuptmem">
+                        <li class="left_wrap_btn">
+                            <span>회원정보수정</span>
+                        </li>
+                    </a>
+                    <a href="#">
+                        <li class="left_wrap_btn">
+                            <span>활동관리</span>
+                        </li>
+                    </a>
+                    <a href="/readydelmem">
+                        <li class="left_wrap_btn">
+                            <span class="select_btn">회원탈퇴</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap">
+                <p class="right_title">
+                    회원 탈퇴
+                </p>
+                <div class="right_list">
+                    <span>탈퇴 전 유의사항을 확인해주세요.</span>
+                    <div class="quit_wrap">
+                        <p>&#183; <span class="highlight">탈퇴와 동시에 회원정보는 삭제되며 복구가 불가</span>합니다.</p>
+                        <p>
+                            &#183; 탈퇴 시 예약 및 결제 내역이 삭제되며 복구가 불가합니다.
+                        </p>
+                        <p>
+                            &#183; 탈퇴 후에는 해당 ID로 재가입이 불가합니다.
+                        </p>
+                    </div>
+                    <input type="hidden" id="pInput">
+                    <button type="button" onclick="chkpwdfordelmem();" class="quit_btn">탈퇴하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="myscript">
+    <script>
+        let pInput = document.getElementById('pInput');
+
+        function chkpwdfordelmem(){
+            let popWidth = 500;
+            let popHeight = 500;
+            let popX = Math.ceil((window.screen.width - popWidth) / 2);
+            let popY = Math.ceil((window.screen.height - popHeight) / 2);
+
+            popup = window.open('/chkpwdfordelmem', '회원탈퇴', 'width=' + popWidth + ',height=' + popHeight + ',left=' + popX + ', top=' + popY);
+
+            popup.addEventListener('beforeunload', function (){
+                if(pInput.value == 1){
+                    location.href = '/';
+                }
+            });
+        }
+    </script>
+</th:block>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/qnaView.css">
+</th:block>
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>고객센터</p>
+                <ul>
+                    <a href="/notice">
+                        <li class="left_wrap_btn">
+                            <span>공지사항</span>
+                        </li>
+                    </a>
+                    <a href="/faq">
+                        <li class="left_wrap_btn">
+                            <span>자주 찾는 질문</span>
+                        </li>
+                    </a>
+                    <a href="/writeqna">
+                        <li class="left_wrap_btn">
+                            <span>1:1 문의</span>
+                        </li>
+                    </a>
+                    <a href="/myqna">
+                        <li class="left_wrap_btn">
+                            <span class="select_btn">1:1 문의내역</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap">
+                <p class="right_title">
+                    1:1 문의내역
+                </p>
+                <div class="right_list">
+                    <div class="notice_wrap">
+                        <ul class="notice_header">
+                            <li th:text="${bd.getQna_name()}"></li>
+                            <li th:text="${bd.getQna_regdate()}"></li>
+                        </ul>
+                        <div class="notice_body">
+                            <span style="white-space: pre-wrap !important" th:text="${bd.getQna_contents()}"></span>
+                            <img style="margin-top: 10px; width: 100%;" th:src="${bd.getQna_attachPath()}">
+                        </div>
+                        <p class="answer">답변</p>
+                        <div class="qna_answer">
+                            <span style="white-space: pre-wrap !important; background: none; color: #d1c9bf;" th:text="${bd.getQna_answer()}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <a href="/myqna">
+                        <div class="write_btn">
+                            목록
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+
+</html>

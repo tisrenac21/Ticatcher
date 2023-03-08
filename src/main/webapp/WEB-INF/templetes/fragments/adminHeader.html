@@ -1,0 +1,58 @@
+<html xmlns:th = "http://www.thymeleaf.org">
+<th:block th:fragment="header">
+	<div class="header">
+		<div class="header_content">
+			<img src="static/img/neon_1.png" alt="네온led배경">
+			<div class="content">
+				<h1>
+					<a href="/adminindex">
+						<img class="logo" src="static/img/logo.png" alt="로고">
+						<p style="font-size: 15px; margin-top: -20px; margin-left: 55px; color: #959595;">  관  리  자  모  드  </p>
+					</a>
+				</h1>
+				<ul class="lnb">
+					<li>
+						<a href = "#" id = "quitAdmin">관리자 모드 종료</a>
+					</li>
+
+					<li>
+						<p style="font-size: 14px;display: inline;">관리자 <a href="#"><span style="color: wheat; font-weight: bold;" th:text="${session.admin.admin_name}" /></a> 님</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="gnb">
+			<div class="gnb_contents">
+				<ul class="gnb_menu">
+					<li>
+						<a href="/manageNotice">
+							<span class="menu_span">게시판 관리</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<span class="menu_span">공연 관리</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<span class="menu_span">회원 관리</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<span class="menu_span">수익 관리</span>
+						</a>
+					</li>
+					<li th:if="${session.admin.getAdmin_grade() == 'super'}">
+						<a href="#">
+							<span class="menu_span">관리자 관리</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</th:block>
+</html>

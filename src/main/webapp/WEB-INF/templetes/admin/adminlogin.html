@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 제이쿼리 -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+    <link rel="stylesheet" href="static/css/adminlogin.css">
+    <title>TICATCHER - ADMIN ::: LOGIN</title>
+</head>
+<body>
+    <div id="container">
+        <header>
+            <img src="static/img/logo_join3.png" />
+                <p>관리자 전용 로그인 페이지입니다.</p>
+        </header>
+        <div id="main">
+            <div id = "adminlogin">
+                <form name="adminLoginForm" onsubmit="return false;">
+                    <div class="loginput">
+                        <input type="text" name="admin_id" id = "adminid" placeholder='ID' onblur="this.placeholder='ID'" onfocus="this.placeholder=''">
+                    </div>
+                    <div class="loginput">
+                        <input type="password" name="admin_pw" id ="adminpw" placeholder='Password' onblur="this.placeholder='Password'" onfocus="this.placeholder=''">
+                    </div>
+                    <div class="loginput">
+                        <input type="button" id="okbtn" value="Login">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let frm = document.adminLoginForm;
+    let admin_id = frm.admin_id;
+    let admin_pw = frm.admin_pw;
+    let okbtn = document.getElementById("okbtn");
+
+    admin_pw.addEventListener('keyup', RegPwd);
+
+    okbtn.addEventListener("click", checkAdminLogin);
+
+    document.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            checkAdminLogin();
+        }
+    })
+
+    function RegPwd(){
+        var korean = /[ㄱ-ㅎㅏ-ㅣ가-힣\s]/;
+        $(this).val($(this).val().replace(korean, ''));
+        $(this).val($(this).val().replace(korean, ''));
+        $(this).val($(this).val().replace(korean, ''));
+
+        $(this).val($(this).val().replace(' ', ''));
+    }
+
+
+    function checkAdminLogin(){
+        if(admin_id.value == ""){
+            alert('관리자 계정 아이디를 입력하세요.');
+        }else if(admin_pw.value == ""){
+            alert('관리자 계정 비밀번호를 입력하세요.');
+        }else {
+            let data = "?admin_id="+admin_id.value+"&admin_pw="+admin_pw.value;
+            let req = new XMLHttpRequest();
+            req.onreadystatechange = () => {
+                if(req.readyState == XMLHttpRequest.DONE){
+                    if(req.status == 200){
+                        let text = req.response;
+                        if (text == 0){
+                            alert("관리자 정보가 확인되지 않았습니다. 다시 로그인 해주세요.");
+                            location.reload();
+                        }else if(text == 1){
+                            location.href = "/adminindex";
+                        }
+                    }
+                }
+            }
+            req.open('post','/admin'+data);
+            req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            req.send();
+        }
+    }
+</script>
+</html>

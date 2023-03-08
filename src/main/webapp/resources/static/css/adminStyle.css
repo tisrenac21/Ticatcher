@@ -1,0 +1,296 @@
+* {
+    background: #000;
+    color: #fff;
+}
+
+.header {
+    position: relative;
+}
+
+.header_content {
+    margin-bottom: 20px;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.header_content>img {
+    width: 1903px;
+    position: relative;
+    top: 0;
+}
+
+.content {
+    width: 980px;
+    margin: 0 auto;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100px;
+    position: absolute;
+    display: flex;
+    padding: 0px 5px 25px 0px;
+}
+
+.content>h1 {
+    align-items: center;
+}
+
+.content>h1>a {
+    width: 150px;
+}
+
+.logo {
+    margin: 5px 0 0 -10px;
+}
+
+.lnb {
+    position: absolute;
+    right: 0%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.lnb li {
+    float: right;
+    margin-right: 25px;
+}
+
+.lnb li:first-child {
+    margin-right: 0px;
+}
+
+.lnb li a {
+    font-size: 14px;
+}
+
+
+.lnb li a:hover {
+    color: #FEF1AB;
+}
+
+.gnb_menu {
+    height: 50px;
+}
+
+.gnb_menu>li {
+    position: relative
+}
+
+.gnb_menu>li:nth-child(2) {
+    margin-left: 6px;
+}
+
+.gnb_menu>li:last-child {
+    margin-left: 6px;
+}
+
+
+.gnb_menu_sub_wrap {
+    position: absolute;
+    display: none;
+    z-index: 9999;
+    left: 0;
+    top: 100%;
+    width: 100%;
+}
+
+.gnb_menu_sub>li {
+    line-height: 25px;
+    border-bottom: 1px solid #f3f3f3
+}
+
+.gnb_menu_sub>li:last-child {
+    border-bottom: none;
+}
+
+.gnb_menu_sub>li a {
+    font-size: 12px;
+    display: block;
+    text-align: center;
+    padding: 6px 12px;
+    line-height: 20px;
+    transition: all 0.25s ease-in-out;
+}
+
+.gnb_menu_sub>li a:hover {
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    background: #999999 !important;
+}
+
+.gnb_contents>ul {
+    margin-bottom: 0;
+    width: 770px;
+    height: 100%;
+}
+
+.gnb_contents>ul:after {
+    display: block;
+    visibility: hidden;
+    clear: both;
+    content: ""
+}
+
+.gnb_contents>ul>li {
+    float: left;
+    width: 95px;
+    height: 100%;
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+.gnb_contents>ul>li>a {
+    display: block;
+    text-align: center;
+    padding: 0 0px 40px;
+    height: 40px;
+    overflow: hidden;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: all 0.25s ease-in-out;
+}
+
+.gnb_contents>ul>li>a .menu_span {
+    display: inline-block;
+    padding: 7px 8px;
+    line-height: 20px;
+    font-size: 16px;
+}
+
+.gnb_contents>ul>li>a:hover .menu_span {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    transition: all 0.25s ease-in-out;
+}
+
+.gnb {
+    position: absolute;
+    top: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 980px;
+    padding: 5px 0;
+    z-index: 100;
+    height: 45px;
+}
+
+.select_chart {
+    padding-left: 10px;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    min-height: 500px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+.contents {
+    width: 980px;
+    height: 100%;
+    margin: 0 auto;
+    /* overflow: hidden; */
+    margin-top: 10px;
+}
+
+.show_info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+
+.show_info_left span span {
+    font-size: 12px;
+}
+
+.show_info_left span img {
+    width: 16px;
+}
+
+.show_info_right strong {
+    font-size: 13px;
+    padding-right: 5px;
+}
+
+.show_info_right span {
+    font-weight: bold;
+}
+
+footer {
+    width: 980px;
+    margin: 0 auto;
+    padding-top: 20px;
+    margin-top: 100px;
+    font-size: 12px;
+    clear: both;
+    height: 150px;
+}
+
+
+footer a {
+    width: 150px;
+    float: left;
+    margin-top: 10px;
+    padding-left: 5px;
+}
+
+.all_company {
+    padding-top: 15px;
+}
+
+.company_info {
+    line-height: 20px;
+    /* width: 500px; */
+    /* outline: 1px solid blue; */
+    /* float: left; */
+}
+
+.company_info address {
+    font-style: normal;
+}
+
+.company_info_list {
+    display: flex;
+    /* float: left; */
+    /* clear: both; */
+}
+
+.company_info dt::after {
+    content: ':';
+    padding: 0 4px;
+}
+
+.company_info dt~dt::before {
+    content: '|';
+    padding: 0 5px;
+    /* font-size: 14px; */
+}
+
+.hidden {
+    display: none !important;
+}
+
+.search_box {
+    float: right;
+    margin-top: -40px;
+    border-color: 1px solid #fff !important;
+    height: 30px;
+}
+
+.search_box input {
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    height: 35px;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid #ccc;
+    color: #fff;
+    vertical-align: bottom;
+}

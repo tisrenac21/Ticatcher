@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticatcher - 회원탈퇴</title>
+    <!-- 구글 웹폰트 -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- 스타일시트 -->
+    <link rel="stylesheet" href="static/css/reset.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/change_pw.css">
+    <!-- 제이쿼리 -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- images loded -->
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <!-- 외부 스크립트 -->
+    <script src="static/js/main.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header_content">
+            <div class="content pw_page">
+                <img class="logo" src="static/img/logo_join3.png" alt="로고">
+            </div>
+        </div>
+    </div>
+
+    <div class="popup_area" style="position:relative;">
+        <div class="pw_txt">
+            <p>
+                탈퇴 전 비밀번호를 입력해 주세요.
+            </p>
+        </div>
+        <form name="deleteForm" onsubmit="return false;">
+            <div class="join_row">
+                <input type="password" id="user_pass" class="pwd input_txt" name="mem_pw" size=15
+                    placeholder="비밀번호" style="margin-bottom: 20px">
+            </div>
+            <input type="hidden" name="pwdchk" value="0">
+            <div class="confirm_box" style="margin:0 auto">
+                <button type="button" id="okbtn">탈퇴하기</button>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    let frm = document.deleteForm;
+    let mem_pw = frm.mem_pw;
+    let okbtn = document.getElementById('okbtn');
+
+    okbtn.addEventListener("click", checkPassword);
+
+    mem_pw.addEventListener("keyup", RegPwd);
+
+    document.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            checkPassword();
+        }
+    });
+
+    function RegPwd(){
+        var korean = /[ㄱ-ㅎㅏ-ㅣ가-힣\s]/;
+        $(this).val($(this).val().replace(korean, ''));
+        $(this).val($(this).val().replace(korean, ''));
+        $(this).val($(this).val().replace(korean, ''));
+
+        $(this).val($(this).val().replace(' ', ''));
+    }
+
+    function checkPassword() {
+        if (mem_pw.value == '') {
+            alert('비밀번호를 입력하세요.');
+        } else {
+            let data = '?mem_pw='+mem_pw.value;
+            let req = new XMLHttpRequest();
+            req.onreadystatechange = () => {
+                if(req.readyState == XMLHttpRequest.DONE){
+                    if(req.status == 200){
+                        let text = req.response;
+                        withdrawal(text);
+                    }
+                }
+            }
+            req.open('post', '/chkpwdfordelmem'+data);
+            req.send();
+        }
+    }
+
+    function withdrawal(text){
+        if(text == 0){
+            alert('비밀번호가 일치하지 않습니다.');
+            mem_pw.value = '';
+        }else if(text == 1){
+            if(confirm('회원탈퇴를 진행하시겠습니까?')) {
+                if (location.href = '/withdrawal') {
+                    alert('회원탈퇴가 완료되었습니다.');
+                    opener.document.getElementById("pInput").value = "1";
+                }
+                else { alert('회원탈퇴가 실패하였습니다.'); }
+            }else {
+                alert('회원탈퇴를 취소하였습니다.');
+            };
+            window.close();
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/adminLayout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/manageQNAView.css">
+</th:block>
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>게시판 관리</p>
+                <ul>
+                    <a href="/manageNotice">
+                        <li class="left_wrap_btn">
+                            <span>공지사항 관리</span>
+                        </li>
+                    </a>
+                    <a href="/manageFAQ">
+                        <li class="left_wrap_btn">
+                            <span>자주 찾는 질문 관리</span>
+                        </li>
+                    </a>
+                    <a href="/manageQNA">
+                        <li class="left_wrap_btn">
+                            <span class="select_btn">문의 관리</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap">
+                <p class="right_title">
+                    문의 관리
+                </p>
+                <div class="right_list">
+                    <div class="notice_wrap">
+                        <ul class="notice_header">
+                            <li th:text="${detail.getQna_name()}"></li>
+                            <li><span th:text="${detail.getQna_regdate()}"></span><br/><span th:text="${detail.getMemberVO().getMem_name()}"></span></li>
+                        </ul>
+                        <div class="notice_body">
+                            <span style="white-space: pre-wrap !important" th:text="${detail.getQna_contents()}"></span>
+                            <img style="margin-top: 10px; width: 100%;" th:src="${detail.getQna_attachPath()}">
+                        </div>
+                        <form name = "answerform" onsubmit="return false">
+                        <p class="answer">답변</p>
+                            <div class="qna_answer">
+                                <input type="hidden" name="qna_idx" th:value="${detail.getQna_idx()}">
+                                <textarea name="qna_answer" id="answerarea" th:text="${detail.getQna_answer()}" readonly="readonly"></textarea>
+    <!--                            <span style="white-space: pre-wrap !important; background: none; color: #d1c9bf;" th:text="${detail.getQna_answer()}"></span>-->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    <a href="#">
+                        <div class="write_btn" id="answerbtn">
+                            <span id="answermsg" style="background: none; color: rgb(120, 120, 120);">답변 등록 및 수정</span>
+                        </div>
+                    </a>
+                    <a th:href="@{/manageQNA(cpg=${ #numbers.formatInteger((((index - 1) / 10) + 1),1,'COMMA') })}">
+                    <div class="write_btn">
+                            목록
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="myscript">
+    <script>
+        let answerbtn = document.getElementById("answerbtn");
+        let answermsg = document.getElementById("answermsg");
+        let frm = document.answerform;
+        let qna_answer = frm.qna_answer;
+
+        answerbtn.addEventListener("click",answerareaonoff);
+
+        function resize() {
+            let textarea = qna_answer;
+
+            textarea.style.height = "0px";
+
+            let scrollHeight = textarea.scrollHeight;
+            let style = window.getComputedStyle(textarea);
+            let borderTop = parseInt(style.borderTop);
+            let borderBottom = parseInt(style.borderBottom);
+
+            textarea.style.height = (scrollHeight + borderTop + borderBottom)+"px";
+        }
+
+        window.addEventListener("load", resize);
+        window.onresize = resize;
+        qna_answer.addEventListener("keydown", resize)
+        qna_answer.addEventListener("keyup", resize)
+        //
+        // function autoResizeTextarea(){
+        //     if (qna_answer) {
+        //         qna_answer.style.height = 'auto';
+        //         let height = qna_answer.scrollHeight; // 높이
+        //         qna_answer.style.height = height;
+        //     }
+        // };
+
+        function answerareaonoff(){
+            if(qna_answer.readOnly == true){
+                qna_answer.readOnly = false;
+                answermsg.innerHTML = "";
+                answermsg.innerHTML = "등록";
+                qna_answer.focus();
+                qna_answer.style.border = "1px solid #545454";
+            }else if(qna_answer.readOnly == false){
+                qna_answer.readOnly = true;
+                answermsg.innerHTML = "답변 등록 및 수정";
+                qna_answer.style.border = "none";
+                frm.method = "post";
+                frm.submit();
+                alert("답변 등록이 완료되었습니다.");
+            }
+        }
+    </script>
+</th:block>
+
+</html>

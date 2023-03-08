@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/in_mypage.css">
+</th:block>
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            <div class="left_wrap">
+                <p>MyPage</p>
+                <ul>
+                    <a href="/mypage">
+                        <li class="left_wrap_btn">
+                            <span>예매내역</span>
+                        </li>
+                    </a>
+                    <a href="/refund">
+                        <li class="left_wrap_btn">
+                            <span>환불/취소내역</span>
+                        </li>
+                    </a>
+                    <a href="/chkuptmem">
+                        <li class="left_wrap_btn">
+                            <span class="select_btn">회원정보수정</span>
+                        </li>
+                    </a>
+                    <a href="#">
+                        <li class="left_wrap_btn">
+                            <span>활동관리</span>
+                        </li>
+                    </a>
+                    <a href="/readydelmem">
+                        <li class="left_wrap_btn">
+                            <span>회원탈퇴</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right_wrap">
+                <p class="right_title">
+                    회원정보수정
+                </p>
+                <div class="right_list" style="">
+                    <div class="container" style="position:relative;">
+                        <form name="myPageForm">
+                            <table class="mypageTable" style="">
+                                <tbody>
+                                <tr>
+                                    <th>아이디</th>
+                                    <td th:text="${mbr.mem_id}"></td>
+                                </tr>
+                                <tr>
+                                    <th>비밀번호</th>
+                                    <td>
+                                        <a class="ch_pw" id="changebtn">비밀번호 변경</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>이름</th>
+                                    <td th:text="${mbr.mem_name}"></td>
+                                </tr>
+                                <tr>
+                                    <th>닉네임</th>
+                                    <td><input type="text" style="
+                                        border: none;
+                                        width: 100%;
+                                        height: 100%;
+                                        font-size: 16px;" name="mem_aka" th:value="${mbr.mem_aka}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>이메일</th>
+                                    <td><input type="text" style="
+                                        border: none;
+                                        width: 100%;
+                                        height: 100%;
+                                        font-size: 16px;" name="mem_email" th:value="${mbr.mem_email}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>휴대폰</th>
+                                    <td th:text="${mbr.mem_tel}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <button type="button" id="mypgbtn" class="mypageBtn">확인</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="myscript">
+    <script>
+        let changebtn = document.getElementById("changebtn");
+        let frm = document.myPageForm;
+
+        let mem_aka = frm.mem_aka;
+        let mem_email = frm.mem_email;
+        let mypgbtn = document.getElementById("mypgbtn");
+
+        let akaRegx = /^.{0,10}$/;
+        var emailRegx = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+
+        mypgbtn.addEventListener("click", submitMypage);
+        changebtn.addEventListener('click', pw_change);
+
+        document.addEventListener("keyup", function(event) {
+            if (event.keyCode === 13) {
+                submitMypage();
+            }
+        });
+
+        function pw_change(result, data){
+            let popWidth = 500;
+            let popHeight = 500;
+            let popX = Math.ceil((window.screen.width - popWidth) / 2);
+            let popY = Math.ceil((window.screen.height - popHeight) / 2);
+
+            popup = window.open('/changePwForChange', '비밀번호 변경', 'width=' + popWidth + ',height=' + popHeight + ',left=' + popX + ', top=' + popY);
+        }
+
+        function submitMypage(){
+            if(mem_aka.value == ''){
+                alert('닉네임을 입력해주세요.');
+            }else if(!akaRegx.test(mem_aka.value)){
+                alert('닉네임은 10자 미만으로 설정해주세요.')
+            }else if(mem_email.value == ''){
+                alert('이메일을 입력해주세요.');
+            }else if(!emailRegx.test(mem_email.value)){
+                alert('이메일 형식이 올바르지 않습니다.');
+            }else{
+                let data = "?mem_aka="+mem_aka.value+"&mem_email="+mem_email.value;
+                let req = new XMLHttpRequest();
+                req.onreadystatechange = () => {
+                    if(req.readyState == XMLHttpRequest.DONE){
+                        if(req.status == 200){
+                            let text = req.response;
+                            if(text == 1){
+                                alert('회원정보가 수정되었습니다.');
+                                location.reload();
+                            }else{
+                                alert('회원정보 수정이 실패하였습니다.');
+                            }
+                        }
+                    }
+                }
+                req.open('post', '/uptmember'+data);
+                req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                req.send();
+            }
+        }
+    </script>
+</th:block>
+</html>

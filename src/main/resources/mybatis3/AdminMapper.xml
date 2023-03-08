@@ -1,0 +1,68 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="admin">
+    <select id="adminLogin" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.AdminVO"
+            resultType="co.kr.ticatcher.vo.AdminVO">
+        select * from tcc_admin where admin_id = #{admin_id} and admin_pw = #{admin_pw}
+    </select>
+    <select id="readCountPost" statementType="PREPARED"
+            parameterType="String"
+            resultType="int">
+        select ceil(count(board_conidx)/10) pages from tcc_board where board_config=#{board_config}
+    </select>
+    <select id="readPost" statementType="PREPARED"
+            parameterType="Map"
+            resultType="co.kr.ticatcher.vo.BoardVO">
+        select board_idx, board_conidx, board_name, board_regdate from tcc_board where board_config=#{board_config}
+        order by board_conidx desc limit #{snum}, 10
+    </select>
+    <select id="readOnePost" statementType="PREPARED"
+            parameterType="String"
+            resultType="co.kr.ticatcher.vo.BoardVO">
+        select * from tcc_board where board_idx = #{board_idx}
+    </select>
+    <insert id="registerPost" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.BoardVO">
+        insert into tcc_board (board_config, board_conidx, board_name, board_contents, board_attachName, board_attachPath, mem_idx) values (#{board_config}, #{board_conidx}, #{board_name}, #{board_contents}, #{board_attachName}, #{board_attachPath}, 1)
+    </insert>
+    <select id="countConidx" statementType="PREPARED"
+            parameterType="String"
+            resultType="int">
+        select max(board_conidx) from tcc_board where board_config=#{board_config}
+    </select>
+    <delete id="deletePost" statementType="PREPARED"
+            parameterType="String">
+        delete from tcc_board where board_idx = #{board_idx}
+    </delete>
+    <update id="modifyPost" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.BoardVO">
+        update tcc_board set board_name = #{board_name}, board_contents = #{board_contents}, board_attachName = #{board_attachName}, board_attachPath = #{board_attachPath} where board_idx = #{board_idx}
+    </update>
+    <select id="readQNA" statementType="PREPARED"
+            parameterType="Map"
+            resultType="co.kr.ticatcher.vo.QnaVO">
+        select * from tcc_qna order by qna_idx desc limit #{snum}, 10
+    </select>
+    <select id="readCountQNA" statementType="PREPARED"
+            resultType="int">
+        select ceil(count(qna_memidx)/10) pages from tcc_qna
+    </select>
+    <select id="readOneQNA" statementType="PREPARED"
+            parameterType="String"
+            resultType="co.kr.ticatcher.vo.QnaVO">
+        select * from tcc_qna where qna_idx = #{qna_idx}
+    </select>
+    <update id="answerQNA" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.QnaVO">
+        update tcc_qna set qna_answer = #{qna_answer} where qna_idx = #{qna_idx}
+    </update>
+    <select id="countIndexFromQna" statementType="PREPARED"
+            parameterType="String"
+            resultType="int">
+        select count(*) from tcc_qna where qna_idx >= (select qna_idx FROM tcc_qna where qna_idx = #{qna_idx})
+    </select>
+
+</mapper>
