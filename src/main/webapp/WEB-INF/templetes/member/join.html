@@ -156,7 +156,7 @@
     let chkeml = frm.chkeml;
 
     <!-- 인증번호 Ajax -->
-    $('#send').click(function() {
+    $("#send").click(function() {
         const to = $('#to').val();
 
         $.ajax({
@@ -166,24 +166,27 @@
                 "to" : to
             },
             success: function (data){
-                const checkNum = data;
-                alert('인증번호를 발송하였습니다.');
+                let checkNum = data;
+                alert('인증번호를 발송하였습니다 : '+ checkNum);
                 document.getElementById('codeinput').style.display = '';
 
 
                 $('#enterBtn').click(function() {
-                    const userNum = $('#userNum').val();
+                    let userNum = $('#userNum').val();
 
                     if(checkNum === userNum) {
                         alert('인증 성공하였습니다.');
-                        $('#userNum').style.backgroundColor = 'gainsboro';
-                        $('#userNum').readOnly=true;
+                        document.getElementById("userNum").style.backgroundColor = 'gainsboro';
+                        document.getElementById("userNum").readOnly=true;
                         document.signupForm.chktel.value = 'yes';
                     }
                     else {
                         alert('인증 실패하였습니다. 다시 입력해주세요.');
                         document.signupForm.chktel.value = 'no';
                     }
+
+                    userNum = '';
+                    checkNum = '';
                 });
             }
         });
