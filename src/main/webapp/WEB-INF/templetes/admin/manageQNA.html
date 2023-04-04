@@ -64,7 +64,7 @@
                                     <li th:text="${qna.memberVO.mem_name}"></li>
                                     <li th:text="${qna.qna_regdate}"></li>
                                     <li th:if="${(qna.qna_answer == null or #strings.equals(qna.qna_answer, ''))}">
-                                        접수 중
+                                        답변 대기 중
                                     </li>
                                     <li th:unless="${(qna.qna_answer == null or #strings.equals(qna.qna_answer, ''))}">
                                         답변 완료

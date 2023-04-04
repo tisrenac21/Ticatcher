@@ -21,7 +21,7 @@ public class BoardController {
 
 	
 	protected Logger LOGGER = LoggerFactory.getLogger(getClass());
-//
+
 	@Autowired
 	private MemberService msrv;
 
