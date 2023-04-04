@@ -16,13 +16,13 @@
             <div class="contents">
                 <section class="pay_show_info">
                     <div class="show_imgbox">
-                        <img src="http://image.toast.com/aaaaab/ticketlink/TKL_8/main0126.jpg" alt="연극 포스터"
+                        <img th:src="${stage.getStageVo().getStage_posterPath()}" alt="연극 포스터"
                              style="width: 280px; border-radius: 10px;">
                     </div>
                     <div class="show_detail_info">
                         <div class="show_header">
-                            <h1>한 뼘 사이</h1>
-                            <p>대학로 대표 커플 필수 관람극</p>
+                            <h1 th:text="${stage.getStageVo().getStage_name()}"></h1>
+                            <p th:text="${stage.getStageVo().getStage_info()}"></p>
                         </div>
                         <div class="detail_info">
                             <ul class="show_info_list">
@@ -32,7 +32,7 @@
                                 </li>
                                 <li class="show_info_item">
                                     <span class="item_title">관람시간</span>
-                                    <div class="item_desc">약 100분</div>
+                                    <div class="item_desc"><span th:text="${stage.getStageVo().getStage_runtime()}"></span></div>
                                 </li>
                                 <li class="show_info_item">
                                     <span class="item_title">기간</span>
@@ -40,7 +40,7 @@
                                 </li>
                                 <li class="show_info_item">
                                     <span class="item_title">관람등급</span>
-                                    <div class="item_desc">만 12세 이상</div>
+                                    <div class="item_desc"><span th:text="${stage.getStageVo().getStage_grade()}"></span></div>
                                 </li>
                             </ul>
                             <ul class="show_info_list">
@@ -50,7 +50,7 @@
                                         <ul class="info_sublist">
                                             <li class="info_subitem">
                                                 <span class="dis_name">일반</span>
-                                                <strong class="show_price">50,000</strong>
+                                                <strong class="show_price"><span th:text="${#numbers.formatInteger(stage.getStageVo().getStage_price(), 3, 'COMMA')}"></span></strong>
                                                 <span>원</span>
                                             </li>
                                         </ul>

@@ -6,7 +6,7 @@
     <select id="getStageInfo" statementType="PREPARED"
             parameterType="String"
             resultType="co.kr.ticatcher.vo.StageInfoVO">
-        select * from tcc_stageInfo where stageinfo_idx = #{stageinfo_idx}
+        select * from tcc_stageinfo where stageinfo_idx = #{stageinfo_idx}
     </select>
     <select id="finStageByStageIdx" statementType="PREPARED"
             parameterType="long"

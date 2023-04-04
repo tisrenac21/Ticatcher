@@ -1,6 +1,7 @@
 package co.kr.ticatcher.controller;
 
 import co.kr.ticatcher.service.StageService;
+import co.kr.ticatcher.vo.StageInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +15,11 @@ public class StageController {
 
 	@GetMapping("/payment")
 	public String payment(Model model, String stageinfo_idx){
-//
-//		StageInfoVO sivo = ssrv.getStageInfo(stageinfo_idx);
-//		sivo.setStageVo(ssrv.finStageByStageIdx(sivo.getStage_idx()));
-//
-//		model.addAttribute("stage", sivo);
+		stageinfo_idx = "1";
+		StageInfoVO sivo = ssrv.getStageInfo(stageinfo_idx);
+		sivo.setStageVo(ssrv.finStageByStageIdx(sivo.getStage_idx()));
+
+		model.addAttribute("stage", sivo);
 
 		return "stage/payment";
 	}
