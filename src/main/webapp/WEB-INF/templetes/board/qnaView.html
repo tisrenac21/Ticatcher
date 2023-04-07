@@ -45,8 +45,12 @@
                             <li th:text="${bd.getQna_regdate()}"></li>
                         </ul>
                         <div class="notice_body">
-                            <span style="white-space: pre-wrap !important" th:text="${bd.getQna_contents()}"></span>
-                            <img style="margin-top: 10px; width: 100%;" th:src="${bd.getQna_attachPath()}">
+                            <div class="notice_body_write">
+                                <span style="white-space: pre-wrap !important" th:text="${bd.getQna_contents()}"></span>
+                            </div>
+                            <div th:style="${not #strings.isEmpty(bd.getQna_attachPath()) ? 'display:block' : 'display:none'}" class="notice_body_img">
+                                <img style="margin-top: 10px; max-width: 100%;" th:src="${bd.getQna_attachPath()}">
+                            </div>
                         </div>
                         <p class="answer">답변</p>
                         <div class="qna_answer">

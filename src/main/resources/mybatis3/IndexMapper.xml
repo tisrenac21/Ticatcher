@@ -1,0 +1,10 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="index">
+    <select id="getAllScheduleOrderByDateDesc" statementType="PREPARED"
+            resultType="co.kr.ticatcher.vo.ScheduleVO">
+        select * from tcc_schedule order by schedule_date desc
+    </select>
+</mapper>

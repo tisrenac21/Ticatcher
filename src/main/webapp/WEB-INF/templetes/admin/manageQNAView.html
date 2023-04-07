@@ -40,8 +40,12 @@
                             <li><span th:text="${detail.getQna_regdate()}"></span><br/><span th:text="${detail.getMemberVO().getMem_name()}"></span></li>
                         </ul>
                         <div class="notice_body">
-                            <span style="white-space: pre-wrap !important" th:text="${detail.getQna_contents()}"></span>
-                            <img style="margin-top: 10px; width: 100%;" th:src="${detail.getQna_attachPath()}">
+                            <div class="notice_body_write">
+                                <span style="white-space: pre-wrap !important" th:text="${detail.getQna_contents()}"></span>
+                            </div>
+                            <div th:style="${not #strings.isEmpty(detail.getQna_attachPath()) ? 'display:block' : 'display:none'}" class="notice_body_img">
+                                <img style="margin-top: 10px; width: 100%;" th:src="${detail.getQna_attachPath()}">
+                            </div>
                         </div>
                         <form name = "answerform" onsubmit="return false">
                         <p class="answer">답변</p>

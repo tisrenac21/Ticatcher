@@ -39,8 +39,12 @@
                             <li th:text="${detail.getBoard_name()}"></li>
                         </ul>
                         <div class="FAQ_body">
-                            <span style="white-space: pre-wrap !important" th:text="${detail.getBoard_contents()}"></span>
-                            <img style="margin-top: 10px; width: 100%;" th:src="${detail.getBoard_attachPath()}">
+                            <div class="FAQ_body_write">
+                                <span style="white-space: pre-wrap !important" th:text="${detail.getBoard_contents()}"></span>
+                            </div>
+                            <div th:style="${not #strings.isEmpty(detail.getBoard_attachPath()) ? 'display:block' : 'display:none'}" class="FAQ_body_img">
+                                <img style="margin-top: 10px; width: 100%;" th:src="${detail.getBoard_attachPath()}">
+                            </div>
                         </div>
                     </div>
                 </div>

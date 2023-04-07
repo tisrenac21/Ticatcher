@@ -54,7 +54,7 @@
                                 <tbody>
                                 <tr>
                                     <th
-                                            style="width: 15%; display:block; float: left; padding: 20px 10px; text-align: left; border-bottom: 1px solid #e2e2e2; color: rgba(255, 255, 255, 0.8);">
+                                            style="height: 65px; width: 15%; display:block; float: left; padding: 20px 10px; text-align: left; border-bottom: 1px solid #e2e2e2; color: rgba(255, 255, 255, 0.8);">
                                         이름
                                     </th>
                                     <td
@@ -100,12 +100,12 @@
                             )된 항목은 필수 입력 사항입니다.
                         </p>
                         <div class="title_box">
-                            <form name = "qnaform" id="qnaform" enctype="multipart/form-data">
+                            <form name = "qnaform" id="qnaform" enctype="multipart/form-data" onsubmit="return false">
                                 <table style="width: 100%;">
                                     <tbody>
                                     <tr>
                                         <th
-                                                style="width: 15%; display:block; float: left; padding: 20px 10px; text-align: left; border-bottom: 1px solid #e2e2e2;">
+                                                style="width: 15%; display:block; float: left; padding: 20px 10px; text-align: left; border-bottom: 1px solid #e2e2e2; height: 65px;">
                                             <label for="inp_title">
                                                 제목
                                                 <em>
@@ -131,7 +131,7 @@
                                             </label>
                                         </th>
                                         <td
-                                                style="width: 85%; display:block;float: left; padding: 18px 10px 20px 10px;  border-bottom: 1px solid #e2e2e2;">
+                                                style="height: 239px; width: 85%; display:block;float: left; padding: 18px 10px 20px 10px;  border-bottom: 1px solid #e2e2e2;">
                                             <textarea id="inp_txt" name="qna_contents" cols="60" rows="5"
                                                       style="width:100%; height: 200px; border:1px solid #e2e2e2; padding: 10px 10px;float: left; vertical-align: top; resize: none;"
                                                       placeholder="문의하실 내용을 입력해주세요."></textarea>
@@ -182,7 +182,7 @@
             }else if(qna_contents.value == ''){
                 alert('내용을 입력해주세요.');
             }else{
-                if(confirm('문의를 등록하시겠습니까?')){
+                if(confirm('문의하신 글은 삭제가 불가능합니다. 문의를 등록하시겠습니까?')){
                     frm.method = 'post';
                     frm.submit();
                 }

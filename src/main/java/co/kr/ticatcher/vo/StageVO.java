@@ -17,6 +17,5 @@ public class StageVO {
 	private String stage_posterPath;
 	private String stage_imgInfoName;
 	private String stage_imgInfoPath;
-	private int stage_price;
 	private String stage_info;
 }

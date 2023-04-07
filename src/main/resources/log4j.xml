@@ -55,6 +55,10 @@
 		<level value="debug" />
 	</logger>
 
+	<logger name="index">
+		<level value="debug"/>
+	</logger>
+
 	<!-- Root Logger -->
 	<root>
 		<priority value="warn" />

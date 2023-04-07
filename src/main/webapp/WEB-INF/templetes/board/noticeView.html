@@ -45,8 +45,15 @@
                             <li th:text="${bd.getBoard_regdate()}"></li>
                         </ul>
                         <div class="notice_body">
-                            <span style="white-space: pre-wrap !important" th:text="${bd.getBoard_contents()}"></span>
-                            <img style="margin-top: 10px; width: 100%;" th:src="${bd.getBoard_attachPath()}">
+                            <div class="notice_body_write">
+                                <span style="white-space: pre-wrap !important" th:text="${bd.getBoard_contents()}"></span>
+                            </div>
+                            <div th:style="${not #strings.isEmpty(bd.getBoard_attachPath()) ? 'display:block' : 'display:none'}" class="notice_body_img">
+                                <img style="margin-top: 10px; max-width: 100%;" th:src="${bd.getBoard_attachPath()}">
+                            </div>
+
+
+
                         </div>
                     </div>
                 </div>

@@ -50,6 +50,7 @@
 
 .show_price {
     margin-left: 10px;
+    font-weight: bold;
 }
 
 .info_subitem+.info_subitem {

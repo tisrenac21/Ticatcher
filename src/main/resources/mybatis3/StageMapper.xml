@@ -3,14 +3,24 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="stage">
-    <select id="getStageInfo" statementType="PREPARED"
-            parameterType="String"
-            resultType="co.kr.ticatcher.vo.StageInfoVO">
-        select * from tcc_stageinfo where stageinfo_idx = #{stageinfo_idx}
-    </select>
-    <select id="finStageByStageIdx" statementType="PREPARED"
+    <select id="getStageByIdx" statementType="PREPARED"
             parameterType="long"
             resultType="co.kr.ticatcher.vo.StageVO">
         select * from tcc_stage where stage_idx = #{stage_idx}
+    </select>
+    <select id="getAllScheduleByStageIdx" statementType="PREPARED"
+            parameterType="long"
+            resultType="co.kr.ticatcher.vo.ScheduleVO">
+        select * from tcc_schedule where stage_idx = #{stage_idx}
+    </select>
+    <select id="getAllTheaterByTheaterIdx" statementType="PREPARED"
+            parameterType="long"
+            resultType="co.kr.ticatcher.vo.TheaterVO">
+        select * from tcc_theater where theater_idx = #{theater_idx}
+    </select>
+    <select id="getAllPriceBySchedule" statementType="PREPARED"
+            parameterType="long"
+            resultType="co.kr.ticatcher.vo.PriceVO">
+        select * from tcc_price where schedule_idx = #{schedule_idx}
     </select>
 </mapper>

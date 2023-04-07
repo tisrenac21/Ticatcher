@@ -50,13 +50,13 @@ public class BoardServiceImpl implements BoardService{
 		if(file.getOriginalFilename() != ""){
 			String projectpath = this.getClass().getResource("").getPath();
 			projectpath = projectpath.split("/Ticatcher/")[0];
-			projectpath = projectpath + "\\Ticatcher\\src\\main\\webapp\\resources\\static\\files\\";
+			projectpath = projectpath + "\\Ticatcher\\src\\main\\webapp\\resources\\static\\qnaFiles\\";
 			UUID uuid = UUID.randomUUID();
 			String fileName = uuid + "_" + file.getOriginalFilename();
 			File saveFile = new File(projectpath+fileName);
 			file.transferTo(saveFile);
 			qvo.setQna_attachName(fileName);
-			qvo.setQna_attachPath("static/files/" +fileName);
+			qvo.setQna_attachPath("static/qnaFiles/" +fileName);
 		}
 
 		if(bdao.registerQnaPost(qvo) > 0) result = true;

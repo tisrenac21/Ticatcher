@@ -4,18 +4,19 @@ import groovy.transform.ToString;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+import java.sql.Time;
+
 @Data
 @NoArgsConstructor
 @ToString
-public class StageInfoVO {
-	private long stageinfo_idx;
+public class ScheduleVO {
+	private long schedule_idx;
+	private Date schedule_date;
+	private Time schedule_time;
 	private long stage_idx;
 	private StageVO stageVo;
-	private long time_idx;
-	private TimeVO timeVO;
 	private long theater_idx;
-	private TheaterVO theaterVO;
-	private long sale_idx;
-	private SaleVO saleVO;
-	private int stageinfo_saleprice;
+	private TheaterVO theaterVo;
+
 }

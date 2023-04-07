@@ -1,11 +1,17 @@
 package co.kr.ticatcher.dao;
 
-import co.kr.ticatcher.vo.StageInfoVO;
-import co.kr.ticatcher.vo.StageVO;
+import co.kr.ticatcher.vo.*;
+
+import java.util.List;
 
 public interface StageDAO {
 
-    StageInfoVO getStageInfo(String stageinfo_idx);
 
-    StageVO finStageByStageIdx(long stage_idx);
+    StageVO getStageByIdx(long stage_idx);
+
+    List<ScheduleVO> getAllScheduleByStageIdx(long stage_idx);
+
+    TheaterVO getAllTheaterByTheaterIdx(long theater_idx);
+
+    List<PriceVO> getAllPriceBySchedule(long schedule_idx);
 }
