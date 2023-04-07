@@ -24,13 +24,12 @@ public class IndexServiceImpl implements IndexService{
 		List<StageVO> stages = new ArrayList<>();
 		List<ScheduleVO> schedules = idao.getAllScheduleOrderByDateDesc();
 
-		while(sum<2){
-//			ScheduleVO schedule = idao.getNewSchedule();
+		while(sum<4) {
 			if(!stageIdxs.contains(schedules.get(i).getStage_idx())){
 				stageIdxs.add(schedules.get(i).getStage_idx());
 				sum++;
 			}
-			i ++;
+			i++;
 		}
 
 		for(long stage_idx : stageIdxs){

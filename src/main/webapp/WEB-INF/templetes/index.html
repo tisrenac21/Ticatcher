@@ -28,20 +28,21 @@
                                 <a th:href="@{/payment(stage_idx=${stage.getStage_idx()})}">
                                     <table cellspacing="0" width="220" style="margin-bottom: 30px;">
                                         <tbody>
-                                        <tr>
+                                        <tr style="height: 300px">
                                             <td>
                                                 <div>
                                                     <img th:src="${stage.getStage_posterPath()}"
                                                          alt="공연 썸네일"
-                                                         style="border-radius: 10px; margin-bottom: 5px; width: 100%">
+                                                         style="border-radius: 10px; margin-bottom: 10px; height: 290px; width: 100%">
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>
+                                            <td style="text-align: center; font-size: 19px;">
                                                 <strong th:text="${stage.getStage_name()}"></strong>
                                             </td>
                                         </tr>
+
 <!--                                        <tr>-->
 <!--                                            <td>-->
 <!--                                                <div class="show_info">-->
@@ -68,6 +69,14 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="ad" style="
+    text-align: center;
+    margin-top: 200px;
+">
+        <a target="_blank" href="https://www.samsung.com/sec/galaxy-s23/launching/">
+            <img src="static/adimg/samsung_galaxy_s23.jpg" style="width: 980px">
+        </a>
     </div>
 </div>
 </th:block>
