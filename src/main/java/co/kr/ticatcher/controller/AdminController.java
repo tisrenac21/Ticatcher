@@ -307,5 +307,25 @@ public class AdminController {
 		return returnPage;
 	}
 
+	@GetMapping("/managestage")
+	public String manageStage(HttpSession session, Model model, String cpg){
+		String returnPage = "redirect:/admin";
+		if(session.getAttribute("admin") != null){
+			int perPage = 10;
+			if (cpg == null || cpg.equals("")) cpg = "1";
+			int cpage = Integer.parseInt(cpg);
+			int snum = (cpage-1) * perPage;
+			int stpgn = ((cpage - 1) / 10) * 10 + 1;
+			String board_config = "notice";
+
+			model.addAttribute("pages",asrv.readCountStage());
+			model.addAttribute("stageList", asrv.readStage(snum));
+			model.addAttribute("stpgn", stpgn);
+
+			returnPage = "admin/manageStage";
+		}
+		return returnPage;
+	}
+
 
 }

@@ -3,6 +3,7 @@ package co.kr.ticatcher.dao;
 import co.kr.ticatcher.vo.AdminVO;
 import co.kr.ticatcher.vo.BoardVO;
 import co.kr.ticatcher.vo.QnaVO;
+import co.kr.ticatcher.vo.StageVO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,7 +25,7 @@ public class AdminDAOImpl implements AdminDAO {
 
 	@Override
 	public int readCountPost(String board_config) {
-		return sqlSession.selectOne("admin.readCountPost");
+		return sqlSession.selectOne("admin.readCountPost", board_config);
 	}
 
 	@Override
@@ -89,5 +90,15 @@ public class AdminDAOImpl implements AdminDAO {
 	@Override
 	public int countIndexFromQna(String qna_idx) {
 		return sqlSession.selectOne("admin.countIndexFromQna", qna_idx);
+	}
+
+	@Override
+	public int readCountStage() {
+		return sqlSession.selectOne("admin.readCountStage");
+	}
+
+	@Override
+	public List<StageVO> readStage(int snum) {
+		return sqlSession.selectList("admin.readStage", snum);
 	}
 }

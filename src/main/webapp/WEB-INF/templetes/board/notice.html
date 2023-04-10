@@ -49,6 +49,7 @@
                         <li>
                             작성일</li>
                     </ul>
+
                     <ul class="list_contents">
                         <table width="100%">
                             <tbody>
@@ -65,6 +66,8 @@
                             </tbody>
                         </table>
                     </ul>
+
+
                     <div class="list_pager">
                         <a th:if="${cpg > 1}" th:href="@{'/notice?cpg=1' + ${fqry}}"><button class="btn_pager first" type="button">처음</button></a>
                         <a th:if="${cpg > 1}" th:href="@{'/notice?cpg=' + ${cpg - 1} + ${fqry}}"><button class="btn_pager prev" type="button">이전</button></a>

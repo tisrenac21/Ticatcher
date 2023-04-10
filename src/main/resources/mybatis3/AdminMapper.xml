@@ -64,5 +64,14 @@
             resultType="int">
         select count(*) from tcc_qna where qna_idx >= (select qna_idx FROM tcc_qna where qna_idx = #{qna_idx})
     </select>
+    <select id="readCountStage" statementType="PREPARED"
+            resultType="int">
+        select ceil(count(stage_idx)/10) pages from tcc_stage
+    </select>
+    <select id="readStage" statementType="PREPARED"
+            parameterType="int"
+            resultType="co.kr.ticatcher.vo.StageVO">
+        select * from tcc_stage order by stage_idx desc limit #{snum}, 10
+    </select>
 
 </mapper>

@@ -4,79 +4,68 @@
       layout:decorate="~{fragments/adminLayout}">
 
 <th:block layout:fragment="mystyle">
-    <link rel="stylesheet" href="static/css/manageNotice.css">
+    <link rel="stylesheet" href="static/css/manageStage.css">
 </th:block>
 <th:block layout:fragment="main">
     <div class="container">
         <div class="contents">
             <div class="left_wrap">
-                <p>게시판 관리</p>
+                <p>공연 관리</p>
                 <ul>
-                    <a href="/manageNotice">
+                    <a href="/managestage">
                         <li class="left_wrap_btn">
-                            <span class="select_btn">공지사항 관리</span>
+                            <span class="select_btn">공연 목록 관리</span>
                         </li>
                     </a>
-                    <a href="/manageFAQ">
+                    <a href="/registerstage">
                         <li class="left_wrap_btn">
-                            <span>자주 찾는 질문 관리</span>
-                        </li>
-                    </a>
-                    <a href="/manageQNA">
-                        <li class="left_wrap_btn">
-                            <span>문의 관리</span>
+                            <span>공연 등록</span>
                         </li>
                     </a>
                 </ul>
             </div>
             <div class="right_wrap" th:with="cpg=${(param.cpg == null or #strings.equals(param.cpg,''))? 1: T(java.lang.Integer).parseInt(param.cpg)}">
                 <p class="right_title">
-                    공지사항 관리
+                    공연 목록 관리
                 </p>
                 <div class="right_list">
                     <ul class="list_header">
-                        <li>번호</li>
-                        <li>제목</li>
-                        <li>작성일</li>
+                        <li>
+                            번호
+                        </li>
+                        <li>
+                            공연 제목
+                        </li>
+                        <li>
+                            주최사
+                        </li>
                     </ul>
-
                     <ul class="list_contents">
                         <table width="100%">
                             <tbody>
-                            <tr th:each="boardList: ${boardList}">
+                            <tr th:each="stage: ${stageList}">
                                 <td valign="top" align="center">
-                                    <li th:text="${boardList.board_conidx}"></li>
+                                    <li th:text="${stage.stage_idx}"></li>
                                     <li>
-                                        <a th:text="${boardList.board_name}" th:href="@{/manageNoticeView(board_idx=${boardList.board_idx})}"></a>
-<!--                                        <a th:text="${boardList.board_name}"></a>-->
+<!--                                        <a th:text="${stage.stage_name}" th:href="@{/manageStageView(stage_idx=${stage.stage_idx})}"></a>-->
+                                        <a th:text="${stage.stage_name}"></a>
                                     </li>
-                                    <li th:text="${boardList.board_regdate}"></li>
+                                    <li th:text="${stage.stage_host}"></li>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </ul>
-
-
-
-                    <a href="/writeNotice">
-                        <div class="write_btn" id="writeNoticeBtn">
-                            공지글 작성
-                        </div>
-                    </a>
-
-
-
                     <div class="list_pager">
-                        <a th:if="${cpg > 1}" th:href="@{'/manageNotice?cpg=1'}"><button class="btn_pager first" type="button">처음</button></a>
-                        <a th:if="${cpg > 1}" th:href="@{'/manageNotice?cpg=' + ${cpg - 1}}"><button class="btn_pager prev" type="button">이전</button></a>
+                        <a th:if="${cpg > 1}" th:href="@{'/manageStage?cpg=1'}"><button class="btn_pager first" type="button">처음</button></a>
+                        <a th:if="${cpg > 1}" th:href="@{'/manageStage?cpg=' + ${cpg - 1}}"><button class="btn_pager prev" type="button">이전</button></a>
                         <ul>
                             <th:block th:each="i: ${#numbers.sequence(0, 9)}">
                                 <th:block th:if="${(stpgn + i) <= pages}">
                                     <li>
                                         <span th:text="${stpgn + i}" th:if="${cpg == (stpgn + i)}" class="on"></span>
                                         <span th:unless="${cpg == (stpgn + i)}">
-                                            <a th:href="@{/manageNotice(cpg=${stpgn+i})}">[[${stpgn + i}]]</a>
+                                            <a th:href="@{/manageStage(cpg=${stpgn+i})}">[[${stpgn + i}]]</a>
                                         </span>
                                     </li>
                                 </th:block>
@@ -84,8 +73,8 @@
 
                         </ul>
 
-                        <a th:if="${cpg < pages}" th:href="@{'/manageNotice?cpg=' + ${cpg + 1}}"><button class="btn_pager next" type="button">다음</button></a>
-                        <a th:if="${cpg < pages}" th:href="@{'/manageNotice?cpg='+${pages}}"><button class="btn_pager end" type="button">끝</button></a>
+                        <a th:if="${cpg < pages}" th:href="@{'/manageStage?cpg=' + ${cpg + 1}}"><button class="btn_pager next" type="button">다음</button></a>
+                        <a th:if="${cpg < pages}" th:href="@{'/manageStage?cpg='+${pages}}"><button class="btn_pager end" type="button">끝</button></a>
                     </div>
                 </div>
             </div>

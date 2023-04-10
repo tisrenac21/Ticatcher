@@ -4,6 +4,7 @@ import co.kr.ticatcher.dao.AdminDAO;
 import co.kr.ticatcher.vo.AdminVO;
 import co.kr.ticatcher.vo.BoardVO;
 import co.kr.ticatcher.vo.QnaVO;
+import co.kr.ticatcher.vo.StageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -119,5 +120,15 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int countIndexFromQna(String qna_idx) {
 		return adao.countIndexFromQna(qna_idx);
+	}
+
+	@Override
+	public int readCountStage() {
+		return adao.readCountStage();
+	}
+
+	@Override
+	public List<StageVO> readStage(int snum) {
+		return adao.readStage(snum);
 	}
 }
