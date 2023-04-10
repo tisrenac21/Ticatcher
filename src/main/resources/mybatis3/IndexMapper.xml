@@ -7,4 +7,10 @@
             resultType="co.kr.ticatcher.vo.ScheduleVO">
         select * from tcc_schedule order by schedule_date desc
     </select>
+
+    <select id="getCheapOfSchedule" statementType="PREPARED"
+            parameterType="long"
+            resultType="co.kr.ticatcher.vo.PriceVO">
+        select * from tcc_price where schedule_idx = #{schedule_idx} order by price_price asc limit 1
+    </select>
 </mapper>

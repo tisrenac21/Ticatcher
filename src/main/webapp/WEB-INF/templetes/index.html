@@ -25,43 +25,43 @@
                         <tbody>
                         <tr>
                             <td th:each="stage : ${stages}" valign="top" align="center">
-                                <a th:href="@{/payment(stage_idx=${stage.getStage_idx()})}">
-                                    <table cellspacing="0" width="220" style="margin-bottom: 30px;">
-                                        <tbody>
-                                        <tr style="height: 300px">
-                                            <td>
-                                                <div>
+                                <table cellspacing="0" width="220" style="margin-bottom: 30px;">
+                                    <tbody>
+                                    <tr style="height: 300px">
+                                        <td>
+                                            <div style="margin-bottom: 10px;">
+                                                <a th:href="@{/payment(stage_idx=${stage.getStage_idx()})}">
                                                     <img th:src="${stage.getStage_posterPath()}"
                                                          alt="공연 썸네일"
-                                                         style="border-radius: 10px; margin-bottom: 10px; height: 290px; width: 100%">
+                                                         style="border-radius: 10px; height: 290px; width: 100%">
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; font-size: 19px;">
+                                            <strong th:text="${stage.getStage_name()}"></strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="show_info" style="justify-content: space-evenly;">
+                                                <div class="show_info_left">
+                                                    <span>
+<!--                                                        <img src="static/img/ico_star2.png" alt="별점">-->
+                                                        <input type="hidden" class="sdx" name="stageIdx" th:value="${stage.getStage_idx()}">
+                                                        <span class="priceName"></span>
+                                                    </span>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: center; font-size: 19px;">
-                                                <strong th:text="${stage.getStage_name()}"></strong>
-                                            </td>
-                                        </tr>
-
-<!--                                        <tr>-->
-<!--                                            <td>-->
-<!--                                                <div class="show_info">-->
-<!--                                                    <div class="show_info_left">-->
-<!--                                                                    <span>-->
-<!--                                                                        <img src="static/img/ico_star2.png" alt="별점">-->
-<!--                                                                        <span>(4.9)</span>-->
-<!--                                                                    </span>-->
-<!--                                                    </div>-->
-<!--                                                    <div class="show_info_right">-->
-<!--                                                        <strong class="highlight">72%</strong>-->
-<!--                                                        <span>13,900원</span>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                            </td>-->
-<!--                                        </tr>-->
-                                        </tbody>
-                                    </table>
-                                </a>
+                                                <div class="show_info_right">
+<!--                                                    <strong class="highlight">72%</strong>-->
+                                                    <span class="pricePrice"></span> 원
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </td>
                         </tr>
                         </tbody>
@@ -81,5 +81,39 @@
 </div>
 </th:block>
 <th:block layout:fragment="myscript">
+    <script>
+        var priceNames = document.getElementsByClassName("priceName");
+        var pricePrices = document.getElementsByClassName("pricePrice");
+        var sdxs = document.getElementsByClassName("sdx");
+
+        window.onload(ready());
+
+        function ready(){
+            for(let i = 0 ; i < 4 ; i++){
+                ajax(i);
+            }
+        }
+
+
+        function ajax(i){
+            var priceName = priceNames.item(i)
+            var pricePrice = pricePrices.item(i)
+            var sdx = sdxs.item(i)
+            $.ajax({
+                type: "POST",
+                url: "/minprice?stageIdx="+sdx.value,
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                success: function (res){
+                    priceName.innerHTML = res.price_name;
+                    pricePrice.innerHTML = res.price_price.toLocaleString('ko-KR');
+                },
+                error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                    alert("통신 실패."+textStatus+errorThrown);
+                }
+            });
+        };
+
+    </script>
 </th:block>
 </html>

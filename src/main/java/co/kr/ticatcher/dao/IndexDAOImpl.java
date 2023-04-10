@@ -1,9 +1,6 @@
 package co.kr.ticatcher.dao;
 
-import co.kr.ticatcher.vo.BoardVO;
-import co.kr.ticatcher.vo.QnaVO;
-import co.kr.ticatcher.vo.ScheduleVO;
-import co.kr.ticatcher.vo.StageVO;
+import co.kr.ticatcher.vo.*;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -27,5 +24,10 @@ public class IndexDAOImpl implements IndexDAO {
 	@Override
 	public StageVO getStageByIdx(long stage_idx) {
 		return sqlSession.selectOne("stage.getStageByIdx", stage_idx);
+	}
+
+	@Override
+	public PriceVO getCheapOfSchedule(long schedule_idx) {
+		return sqlSession.selectOne("index.getCheapOfSchedule", schedule_idx);
 	}
 }

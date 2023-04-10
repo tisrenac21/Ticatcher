@@ -1,6 +1,8 @@
 package co.kr.ticatcher.service;
 
 import co.kr.ticatcher.dao.IndexDAO;
+import co.kr.ticatcher.dao.StageDAO;
+import co.kr.ticatcher.vo.PriceVO;
 import co.kr.ticatcher.vo.ScheduleVO;
 import co.kr.ticatcher.vo.StageVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ public class IndexServiceImpl implements IndexService{
 	@Autowired
 	private IndexDAO idao;
 
+	@Autowired
+	private StageDAO sdao;
 
 	@Override
 	public List<StageVO> getNewStage() {
@@ -37,5 +41,15 @@ public class IndexServiceImpl implements IndexService{
 		}
 
 		return stages;
+	}
+
+	@Override
+	public List<ScheduleVO> getAllScheduleByStageIdx(long stage_idx) {
+		return sdao.getAllScheduleByStageIdx(stage_idx);
+	}
+
+	@Override
+	public PriceVO getCheapOfSchedule(long schedule_idx) {
+		return idao.getCheapOfSchedule(schedule_idx);
 	}
 }
