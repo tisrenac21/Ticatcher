@@ -1,9 +1,6 @@
 package co.kr.ticatcher.service;
 
-import co.kr.ticatcher.vo.AdminVO;
-import co.kr.ticatcher.vo.BoardVO;
-import co.kr.ticatcher.vo.QnaVO;
-import co.kr.ticatcher.vo.StageVO;
+import co.kr.ticatcher.vo.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -26,4 +23,6 @@ public interface AdminService {
     int countIndexFromQna(String qna_idx);
     int readCountStage();
     List<StageVO> readStage(int snum);
+    int readCountMember();
+    List<MemberVO> readMember(int snum);
 }

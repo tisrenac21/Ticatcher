@@ -15,10 +15,9 @@
 <!--                        <h3 class="txt_div">|</h3>-->
 <!--                        <h3>평점순</h3>-->
                         <h3>
-                               최신 공연
+                               최신순
                         </h3>
                     </div>
-                    <a href="/stage" style="font-size: 14px;">전체보기 ></a>
                 </div>
                 <div class="chart-list" style="margin-left: 10px;">
                     <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -62,6 +61,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
+                                <span th:if="((${stageStat.index} % 3) == 0) and ${stageStat.index} != 0" th:utext="'</tr><tr>'"></span>
                             </td>
                         </tr>
                         </tbody>
@@ -69,14 +69,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="ad" style="
-    text-align: center;
-    margin-top: 100px;
-">
-        <a target="_blank" href="https://www.samsung.com/sec/galaxy-s23/launching/">
-            <img src="static/adimg/samsung_galaxy_s23.jpg" style="width: 980px">
-        </a>
     </div>
 </div>
 </th:block>

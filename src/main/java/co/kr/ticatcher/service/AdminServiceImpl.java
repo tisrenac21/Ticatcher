@@ -1,10 +1,7 @@
 package co.kr.ticatcher.service;
 
 import co.kr.ticatcher.dao.AdminDAO;
-import co.kr.ticatcher.vo.AdminVO;
-import co.kr.ticatcher.vo.BoardVO;
-import co.kr.ticatcher.vo.QnaVO;
-import co.kr.ticatcher.vo.StageVO;
+import co.kr.ticatcher.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -126,9 +123,18 @@ public class AdminServiceImpl implements AdminService {
 	public int readCountStage() {
 		return adao.readCountStage();
 	}
-
 	@Override
 	public List<StageVO> readStage(int snum) {
 		return adao.readStage(snum);
+	}
+
+	@Override
+	public int readCountMember() {
+		return adao.readCountMember();
+	}
+
+	@Override
+	public List<MemberVO> readMember(int snum) {
+		return adao.readMember(snum);
 	}
 }

@@ -73,5 +73,14 @@
             resultType="co.kr.ticatcher.vo.StageVO">
         select * from tcc_stage order by stage_idx desc limit #{snum}, 10
     </select>
+    <select id="readCountMember" statementType="PREPARED"
+            resultType="int">
+        select ceil(count(mem_idx)/10) pages from tcc_member
+    </select>
+    <select id="readMember" statementType="PREPARED"
+            parameterType="int"
+            resultType="co.kr.ticatcher.vo.MemberVO">
+        select * from tcc_member order by mem_idx desc limit #{snum}, 10
+    </select>
 
 </mapper>

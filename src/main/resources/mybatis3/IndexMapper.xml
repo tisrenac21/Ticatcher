@@ -13,4 +13,9 @@
             resultType="co.kr.ticatcher.vo.PriceVO">
         select * from tcc_price where schedule_idx = #{schedule_idx} order by price_price asc limit 1
     </select>
+    <select id="getPriceByIdx" statementType="PREPARED"
+            parameterType="long"
+            resultType="co.kr.ticatcher.vo.PriceVO">
+        select * from tcc_price where price_idx = #{price_idx}
+    </select>
 </mapper>

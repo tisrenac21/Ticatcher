@@ -1,9 +1,6 @@
 package co.kr.ticatcher.dao;
 
-import co.kr.ticatcher.vo.AdminVO;
-import co.kr.ticatcher.vo.BoardVO;
-import co.kr.ticatcher.vo.QnaVO;
-import co.kr.ticatcher.vo.StageVO;
+import co.kr.ticatcher.vo.*;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -100,5 +97,15 @@ public class AdminDAOImpl implements AdminDAO {
 	@Override
 	public List<StageVO> readStage(int snum) {
 		return sqlSession.selectList("admin.readStage", snum);
+	}
+
+	@Override
+	public int readCountMember() {
+		return sqlSession.selectOne("admin.readCountMember");
+	}
+
+	@Override
+	public List<MemberVO> readMember(int snum) {
+		return sqlSession.selectList("admin.readMember",snum);
 	}
 }

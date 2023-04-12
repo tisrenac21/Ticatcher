@@ -2,20 +2,27 @@ package co.kr.ticatcher.controller;
 
 import co.kr.ticatcher.service.AdminService;
 import co.kr.ticatcher.service.MemberService;
-import co.kr.ticatcher.vo.AdminVO;
-import co.kr.ticatcher.vo.BoardVO;
-import co.kr.ticatcher.vo.QnaVO;
+import co.kr.ticatcher.service.StageService;
+import co.kr.ticatcher.vo.*;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class AdminController {
@@ -25,6 +32,9 @@ public class AdminController {
 
 	@Autowired
 	private MemberService msrv;
+
+	@Autowired
+	private StageService ssrv;
 
 
 
@@ -304,6 +314,7 @@ public class AdminController {
 	public String answerQNA(QnaVO qvo){
 		String returnPage = "redirect:/manageQNAView?qna_idx=" + qvo.getQna_idx();
 		asrv.answerQNA(qvo);
+
 		return returnPage;
 	}
 
@@ -327,5 +338,84 @@ public class AdminController {
 		return returnPage;
 	}
 
+	@GetMapping("/manageStageView")
+	public String manageStageView(HttpSession session, Model model, long stage_idx){
+		String returnPage = "redirect:/admin";
+		if(session.getAttribute("admin") != null){
+
+			StageVO svo = ssrv.getStageByIdx(stage_idx);
+
+			List<ScheduleVO> stageSchedule = ssrv.getAllScheduleByStageIdx(stage_idx);
+
+			List<TheaterVO> stageTheater = new ArrayList<>();
+			List<Long> theaterIdxs = new ArrayList<>();
+			List<PriceVO> priceList = new ArrayList<>();
+
+			for(int i = 0 ; i < stageSchedule.size() ; i++){
+				long theaterIdx = stageSchedule.get(i).getTheater_idx();
+				long scheduleIdx = stageSchedule.get(i).getSchedule_idx();
+				List<PriceVO> prices = ssrv.getAllPriceBySchedule(scheduleIdx);
+				if(!theaterIdxs.contains(theaterIdx)){
+					theaterIdxs.add(theaterIdx);
+					stageTheater.add(ssrv.getAllTheaterByTheaterIdx(theaterIdx));
+				}
+				for(int j = 0 ; j < prices.size() ; j++){
+					priceList.add(prices.get(j));
+				}
+			}
+
+			List<String> priceNames = new ArrayList<>();
+			List<PriceVO> realPriceList = new ArrayList<>();
+			for(int i = 0 ; i < priceList.size() ; i++){
+				String priceName = priceList.get(i).getPrice_name();
+				if(!priceNames.contains(priceName)){
+					priceNames.add(priceName);
+					realPriceList.add(priceList.get(i));
+				}
+			}
+			List<String> dateList = new ArrayList<>();
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			for(ScheduleVO sc : stageSchedule){
+				dateList.add(format.format(sc.getSchedule_date()));
+			}
+
+
+
+			String[] infoImg = svo.getStage_imgInfoPath().split(",");
+			String period = Collections.min(dateList) + " ~ " + Collections.max(dateList);
+
+			model.addAttribute("stage", svo);
+			model.addAttribute("schedules", stageSchedule);
+			model.addAttribute("theaters", stageTheater);
+			model.addAttribute("infoImg", infoImg);
+			model.addAttribute("period", period);
+			model.addAttribute("prices",realPriceList);
+
+			returnPage = "admin/manageStageView";
+
+		}
+
+		return returnPage;
+
+	}
+
+	@GetMapping("/manageMember")
+	public String goManageMember(HttpSession session, Model model, String cpg){
+		String returnPage = "redirect:/admin";
+		if(session.getAttribute("admin") != null){
+			int perPage = 10;
+			if (cpg == null || cpg.equals("")) cpg = "1";
+			int cpage = Integer.parseInt(cpg);
+			int snum = (cpage-1) * perPage;
+			int stpgn = ((cpage - 1) / 10) * 10 + 1;
+
+			model.addAttribute("pages",asrv.readCountMember());
+			model.addAttribute("memberList", asrv.readMember(snum));
+			model.addAttribute("stpgn", stpgn);
+
+			returnPage = "admin/manageMember";
+		}
+		return returnPage;
+	}
 
 }

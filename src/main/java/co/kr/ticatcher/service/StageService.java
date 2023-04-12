@@ -9,4 +9,6 @@ public interface StageService {
     List<ScheduleVO> getAllScheduleByStageIdx(long stage_idx);
     TheaterVO getAllTheaterByTheaterIdx(long theater_idx);
     List<PriceVO> getAllPriceBySchedule(long schedule_idx);
+    List<StageVO> getNewStage();
+    PriceVO getCheapOfSchedule(long scheduleIdx);
 }

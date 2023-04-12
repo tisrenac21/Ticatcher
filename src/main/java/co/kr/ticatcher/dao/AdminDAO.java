@@ -1,9 +1,6 @@
 package co.kr.ticatcher.dao;
 
-import co.kr.ticatcher.vo.AdminVO;
-import co.kr.ticatcher.vo.BoardVO;
-import co.kr.ticatcher.vo.QnaVO;
-import co.kr.ticatcher.vo.StageVO;
+import co.kr.ticatcher.vo.*;
 
 import java.util.List;
 
@@ -25,4 +22,6 @@ public interface AdminDAO {
     int countIndexFromQna(String qna_idx);
     int readCountStage();
     List<StageVO> readStage(int snum);
+    int readCountMember();
+    List<MemberVO> readMember(int snum);
 }

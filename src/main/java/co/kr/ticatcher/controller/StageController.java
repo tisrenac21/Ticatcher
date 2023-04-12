@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -71,4 +73,27 @@ public class StageController {
 
 		return "stage/payment";
 	}
+
+	@GetMapping("/stage")
+	public String goStageList(Model model) {
+		List<StageVO> newStage = ssrv.getNewStage();
+		model.addAttribute("stages", newStage);
+		return "stage/stage";
+	}
+
+//	@ResponseBody
+//	@PostMapping("/minprice")
+//	public PriceVO minPrice(String stageIdx){
+//		long stage_idx = Long.parseLong(stageIdx);
+//		List<ScheduleVO> AllScheduleByStage = ssrv.getAllScheduleByStageIdx(stage_idx);
+//		PriceVO pvo = new PriceVO();
+//
+//		for(int i = 0 ; i < AllScheduleByStage.size() ; i++){
+//			PriceVO price = ssrv.getCheapOfSchedule(AllScheduleByStage.get(i).getSchedule_idx());
+//			if(((pvo.getPrice_price()) > (price.getPrice_price())) || (pvo.getPrice_price() == 0)){
+//				pvo = price;
+//			}
+//		}
+//		return pvo;
+//	}
 }

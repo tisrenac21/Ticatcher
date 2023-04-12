@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/adminLayout}">
+
+<th:block layout:fragment="mystyle">
+    <!-- jQuery UI CSS파일 -->
+    <link type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css"
+          rel="stylesheet" />
+    <link rel="stylesheet" href="static/css/manageStageView.css">
+</th:block>
+
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="play_chart">
+            <div class="contents">
+                <section class="pay_show_info">
+                    <div class="show_imgbox">
+                        <img th:src="${stage.getStage_posterPath()}" alt="연극 포스터"
+                             style="width: 280px; border-radius: 10px;">
+                    </div>
+                    <div class="show_detail_info">
+                        <div class="show_header">
+                            <h1 th:text="${stage.getStage_name()}"></h1>
+                            <p th:text="${stage.getStage_info()}"></p>
+                        </div>
+                        <div class="detail_info">
+                            <ul class="show_info_list">
+                                <li class="show_info_item">
+                                    <span class="item_title">장소</span>
+                                    <div style="display: inline;">
+                                        <div th:each="theater : ${theaters}" class="item_desc">
+                                            <span th:text="${theater.getTheater_name()}"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="show_info_item">
+                                    <span class="item_title">관람시간</span>
+                                    <div class="item_desc"><span th:text="${stage.getStage_runtime()}"></span></div>
+                                </li>
+                                <li class="show_info_item">
+                                    <span class="item_title">기간</span>
+                                    <div class="item_desc">
+                                        <span th:text="${period}"></span>
+                                    </div>
+                                </li>
+                                <li class="show_info_item">
+                                    <span class="item_title">관람등급</span>
+                                    <div class="item_desc"><span th:text="${stage.getStage_grade()}"></span></div>
+                                </li>
+                            </ul>
+                            <ul class="show_info_list">
+                                <li class="show_info_item" style="width: 100%">
+                                    <span class="item_title">가격</span>
+                                    <div class="item_desc">
+                                        <table class="info_sublist">
+                                            <tr class="info_subitem" th:each="price : ${prices}">
+                                                <td class="dis_name" style="width: 230px;" th:text="${price.getPrice_name()}"></td>
+                                                <td class="show_price" th:utext="${#numbers.formatInteger(price.getPrice_price(), 3, 'COMMA')} + '<span style=&quot;font-weight: normal;&quot;> 원</span>'"></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </li>
+                                <li class="show_info_item">
+                                    <span class="item_title">예매</span>
+                                    <div class="item_desc">
+                                        판매중단
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <hr style="margin-top: 50px;" />
+
+
+<!--                <section class="pay_reserve">-->
+<!--                    <div class="show_detail_reserve">-->
+<!--                        <div class="reserve_date">-->
+<!--                            <div class="reserve_header">-->
+<!--                                <p class="reserve_step">STEP1</p>-->
+<!--                                <span class="reserve_title">날짜 선택</span>-->
+<!--                            </div>-->
+<!--                            <div id="calendar_popup" class="calendar_popup02 choice_day">-->
+<!--                                <div class="popup_warp">-->
+<!--                                    <div class="datepicker inp"></div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                        <div class="reserve_time">-->
+<!--                            <div class="reserve_header">-->
+<!--                                <p class="reserve_step">STEP2</p>-->
+<!--                                <span class="reserve_title">회차 선택</span>-->
+<!--                            </div>-->
+<!--                            <ul class="reserve_time_list" role="listbox">-->
+<!--                                <li class="time_lists" role="none">-->
+<!--                                    <button type="button" class="time_lists_btn" aria-selected="true">-->
+<!--                                        <p>13시 00분</p>-->
+<!--                                    </button>-->
+<!--                                </li>-->
+<!--                                <li class="time_lists" role="none">-->
+<!--                                    <button type="button" class="time_lists_btn" aria-selected="false">-->
+<!--                                        <p>15시 00분</p>-->
+<!--                                    </button>-->
+<!--                                </li>-->
+<!--                                <li class="time_lists" role="none">-->
+<!--                                    <button type="button" class="time_lists_btn" aria-selected="false">-->
+<!--                                        <p>17시 00분</p>-->
+<!--                                    </button>-->
+<!--                                </li>-->
+<!--                                <li class="time_lists" role="none">-->
+<!--                                    <button type="button" class="time_lists_btn" aria-selected="false">-->
+<!--                                        <p>19시 00분</p>-->
+<!--                                    </button>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                        <div class="reserve_ticket">-->
+<!--                            <div class="reserve_ticket_t">-->
+<!--                                <div class="reserve_header">-->
+<!--                                    <p class="reserve_step">STEP3</p>-->
+<!--                                    <span class="reserve_title">티켓선택</span>-->
+<!--                                </div>-->
+<!--                                <ul class="reserve_ticket_cnt" role="listbox">-->
+<!--                                    <li class="ticket_lists" role="none">-->
+<!--                                        <button type="button" class="ticket_lists_btn" aria-selected="false">-->
+<!--                                            <span class="ticket_opt_title">중고생할인</span>-->
+<!--                                            <span class="ticket_left">남은티켓 10매</span>-->
+<!--                                            <span class="ticket_price">13,900원</span>-->
+<!--                                        </button>-->
+<!--                                    </li>-->
+<!--                                    <li class="ticket_lists" role="none">-->
+<!--                                        <button type="button" class="ticket_lists_btn" aria-selected="false">-->
+<!--                                            <span class="ticket_opt_title">일반</span>-->
+<!--                                            <span class="ticket_left">남은티켓 10매</span>-->
+<!--                                            <span class="ticket_price">15,900원</span>-->
+<!--                                        </button>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                            <div class="reserve_ticket_b">-->
+<!--                                <div class="reserve_header">-->
+<!--                                    <p class="reserve_step">STEP4</p>-->
+<!--                                    <span class="reserve_title">수량선택</span>-->
+<!--                                </div>-->
+<!--                                <div class="select_opt">-->
+<!--                                    <div class="select_opt_ticket" id="111" style="width: 205px; margin-bottom: 10px;">-->
+<!--                                        <div class="opt_name" style="float: left; font-size: 14px;">-->
+<!--                                            1.25[수] 13:00 일반-->
+<!--                                        </div>-->
+<!--                                        <div style="display: inline-block; float: right;">-->
+<!--                                            <a href="#opt_close" class="close" data-store="111">-->
+<!--                                                <span style="font-size: 12px;-->
+<!--                                                border: 1px solid #888;-->
+<!--                                                border-radius: 5px;-->
+<!--                                                width: 14px;-->
+<!--                                                padding: 0 6px;-->
+<!--                                                color: #fff;-->
+<!--                                                background: #888;">X</span>-->
+<!--                                            </a>-->
+<!--                                        </div>-->
+<!--                                        <div style="clear: both;"></div>-->
+<!--                                        <div class="price_wrap"-->
+<!--                                             style="display: flex; align-items: center; justify-content: space-between; margin-top: 5px; width: 100%;">-->
+<!--                                            <div class="quantity"-->
+<!--                                                 style="display: flex; align-items: center; justify-content: space-between; width: 65px; height: 19px; border-radius: 3px; font-size: 13px;">-->
+<!--                                                <button type="button" class="remove_ticket">-->
+<!--                                                    <img src="https://timeticket.co.kr/mobile_img/detail/btn_minus_square.png"-->
+<!--                                                         alt="" style="width:18px; vertical-align: -5px;">-->
+<!--                                                </button>-->
+<!--                                                <span>1</span>-->
+<!--                                                <button type="button" class="add_ticket">-->
+<!--                                                    <img src="https://timeticket.co.kr/mobile_img/detail/btn_plus_square.png"-->
+<!--                                                         alt="" style="width:18px; vertical-align: -5px;">-->
+<!--                                                </button>-->
+<!--                                            </div>-->
+<!--                                            <span style="font-size: 14px;">15,900원</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="select_opt_ticket" id="111" style="width: 205px;">-->
+<!--                                        <div class="opt_name" style="float: left; font-size: 14px;">-->
+<!--                                            1.25[수] 13:00 중고생할인-->
+<!--                                        </div>-->
+<!--                                        <div style="display: inline-block; float: right;">-->
+<!--                                            <a href="#opt_close" class="close" data-store="111">-->
+<!--                                                <span style="font-size: 12px;-->
+<!--                                                border: 1px solid #888;-->
+<!--                                                border-radius: 5px;-->
+<!--                                                width: 14px;-->
+<!--                                                padding: 0 6px;-->
+<!--                                                color: #fff;-->
+<!--                                                background: #888;">X</span>-->
+<!--                                            </a>-->
+<!--                                        </div>-->
+<!--                                        <div style="clear: both;"></div>-->
+<!--                                        <div class="price_wrap"-->
+<!--                                             style="display: flex; align-items: center; justify-content: space-between; margin-top: 5px; width: 100%;">-->
+<!--                                            <div class="quantity"-->
+<!--                                                 style="display: flex; align-items: center; justify-content: space-between; width: 65px; height: 19px; border-radius: 3px; font-size: 13px;">-->
+<!--                                                <button type="button" class="remove_ticket">-->
+<!--                                                    <img src="https://timeticket.co.kr/mobile_img/detail/btn_minus_square.png"-->
+<!--                                                         alt="" style="width:18px; vertical-align: -5px;">-->
+<!--                                                </button>-->
+<!--                                                <span>1</span>-->
+<!--                                                <button type="button" class="add_ticket">-->
+<!--                                                    <img src="https://timeticket.co.kr/mobile_img/detail/btn_plus_square.png"-->
+<!--                                                         alt="" style="width:18px; vertical-align: -5px;">-->
+<!--                                                </button>-->
+<!--                                            </div>-->
+<!--                                            <span style="font-size: 14px;">13,900원</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </section>-->
+
+
+            </div>
+        </div>
+        <div class="product_img">
+            <p>작품상세정보</p>
+            <div th:each="imgs : ${infoImg}" style="text-align: center;">
+                <img th:src="${imgs}" alt="">
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="myscript">
+    <!-- jQuery UI CSS파일 -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+    <!-- jQuery UI 라이브러리 js파일 -->
+    <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="static/js/payment.js"></script>
+    <script type="text/javascript">
+
+        var divs = $(".show_box");
+        for (var i = 0; i < divs.length; i += 4) {
+            divs.slice(i, i + 4).wrapAll("<tr class='wrap'></tr>");
+        }
+
+    </script>
+</th:block>
+</html>
