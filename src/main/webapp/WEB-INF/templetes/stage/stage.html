@@ -73,15 +73,16 @@
 </div>
 </th:block>
 <th:block layout:fragment="myscript">
-    <script>
+    <script th:inline="javascript">
         var priceNames = document.getElementsByClassName("priceName");
         var pricePrices = document.getElementsByClassName("pricePrice");
         var sdxs = document.getElementsByClassName("sdx");
+        var stages = [[${stages}]];
 
         window.onload(ready());
 
         function ready(){
-            for(let i = 0 ; i < 4 ; i++){
+            for(let i = 0 ; i < stages.length ; i++){
                 ajax(i);
             }
         }

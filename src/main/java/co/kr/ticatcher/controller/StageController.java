@@ -55,6 +55,7 @@ public class StageController {
 		}
 		List<String> dateList = new ArrayList<>();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
 		for(ScheduleVO sc : stageSchedule){
 			dateList.add(format.format(sc.getSchedule_date()));
 		}
