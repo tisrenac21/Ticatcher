@@ -127,7 +127,6 @@ public class MemberController {
 		}else if (session.getAttribute("m") != null){
 			returnPage = "redirect:/";
 		}
-
 		return returnPage;
 	}
 

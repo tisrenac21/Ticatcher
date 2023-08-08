@@ -1,96 +1,334 @@
-<!DOCTYPE html>
-<html xmlns:th = "http://www.thymeleaf.org"
-      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragments/adminLayout}">
-
-<th:block layout:fragment="mystyle">
+<!doctype html>
+<html xmlns:th = "http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticatcher - ADMIN</title>
+    <!-- 구글 웹폰트 -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet">
+    <!-- bx slider css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <!-- 스타일시트 -->
+    <link rel="stylesheet" href="static/css/adminReset.css">
+    <link rel="stylesheet" href="static/css/adminStyle.css">
     <link rel="stylesheet" href="static/css/manageMember.css">
-</th:block>
-<th:block layout:fragment="main">
-    <div class="container">
-        <div class="contents">
-            <div class="left_wrap">
-                <p>회원 관리</p>
-                <ul>
-                    <a href="/manageMember">
-                        <li class="left_wrap_btn">
-                            <span class="select_btn">회원 목록 관리</span>
-                        </li>
+    <!-- 제이쿼리 -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- bx slider -->
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <!-- images loded -->
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <!-- 외부 스크립트 -->
+    <script src="static/js/adminMain.js"></script>
+    <!-- 개인 스타일시트 -->
+    <style>
+        .modal{
+            display: none;
+            position: fixed;
+            z-index: 101;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+
+        #modal-content, #modal-content * {
+            background-color: #2b2b2b;
+        }
+
+        #modal-content{
+            margin: 13% auto;
+            padding: 20px;
+            border: 2px solid #3f3f3f;
+            width: 25%;
+        }
+
+        #modal-content tr {
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .modalbtn button {
+            padding: 10px;
+            width: 120px;
+            margin-top: 30px;
+            margin-left: 20px;
+        }
+
+        .modalbtn {
+           text-align: center;
+        }
+
+        .modal th {
+            width: 100px;
+        }
+        .modal td {
+            width: 300px;
+        }
+        .modal input, select {
+            width: 300px;
+            padding: 5px;
+            border: 1px solid #5b5b5b;
+            border-radius: 5px;
+            background-color: #1a1a1a !important;
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="modalForInfo" class="modal">
+    <div id="modal-content">
+        <table class="mypageTable" style="">
+            <tbody>
+            <tr>
+                <th>아이디</th>
+                <td><input type="text" id="modalId" disabled="disabled" style="color: #676767; background-color: #3f3f3f !important;"></td>
+            </tr>
+            <tr>
+                <th>이름</th>
+                <td><input type="text" id="modalName"></td>
+            </tr>
+            <tr>
+                <th>닉네임</th>
+                <td><input type="text" id="modalNickname"></td>
+            </tr>
+            <tr>
+                <th>이메일</th>
+                <td><input type="email" id="modalEmail"></td>
+            </tr>
+            <tr>
+                <th>휴대폰</th>
+                <td><input style="width: 84px;" type="tel" maxlength="3" id="modalTel1"> - <input style="width: 95px;" type="tel" maxlength="4" id="modalTel2"> - <input style="width: 95px;" type="tel" maxlength="4" id="modalTel3"></td>
+            </tr>
+            <tr>
+                <th>계정 상태</th>
+                <td>
+                    <select>
+                        <option>
+                            정상
+                        </option>
+                        <option>
+                            휴면
+                        </option>
+                        <option>
+                            정지
+                        </option>
+                    </select></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="modalbtn" id="modalbtn">
+            <button class="btn-in-modal" style="margin-left: 0px">수정</button>
+            <button class="btn-in-modal">강제 탈퇴</button>
+            <button class="btn-in-modal"  id="close-modal">닫기</button>
+        </div>
+    </div>
+</div>
+
+<div id="container">
+    <div class="header">
+        <div class="header_content">
+            <img src="static/img/neon_1.png" alt="네온led배경">
+            <div class="content">
+                <h1>
+                    <a href="/adminindex">
+                        <img class="logo" src="static/img/logo.png" alt="로고">
+                        <p style="font-size: 15px; margin-top: -20px; margin-left: 55px; color: #959595;">  관  리  자  모  드  </p>
                     </a>
-                    <a href="#">
-                        <li class="left_wrap_btn">
-                            <span>징계 회원 리스트</span>
-                        </li>
-                    </a>
-                    <a href="#">
-                        <li class="left_wrap_btn">
-                            <span>탈퇴 회원 리스트</span>
-                        </li>
-                    </a>
+                </h1>
+                <ul class="lnb">
+                    <li>
+                        <a href = "#" id = "quitAdmin">관리자 모드 종료</a>
+                    </li>
+
+                    <li>
+                        <p style="font-size: 14px;display: inline;">관리자 <a href="#"><span style="color: wheat; font-weight: bold;" th:text="${session.admin.admin_name}" /></a> 님</p>
+                    </li>
                 </ul>
             </div>
-            <div class="right_wrap" th:with="cpg=${(param.cpg == null or #strings.equals(param.cpg,''))? 1: T(java.lang.Integer).parseInt(param.cpg)}">
-                <p class="right_title">
-                    회원 목록 관리
-                </p>
-                <div class="right_list">
-                    <ul class="list_header">
-                        <li>
-                            &nbsp;
-                        </li>
-                        <li>
-                            아이디
-                        </li>
-                        <li>
-                            이름
-                        </li>
-                        <li>
-                            가입날짜
-                        </li>
-                    </ul>
-                    <ul class="list_contents">
-                        <table width="100%">
-                            <tbody>
-                            <tr th:each="member: ${memberList}">
-                                <td valign="top" align="center">
-                                    <li th:unless="${member.mem_idx} == 1"><input type="checkbox" th:value="${member.mem_idx}"></li>
-                                    <li th:if="${member.mem_idx} == 1"><input type="checkbox" style="background: #6a6a6a" disabled th:value="${member.mem_idx}"></li>
-                                    <li th:text="${member.mem_id}">
-<!--                                        <a th:text="${member.mem_ide}" th:href="@{/manageStageView(stage_idx=${stage.stage_idx})}"></a>-->
-<!--                                        <a th:text="${stage.stage_name}"></a>-->
-                                    </li>
-                                    <li th:text="${member.mem_name}"></li>
-                                    <li th:text="${member.mem_regDate}"></li>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </ul>
-                    <div class="list_pager">
-                        <a th:if="${cpg > 1}" th:href="@{'/manageMember?cpg=1'}"><button class="btn_pager first" type="button">처음</button></a>
-                        <a th:if="${cpg > 1}" th:href="@{'/manageMember?cpg=' + ${cpg - 1}}"><button class="btn_pager prev" type="button">이전</button></a>
-                        <ul>
-                            <th:block th:each="i: ${#numbers.sequence(0, 9)}">
-                                <th:block th:if="${(stpgn + i) <= pages}">
-                                    <li>
-                                        <span th:text="${stpgn + i}" th:if="${cpg == (stpgn + i)}" class="on"></span>
-                                        <span th:unless="${cpg == (stpgn + i)}">
-                                            <a th:href="@{/manageMember(cpg=${stpgn+i})}">[[${stpgn + i}]]</a>
-                                        </span>
-                                    </li>
-                                </th:block>
-                            </th:block>
+        </div>
 
-                        </ul>
-
-                        <a th:if="${cpg < pages}" th:href="@{'/manageMember?cpg=' + ${cpg + 1}}"><button class="btn_pager next" type="button">다음</button></a>
-                        <a th:if="${cpg < pages}" th:href="@{'/manageMember?cpg='+${pages}}"><button class="btn_pager end" type="button">끝</button></a>
+        <div class="gnb">
+            <div class="gnb_contents">
+                <ul class="gnb_menu">
+                    <li>
+                        <a href="/manageNotice">
+                            <span class="menu_span">게시판 관리</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/managestage">
+                            <span class="menu_span">공연 관리</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/manageMember">
+                            <span class="menu_span">회원 관리</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="menu_span">수익 관리</span>
+                        </a>
+                    </li>
+                    <li th:if="${session.admin.getAdmin_grade() == 'super'}">
+                        <a href="#">
+                            <span class="menu_span">관리자 관리</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="contents">
+        <div class="left_wrap">
+            <p>회원 관리</p>
+            <ul>
+                <a href="/manageMember">
+                    <li class="left_wrap_btn">
+                        <span class="select_btn">회원 목록 관리</span>
+                    </li>
+                </a>
+                <a href="#">
+                    <li class="left_wrap_btn">
+                        <span>징계 회원 리스트</span>
+                    </li>
+                </a>
+                <a href="#">
+                    <li class="left_wrap_btn">
+                        <span>탈퇴 회원 리스트</span>
+                    </li>
+                </a>
+            </ul>
+        </div>
+        <div class="right_wrap" th:with="cpg=${(param.cpg == null or #strings.equals(param.cpg,''))? 1: T(java.lang.Integer).parseInt(param.cpg)}">
+            <p class="right_title">
+                회원 목록 관리
+            </p>
+            <div class="right_list">
+                <ul class="list_header">
+                    <li>
+                        &nbsp;
+                    </li>
+                    <li>
+                        아이디
+                    </li>
+                    <li>
+                        이름
+                    </li>
+                    <li>
+                        가입날짜
+                    </li>
+                </ul>
+                <ul class="list_contents">
+                    <table width="100%">
+                        <tbody>
+                        <tr th:each="member: ${memberList}">
+                            <td valign="top" align="center">
+                                <li th:unless="${member.mem_idx} == 1"><input type="checkbox" th:value="${member.mem_idx}"></li>
+                                <li th:if="${member.mem_idx} == 1"><input type="checkbox" style="background: #6a6a6a" disabled th:value="${member.mem_idx}"></li>
+                                <li id="memberId" th:onclick="showMemberInfo([[${member}]])" th:text="${member.mem_id}">
+                                    <!--                                        <a th:text="${member.mem_id}" th:href="@{/getInfoMember(mem_idx=${member.mem_idx})}"></a>-->
+                                </li>
+                                <li th:text="${member.mem_name}"></li>
+                                <li th:text="${member.mem_regDate}"></li>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </ul>
+                <a href="#">
+                    <div class="write_btn" id="uptbtn"style="width: 70px; margin-left: 10px;">
+                        탈퇴
                     </div>
+                </a>
+                <a href="#">
+                    <div class="write_btn" style="width: 70px; margin-left: 10px;">
+                        정지
+                    </div>
+                </a>
+                <div class="list_pager">
+                    <a th:if="${cpg > 1}" th:href="@{'/manageMember?cpg=1'}"><button class="btn_pager first" type="button">처음</button></a>
+                    <a th:if="${cpg > 1}" th:href="@{'/manageMember?cpg=' + ${cpg - 1}}"><button class="btn_pager prev" type="button">이전</button></a>
+                    <ul>
+                        <th:block th:each="i: ${#numbers.sequence(0, 9)}">
+                            <th:block th:if="${(stpgn + i) <= pages}">
+                                <li>
+                                    <span th:text="${stpgn + i}" th:if="${cpg == (stpgn + i)}" class="on"></span>
+                                    <span th:unless="${cpg == (stpgn + i)}">
+                                        <a th:href="@{/manageMember(cpg=${stpgn+i})}">[[${stpgn + i}]]</a>
+                                    </span>
+                                </li>
+                            </th:block>
+                        </th:block>
+
+                    </ul>
+
+                    <a th:if="${cpg < pages}" th:href="@{'/manageMember?cpg=' + ${cpg + 1}}"><button class="btn_pager next" type="button">다음</button></a>
+                    <a th:if="${cpg < pages}" th:href="@{'/manageMember?cpg='+${pages}}"><button class="btn_pager end" type="button">끝</button></a>
                 </div>
             </div>
         </div>
     </div>
-</th:block>
-<th:block layout:fragment="myscript">
-</th:block>
+
+    <div style="margin-top: 180px"></div>
+
+</div>
+
+<script type="text/javascript">
+    var divs = $(".show_box");
+    for (var i = 0; i < divs.length; i += 4) {
+        divs.slice(i, i + 4).wrapAll("<tr class='wrap'></tr>");
+    }
+
+    let quitAdmin = document.querySelector('#quitAdmin')
+    quitAdmin.addEventListener('click', gologout)
+    function gologout() {
+        if(confirm('관리자 모드를 종료 하시겠습니까?'))
+        { if(location.href = '/quitadmin'){
+            alert('관리자 모드가 종료 되었습니다.')}
+        };
+    }
+
+    var modalId = document.getElementById("modalId");
+    var modalName = document.getElementById("modalName");
+    var modalNickname = document.getElementById("modalNickname");
+    var modalEmail = document.getElementById("modalEmail");
+    var modalTel1 = document.getElementById("modalTel1");
+    var modalTel2 = document.getElementById("modalTel2");
+    var modalTel3 = document.getElementById("modalTel3");
+    var modelForInfo = document.getElementById("modalForInfo");
+    var closeModal = document.getElementById("close-modal");
+
+    window.onload = modelForInfo.style.display = 'none';
+
+    closeModal.addEventListener("click", function (){
+        modelForInfo.style.display = 'none'
+    })
+
+    function showMemberInfo(data){
+        modalId.value = data.mem_id;
+        modalName.value = data.mem_name;
+        modalNickname.value = data.mem_aka;
+        modalEmail.value = data.mem_email;
+        modalTel1.value = data.mem_tel.substr(0, 3);
+        if(data.mem_tel.length == 11){ // 11자 휴대폰 번호 (010 - XXXX - XXXX)
+            modalTel2.value = data.mem_tel.substr(3, 4);
+            modalTel3.value = data.mem_tel.substr(7, 4);
+        } else if(data.mem_tel.length == 10) { // 10자 휴대폰 번호 (01X - XXX - XXXX)
+            modalTel2.value = data.mem_tel.substr(3, 3);
+            modalTel3.value = data.mem_tel.substr(6, 4);
+        }
+        modelForInfo.style.display = 'block';
+    }
+
+</script>
+
+</body>
 </html>

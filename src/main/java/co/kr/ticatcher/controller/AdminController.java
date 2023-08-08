@@ -4,14 +4,13 @@ import co.kr.ticatcher.service.AdminService;
 import co.kr.ticatcher.service.MemberService;
 import co.kr.ticatcher.service.StageService;
 import co.kr.ticatcher.vo.*;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -19,10 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class AdminController {
@@ -415,7 +411,12 @@ public class AdminController {
 
 			returnPage = "admin/manageMember";
 		}
+
 		return returnPage;
 	}
 
+	@GetMapping("/testtest")
+	public String testtest() {
+		return "test";
+	}
 }
