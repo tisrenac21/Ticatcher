@@ -414,9 +414,4 @@ public class AdminController {
 
 		return returnPage;
 	}
-
-	@GetMapping("/testtest")
-	public String testtest() {
-		return "test";
-	}
 }
