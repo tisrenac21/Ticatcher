@@ -1,0 +1,393 @@
+p {
+    font-size: 20px;
+}
+
+.left_wrap {
+    float: left;
+    width: 150px;
+    padding-left: 10px;
+}
+
+.left_wrap p {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e2e2;
+}
+
+.left_wrap_btn {
+    margin: 10px 0;
+}
+
+.left_wrap_btn span {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.left_wrap_btn:hover span {
+    color: #FEF1AB;
+}
+
+.select_btn {
+    color: #FEF1AB !important;
+    background: rgba(254, 241, 171, 0.15) !important;
+}
+
+.right_wrap {
+    float: right;
+    width: 780px;
+}
+
+.right_title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #FEF1AB;
+}
+
+.right_list {
+    margin-top: 25px;
+}
+
+.qna_box {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+}
+
+.title_box {
+    background: transparent;
+}
+
+.title_box table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.form_th {
+    width: 150px;
+    padding: 15px 20px;
+    text-align: left;
+    font-weight: 600;
+    color: #FEF1AB;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(254, 241, 171, 0.05);
+}
+
+.form_th em {
+    display: inline-block;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+.form_th em img {
+    width: 8px;
+    height: 8px;
+    vertical-align: middle;
+}
+
+.form_td {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inp_common {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.inp_common:focus {
+    outline: none;
+    border-color: #FEF1AB;
+    background: rgba(254, 241, 171, 0.08);
+    box-shadow: 0 0 0 3px rgba(254, 241, 171, 0.1);
+}
+
+.inp_common::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+select.inp_common {
+    cursor: pointer;
+}
+
+.date_group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.date_group input {
+    flex: 1;
+}
+
+.date_group span {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 18px;
+}
+
+.form_td p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 8px;
+    line-height: 1.6;
+}
+
+.write_btn {
+    float: right;
+    width: 120px;
+    height: 45px;
+    background: linear-gradient(135deg, #FEF1AB 0%, #F5E076 100%);
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 20px;
+    text-align: center;
+    line-height: 45px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(254, 241, 171, 0.3);
+}
+
+.write_btn:hover {
+    background: linear-gradient(135deg, #F5E076 0%, #FEF1AB 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(254, 241, 171, 0.4);
+}
+
+.write_btn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(254, 241, 171, 0.3);
+}
+
+/* 티켓 가격 관리 */
+.price_list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.price_item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.price_item input {
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 14px;
+}
+
+.price_item input:focus {
+    outline: none;
+    border-color: #FEF1AB;
+}
+
+.price_item input[type="text"] {
+    flex: 1;
+}
+
+.price_item input[type="number"] {
+    width: 150px;
+}
+
+.price_remove_btn {
+    padding: 6px 12px;
+    background: rgba(255, 50, 50, 0.8);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.price_remove_btn:hover {
+    background: rgba(255, 50, 50, 1);
+}
+
+.price_add_btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: rgba(254, 241, 171, 0.2);
+    color: #FEF1AB;
+    border: 1px solid #FEF1AB;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.price_add_btn:hover {
+    background: rgba(254, 241, 171, 0.3);
+}
+
+/* 파일 업로드 커스텀 */
+.file_input_wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.file_input_wrapper input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.file_custom_btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #FEF1AB 0%, #F5E076 100%);
+    color: #333;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(254, 241, 171, 0.3);
+}
+
+.file_custom_btn:hover {
+    background: linear-gradient(135deg, #F5E076 0%, #FEF1AB 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(254, 241, 171, 0.4);
+}
+
+.file_name {
+    display: inline-block;
+    margin-left: 15px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+}
+
+/* 이미지 미리보기 */
+.image_preview {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.preview_image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 상세 이미지 관리 */
+.detail_images_container {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.detail_image_item {
+    position: relative;
+    width: 150px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    cursor: move;
+}
+
+.detail_image_item:hover {
+    border-color: #FEF1AB;
+}
+
+.detail_image_item.dragging {
+    opacity: 0.5;
+    transform: scale(0.95);
+}
+
+.detail_image_item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.detail_image_order {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: #FEF1AB;
+    color: #333;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.detail_image_remove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(255, 50, 50, 0.9);
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.detail_image_remove:hover {
+    background: rgba(255, 50, 50, 1);
+    transform: scale(1.1);
+}
+
+.drag_hint {
+    margin-top: 10px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+}
+
+/* 반응형 개선 */
+@media (max-width: 980px) {
+    .left_wrap {
+        width: 100%;
+        float: none;
+        margin-bottom: 20px;
+    }
+
+    .right_wrap {
+        width: 100%;
+        float: none;
+        padding: 0px 0px 20px 0px;
+    }
+}

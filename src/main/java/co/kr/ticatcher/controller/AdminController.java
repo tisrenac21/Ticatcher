@@ -27,7 +27,7 @@ public class AdminController {
 	private AdminService asrv;
 
 	@Autowired
-	private MemberService msrv;
+	private MemberService memberService;
 
 	@Autowired
 	private StageService ssrv;
@@ -154,7 +154,7 @@ public class AdminController {
 		String retrunPage;
 		if(session.getAttribute("admin") != null) {
 			QnaVO qna = asrv.readOneQNA(qna_idx);
-			qna.setMemberVO(msrv.selectInfoByIdx(qna.getMem_idx()));
+			qna.setMemberVO(memberService.selectInfoByIdx(qna.getMem_idx()));
 			model.addAttribute("detail", qna);
 			model.addAttribute("index", asrv.countIndexFromQna(qna_idx));
 			retrunPage = "admin/manageQNAView";
@@ -294,7 +294,7 @@ public class AdminController {
 
 			List<QnaVO> list = asrv.readQNA(snum);
 			for(QnaVO qna : list){
-				qna.setMemberVO(msrv.selectInfoByIdx(qna.getMem_idx()));
+				qna.setMemberVO(memberService.selectInfoByIdx(qna.getMem_idx()));
 			}
 
 			m.addAttribute("pages",asrv.readCountQNA());
@@ -413,5 +413,10 @@ public class AdminController {
 		}
 
 		return returnPage;
+	}
+
+	@GetMapping("/registerstage")
+	public String goIntmngstg(HttpSession session, Model model, String cpg){
+		return "admin/writeStage";
 	}
 }

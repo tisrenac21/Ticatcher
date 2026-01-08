@@ -21,7 +21,7 @@ import java.util.Map;
 public class MemberController {
 
 	@Autowired
-	private MemberService msrv;
+	private MemberService memberService;
 	
 	protected Logger LOGGER =
 			LoggerFactory.getLogger(getClass());
@@ -42,7 +42,7 @@ public class MemberController {
 		MemberVO mvo = new MemberVO();
 		mvo.setMem_id(mem_id);
 		mvo.setMem_pw(mem_pw);
-		MemberVO result = msrv.checkLogin(mvo);
+		MemberVO result = memberService.checkLogin(mvo);
 		int returnPage = 0;
 
 		if((result.getMem_idx()) != null){
@@ -75,7 +75,7 @@ public class MemberController {
 	public String checkjoin(MemberVO mvo, RedirectAttributes redirect){
 		String returnPage = "redirect:/join";
 
-		if(msrv.checkjoin(mvo) == 1){
+		if(memberService.checkjoin(mvo) == 1){
 			returnPage = "member/join_fail";
 		}
 		else{
@@ -95,7 +95,7 @@ public class MemberController {
 
 	@PostMapping("/join")
 	public String join(MemberVO mvo){
-		msrv.join(mvo);
+		memberService.join(mvo);
 		return "redirect:/login";
 	}
 
@@ -105,8 +105,8 @@ public class MemberController {
 		String result = "잘못된 방법으로 호출하였습니다.";
 
 		if(uid != null || !uid.equals("")){
-			result = msrv.checkid(uid);
-			String delresult = msrv.checkDelId(uid);
+			result = memberService.checkid(uid);
+			String delresult = memberService.checkDelId(uid);
 			if(delresult.equals("1")){result = "3";}
 		}
 		return result;
@@ -116,7 +116,7 @@ public class MemberController {
 	@ResponseBody
 	@GetMapping("/sendsms")
 	public String sendsms(String to){
-		return msrv.sendSMS(to);
+		return memberService.sendSMS(to);
 	}
 
 	@GetMapping("/findinfo")
@@ -133,13 +133,13 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("/findid")
 	public String findId(MemberVO mvo){
-		return msrv.findId(mvo);
+		return memberService.findId(mvo);
 	}
 
 	@ResponseBody
 	@PostMapping("/findpw")
 	public int findPw(MemberVO mvo){
-		return msrv.findPw(mvo);
+		return memberService.findPw(mvo);
 	}
 
 	@GetMapping("/changePwForFind")
@@ -158,7 +158,7 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("/changePw")
 	public int changePw(MemberVO mvo){
-		return msrv.changePw(mvo);
+		return memberService.changePw(mvo);
 	}
 
 	@GetMapping("/mypage")
@@ -222,7 +222,7 @@ public class MemberController {
 		originmvo.setMem_aka(mvo.getMem_aka());
 		originmvo.setMem_email(mvo.getMem_email());
 		session.setAttribute("m", originmvo);
-		return msrv.uptmember(originmvo);
+		return memberService.uptmember(originmvo);
 	}
 
 	@GetMapping("/readydelmem")
@@ -262,8 +262,8 @@ public class MemberController {
 		if(session.getAttribute("m") != null){
 			MemberVO mvo = (MemberVO) session.getAttribute("m");
 			session.invalidate();
-			msrv.saveDeleteId(mvo.getMem_id());
-			msrv.deleteMember(mvo.getMem_idx());
+			memberService.saveDeleteId(mvo.getMem_id());
+			memberService.deleteMember(mvo.getMem_idx());
 			returnPage = "redirect:/";
 		}else {
 			returnPage = "redirect:/login";

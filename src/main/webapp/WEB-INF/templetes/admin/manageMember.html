@@ -77,6 +77,10 @@
             border-radius: 5px;
             background-color: #1a1a1a !important;
         }
+
+        #memid {
+            cursor: pointer;
+        }
     </style>
 
 </head>
@@ -233,7 +237,7 @@
                             <td valign="top" align="center">
                                 <li th:unless="${member.mem_idx} == 1"><input type="checkbox" th:value="${member.mem_idx}"></li>
                                 <li th:if="${member.mem_idx} == 1"><input type="checkbox" style="background: #6a6a6a" disabled th:value="${member.mem_idx}"></li>
-                                <li id="memberId" th:onclick="showMemberInfo([[${member}]])" th:text="${member.mem_id}">
+                                <li id="memberId"><span id="memid" th:onclick="showMemberInfo([[${member}]])" th:text="${member.mem_id}"></span>
                                     <!--                                        <a th:text="${member.mem_id}" th:href="@{/getInfoMember(mem_idx=${member.mem_idx})}"></a>-->
                                 </li>
                                 <li th:text="${member.mem_name}"></li>

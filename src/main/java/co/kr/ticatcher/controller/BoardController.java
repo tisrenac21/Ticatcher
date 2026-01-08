@@ -23,7 +23,7 @@ public class BoardController {
 	protected Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private MemberService msrv;
+	private MemberService memberService;
 
 	@Autowired
 	private BoardService bsrv;
@@ -111,7 +111,7 @@ public class BoardController {
 
 			m.addAttribute("pages",bsrv.readCountMyQna(mem_idx));
 			m.addAttribute("qna", bsrv.readMyQna(snum, mem_idx));
-			m.addAttribute("member", msrv.selectInfoByIdx(mem_idx));
+			m.addAttribute("member", memberService.selectInfoByIdx(mem_idx));
 			m.addAttribute("stpgn", stpgn);
 
 			returnPage = "board/help_qna";

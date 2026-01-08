@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th = "http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/adminLayout}">
 
 <th:block layout:fragment="mystyle">
-    <link rel="stylesheet" href="static/css/writeNotice.css">
+    <link rel="stylesheet" href="static/css/writeStage.css">
 </th:block>
+
 <th:block layout:fragment="main">
     <div class="container">
         <div class="contents">
@@ -24,20 +25,322 @@
                     </a>
                 </ul>
             </div>
+
             <div class="right_wrap">
-                <p class="right_title">
-                    공연 등록
-                </p>
+                <p class="right_title">공연 등록</p>
                 <div class="right_list">
+                    <div class="qna_box">
+                        <div class="title_box">
+                            <form name="boardform" id="boardform" enctype="multipart/form-data">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <th class="form_th">
+                                            <label for="inp_title">공연 제목 <em><img src="static/img/ico_star.png" alt="필수"></em></label>
+                                        </th>
+                                        <td class="form_td">
+                                            <input type="text" id="inp_title" name="stage_name" class="inp_common" placeholder="공연 제목을 입력해주세요.">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="form_th">
+                                            <label for="inp_location">장소 <em><img src="static/img/ico_star.png" alt="필수"></em></label>
+                                        </th>
+                                        <td class="form_td">
+                                            <input type="text" id="inp_location" name="stage_location" class="inp_common" placeholder="공연 장소를 입력해주세요. (예: 대학로 아트센터)">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="form_th">
+                                            <label>일시 <em><img src="static/img/ico_star.png" alt="필수"></em></label>
+                                        </th>
+                                        <td class="form_td">
+                                            <div class="date_group">
+                                                <input type="date" id="inp_date" name="stage_date" class="inp_common">
+                                                <span>-</span>
+                                                <input type="time" id="inp_time" name="stage_start_time" class="inp_common">
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="form_th">
+                                            <label for="inp_runtime">러닝타임</label>
+                                        </th>
+                                        <td class="form_td">
+                                            <input type="number" id="inp_runtime" name="stage_runtime" class="inp_common" placeholder="분 단위로 입력 (예: 90)">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="form_th">
+                                            <label>티켓 가격 <em><img src="static/img/ico_star.png" alt="필수"></em></label>
+                                        </th>
+                                        <td class="form_td">
+                                            <div id="price_list" class="price_list">
+                                                <!-- 가격 항목들이 동적으로 추가됩니다 -->
+                                            </div>
+                                            <button type="button" class="price_add_btn" id="add_price_btn">+ 가격 추가</button>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="form_th">
+                                            <label for="inp_grade">관람 등급 <em><img src="static/img/ico_star.png" alt="필수"></em></label>
+                                        </th>
+                                        <td class="form_td">
+                                            <select id="inp_grade" name="stage_grade" class="inp_common">
+                                                <option value="">등급을 선택해주세요</option>
+                                                <option value="ALL">전체 관람가</option>
+                                                <option value="8">8세 이상</option>
+                                                <option value="12">12세 이상</option>
+                                                <option value="15">15세 이상</option>
+                                                <option value="19">청소년 관람불가</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="form_th">
+                                            <label for="inp_poster">포스터 <em><img src="static/img/ico_star.png" alt="필수"></em></label>
+                                        </th>
+                                        <td class="form_td">
+                                            <div class="file_input_wrapper">
+                                                <input type="file" id="inp_poster" name="poster_file" accept="image/*">
+                                                <div class="file_custom_btn">📁 포스터 이미지 선택</div>
+                                                <span class="file_name" id="poster_file_name">선택된 파일 없음</span>
+                                            </div>
+                                            <div id="poster_preview" class="image_preview" style="display: none;">
+                                                <img id="poster_preview_img" class="preview_image" alt="포스터 미리보기">
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="form_th">
+                                            <label for="inp_details">상세페이지<br>(이미지)</label>
+                                        </th>
+                                        <td class="form_td">
+                                            <div class="file_input_wrapper">
+                                                <input type="file" id="inp_details" name="detail_files" multiple accept="image/*">
+                                                <div class="file_custom_btn">📁 상세 이미지 선택 (여러장)</div>
+                                            </div>
+                                            <p style="margin-top: 10px;">* Ctrl 또는 Shift 키를 눌러 여러 장의 이미지를 선택할 수 있습니다.</p>
+                                            <div id="detail_images_container" class="detail_images_container"></div>
+                                            <p class="drag_hint">💡 이미지를 드래그하여 순서를 변경할 수 있습니다.</p>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div id="okbtn" class="write_btn">등록</div>
+                <div id="okbtn" class="write_btn">등록하기</div>
             </div>
         </div>
     </div>
 </th:block>
+
 <th:block layout:fragment="myscript">
     <script>
+        // 티켓 가격 관리
+        let priceIndex = 0;
 
+        function addPriceItem() {
+            const priceList = document.getElementById('price_list');
+            const priceItem = document.createElement('div');
+            priceItem.className = 'price_item';
+            priceItem.innerHTML = `
+                <input type="text" name="price_name[]" placeholder="좌석 등급 (예: VIP석, R석)" required>
+                <input type="number" name="price_value[]" placeholder="가격 (원)" required>
+                <button type="button" class="price_remove_btn" onclick="removePriceItem(this)">삭제</button>
+            `;
+            priceList.appendChild(priceItem);
+        }
+
+        function removePriceItem(btn) {
+            btn.parentElement.remove();
+        }
+
+        document.getElementById('add_price_btn').addEventListener('click', addPriceItem);
+
+        // 초기 가격 항목 1개 추가
+        addPriceItem();
+
+        // 포스터 이미지 미리보기
+        document.getElementById('inp_poster').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const fileNameSpan = document.getElementById('poster_file_name');
+            const preview = document.getElementById('poster_preview');
+            const previewImg = document.getElementById('poster_preview_img');
+
+            if (file) {
+                fileNameSpan.textContent = file.name;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                fileNameSpan.textContent = '선택된 파일 없음';
+                preview.style.display = 'none';
+            }
+        });
+
+        // 상세 이미지 관리
+        let detailImages = [];
+        let draggedElement = null;
+
+        document.getElementById('inp_details').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            const container = document.getElementById('detail_images_container');
+
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = {
+                        file: file,
+                        dataUrl: e.target.result,
+                        id: Date.now() + index
+                    };
+                    detailImages.push(imageData);
+                    renderDetailImages();
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        function renderDetailImages() {
+            const container = document.getElementById('detail_images_container');
+            container.innerHTML = '';
+
+            detailImages.forEach((img, index) => {
+                const div = document.createElement('div');
+                div.className = 'detail_image_item';
+                div.draggable = true;
+                div.dataset.id = img.id;
+                div.innerHTML = `
+                    <div class="detail_image_order">${index + 1}</div>
+                    <img src="${img.dataUrl}" alt="상세 이미지 ${index + 1}">
+                    <div class="detail_image_remove" onclick="removeDetailImage(${img.id})">×</div>
+                `;
+
+                // 드래그 이벤트 추가
+                div.addEventListener('dragstart', handleDragStart);
+                div.addEventListener('dragover', handleDragOver);
+                div.addEventListener('drop', handleDrop);
+                div.addEventListener('dragend', handleDragEnd);
+
+                container.appendChild(div);
+            });
+        }
+
+        function removeDetailImage(id) {
+            detailImages = detailImages.filter(img => img.id !== id);
+            renderDetailImages();
+        }
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+
+            if (draggedElement !== this) {
+                const draggedId = parseInt(draggedElement.dataset.id);
+                const targetId = parseInt(this.dataset.id);
+
+                const draggedIndex = detailImages.findIndex(img => img.id === draggedId);
+                const targetIndex = detailImages.findIndex(img => img.id === targetId);
+
+                // 배열 순서 변경
+                const temp = detailImages[draggedIndex];
+                detailImages[draggedIndex] = detailImages[targetIndex];
+                detailImages[targetIndex] = temp;
+
+                renderDetailImages();
+            }
+
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+        }
+
+        // 폼 제출
+        document.getElementById("okbtn").addEventListener("click", function() {
+            const form = document.getElementById("boardform");
+
+            if(!form.stage_name.value) {
+                alert("공연 제목을 입력하세요.");
+                form.stage_name.focus();
+                return;
+            }
+            if(!form.stage_location.value) {
+                alert("장소를 입력하세요.");
+                form.stage_location.focus();
+                return;
+            }
+            if(!form.stage_date.value || !form.stage_start_time.value) {
+                alert("일시를 정확히 입력하세요.");
+                return;
+            }
+
+            // 가격 검증
+            const priceNames = document.querySelectorAll('input[name="price_name[]"]');
+            const priceValues = document.querySelectorAll('input[name="price_value[]"]');
+
+            if(priceNames.length === 0) {
+                alert("티켓 가격을 최소 1개 이상 추가해주세요.");
+                return;
+            }
+
+            for(let i = 0; i < priceNames.length; i++) {
+                if(!priceNames[i].value || !priceValues[i].value) {
+                    alert("모든 가격 정보를 입력해주세요.");
+                    return;
+                }
+            }
+
+            if(!form.stage_grade.value) {
+                alert("관람 등급을 선택하세요.");
+                form.stage_grade.focus();
+                return;
+            }
+            if(!form.poster_file.value) {
+                alert("포스터 이미지를 등록하세요.");
+                return;
+            }
+
+            // 상세 이미지 순서 정보 수집
+            console.log("등록된 상세 이미지 순서:", detailImages.map((img, idx) => ({
+                순서: idx + 1,
+                파일명: img.file.name
+            })));
+
+            alert("공연 등록이 요청되었습니다.");
+            console.log("등록 로직 실행");
+            // form.submit();
+        });
     </script>
 </th:block>
 </html>
