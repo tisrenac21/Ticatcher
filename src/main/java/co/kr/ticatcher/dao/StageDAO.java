@@ -14,4 +14,6 @@ public interface StageDAO {
     TheaterVO getAllTheaterByTheaterIdx(long theater_idx);
 
     List<PriceVO> getAllPriceBySchedule(long schedule_idx);
+
+    int saveStage(StageVO svo);
 }

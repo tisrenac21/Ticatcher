@@ -1,7 +1,9 @@
 package co.kr.ticatcher.service;
 
 import co.kr.ticatcher.vo.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface StageService {
@@ -11,4 +13,5 @@ public interface StageService {
     List<PriceVO> getAllPriceBySchedule(long schedule_idx);
     List<StageVO> getNewStage();
     PriceVO getCheapOfSchedule(long scheduleIdx);
+    int saveStage(StageVO svo, MultipartFile posterFile, List<MultipartFile> detailFiles) throws IOException;
 }

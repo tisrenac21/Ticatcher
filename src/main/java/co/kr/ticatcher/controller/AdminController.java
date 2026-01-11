@@ -375,10 +375,12 @@ public class AdminController {
 				dateList.add(format.format(sc.getSchedule_date()));
 			}
 
-
+			String period = "-";
 
 			String[] infoImg = svo.getStage_imgInfoPath().split(",");
-			String period = Collections.min(dateList) + " ~ " + Collections.max(dateList);
+			if((dateList != null) && (!dateList.isEmpty())) {
+				period = Collections.min(dateList) + " ~ " + Collections.max(dateList);
+			}
 
 			model.addAttribute("stage", svo);
 			model.addAttribute("schedules", stageSchedule);

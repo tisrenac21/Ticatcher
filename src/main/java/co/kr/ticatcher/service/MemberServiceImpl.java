@@ -49,6 +49,10 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public String sendSMS(String to) {
+		String api_key = "NCSPY00K2BTHQXVE";
+		String api_secret = "XH3PTLHXSITLZSBK7TYXWHW4GKOQA9DU";
+		Message coolsms = new Message(api_key, api_secret);
+
 		Random rand = new Random();
 
 		String numStr = "";
@@ -57,30 +61,18 @@ public class MemberServiceImpl implements MemberService {
 			numStr+=ran;
 		}
 
-//		String api_key = "NCSPY00K2BTHQXVE";
-//		String api_secret = "ZVWGH7KUB98Z5K9MUZEADFRPCKT4NPTG";
-//		Message coolsms = new Message(api_key, api_secret);
-//
-//		Random rand = new Random();
-//
-//		String numStr = "";
-//		for(int i=0; i<6; i++){
-//			String ran = Integer.toString(rand.nextInt(10));
-//			numStr+=ran;
-//		}
-//
-//		HashMap<String, String> params = new HashMap<String, String>();
-//		params.put("to", to);
-//		params.put("from", "01086631564");
-//		params.put("type", "SMS");
-//		params.put("text", "[Ticatcher] 인증번호 [ " + numStr + " ] 를 입력하세요.");
-//		params.put("app_version", "test app 1.2"); // application name and version
-//
-//		try {
-//			coolsms.send(params);
-//		} catch (CoolsmsException e) {
-//			throw new RuntimeException(e);
-//		}
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("to", to);
+		params.put("from", "01086631564");
+		params.put("type", "SMS");
+		params.put("text", "[Ticatcher] 인증번호 [ " + numStr + " ] 를 입력하세요.");
+		params.put("app_version", "test app 1.2"); // application name and version
+
+		try {
+			coolsms.send(params);
+		} catch (CoolsmsException e) {
+			throw new RuntimeException(e);
+		}
 
 		return numStr;
 	}

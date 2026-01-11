@@ -1,181 +1,278 @@
-p {
-    font-size: 20px;
+/* 레이아웃 초기화 및 설정 */
+.full_wrap {
+    width: 100%;
+    padding: 0 10px;
 }
 
-.left_wrap {
-    float: left;
-    width: 150px;
-    padding-left: 10px;
-}
-
-.left_wrap p {
+/* 페이지 헤더 영역 */
+.page_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #FEF1AB;
     padding-bottom: 10px;
-    border-bottom: 1px solid #e2e2e2;
 }
 
-.left_wrap_btn {
-    margin: 10px 0;
+.page_header h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
 }
 
-.left_wrap_btn span {
-    color: rgba(255, 255, 255, 0.85);
+/* 우측 상단 그룹 (검색창 + 등록버튼) */
+.header_right_group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
-.left_wrap_btn:hover span {
+/* 검색창 스타일 */
+.search_box_wrap {
+    display: flex;
+    align-items: center;
+    background: #222;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.search_select {
+    background: #222;
+    color: #fff;
+    border: none;
+    padding: 5px;
+    outline: none;
+    font-size: 13px;
+    border-right: 1px solid #555;
+    cursor: pointer;
+}
+
+.search_input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 5px 10px;
+    width: 180px;
+    outline: none;
+    font-size: 14px;
+}
+
+.btn_search {
+    background: #555;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    border-radius: 2px;
+    transition: background 0.2s;
+}
+
+.btn_search:hover {
+    background: #FEF1AB;
+    color: #000;
+}
+
+/* 공연 등록 버튼 스타일 */
+.btn_register {
+    display: inline-block;
+    padding: 8px 20px;
+    background: #FEF1AB;
+    color: #333 !important;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.btn_register:hover {
+    background: #fff;
+    color: #000 !important;
+}
+
+/* 리스트 컨테이너 (Flexbox 기반) */
+.stage_list_container {
+    width: 100%;
+    border-top: 1px solid #555;
+}
+
+/* 공통 Flex Row 스타일 */
+.list_header, .list_row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+/* 헤더 스타일 */
+.list_header {
+    font-weight: bold;
+    height: 50px;
+}
+
+.list_header .col {
+    color: #FEF1AB;
+    text-align: center;
+}
+
+/* 리스트 바디 스타일 */
+.list_row {
+    padding: 15px 0;
+    transition: background 0.2s;
+}
+
+.list_row:hover {
+    background: rgba(254, 241, 171, 0.05);
+}
+
+/* --- 컬럼 너비 정의 (상태창 추가로 조정됨) --- */
+.col_idx {
+    flex: 0 0 60px;
+    text-align: center;
+}
+
+.col_title {
+    flex: 1; /* 남은 공간 차지 */
+    padding: 0 15px;
+    text-align: left !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.col_title a {
+    color: #fff;
+    font-size: 16px;
+}
+
+.col_title a:hover {
+    color: #FEF1AB;
+    text-decoration: underline;
+}
+
+.col_host {
+    flex: 0 0 130px;
+    text-align: center;
+    color: #ccc;
+    font-size: 14px;
+}
+
+/* 상태 컬럼 (신규) */
+.col_status {
+    flex: 0 0 130px;
+    text-align: center;
+}
+
+/* 상태 배지 디자인 */
+.status_badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    min-width: 95px;
+    text-align: center;
+}
+
+/* 상태별 색상 */
+.status_badge.warning { /* 공연장 미설정 (빨강) */
+    background: rgba(255, 82, 82, 0.15);
+    color: #ff8a80;
+    border: 1px solid #ff5252;
+}
+
+.status_badge.caution { /* 일정 미설정 (주황) */
+    background: rgba(255, 152, 0, 0.15);
+    color: #ffb74d;
+    border: 1px solid #ff9800;
+}
+
+.status_badge.complete { /* 등록 완료 (초록/민트) */
+    background: rgba(76, 175, 80, 0.15);
+    color: #69f0ae;
+    border: 1px solid #00e676;
+}
+
+/* 관리 버튼 컬럼 */
+.col_manage {
+    flex: 0 0 200px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn_action {
+    display: inline-block;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.btn_action.schedule {
+    border: 1px solid #FEF1AB;
     color: #FEF1AB;
 }
 
-.select_btn {
-    color: #FEF1AB !important;
-}
-
-.right_wrap {
-    float: right;
-    width: 780px;
-    padding-left: 10px;
-}
-
-.right_list {
-    margin-top: 15px;
-}
-
-.list_header li {
-    padding: 10px 0;
-}
-
-.list_header li:first-child {
-    width: 85px;
-    float: left;
-    text-align: center;
+.btn_action.schedule:hover {
     background: #FEF1AB;
-    color: rgb(120, 120, 120);
+    color: #000;
 }
 
-.list_header li:nth-child(2) {
-    width: 557px;
-    float: left;
-    text-align: center;
-    background: #FEF1AB;
-    color: rgb(120, 120, 120);
+.btn_action.venue {
+    border: 1px solid #fff;
+    color: #fff;
 }
 
-.list_header li:last-child {
-    width: 128px;
-    float: left;
-    text-align: center;
-    background: #FEF1AB;
-    color: rgb(120, 120, 120)
+.btn_action.venue:hover {
+    background: #fff;
+    color: #000;
 }
 
-.list_contents td {
-    border-bottom: 1px solid #e2e2e2;
-}
-
-.list_contents li:first-child {
-    width: 85px;
-    float: left;
-    text-align: center;
-    padding: 10px 0;
-}
-
-.list_contents li:nth-child(2) {
-    width: 530px;
-    float: left;
-    text-align: left;
-    padding: 10px 0 10px 10px;
-}
-
-.list_contents li:last-child {
-    width: 155px;
-    float: right;
-    text-align: center;
-    padding: 10px 0;
-}
-
+/* 페이징 */
 .list_pager {
     text-align: center;
-    margin-top: 20px;
-    clear: both;
+    margin-top: 30px;
 }
 
 .list_pager ul {
     display: inline-block;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 .list_pager li {
     display: inline-block;
-    padding: 0 8px;
-    line-height: 40px;
+    padding: 0 5px;
 }
 
-.list_pager li a {
-    color: rgba(255, 255, 255, 0.85);
+.list_pager li a, .list_pager li span {
+    display: block;
+    min-width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: #888;
 }
 
-.list_pager li a:hover,
-.on {
+.list_pager li a:hover, .list_pager li .on {
     color: #FEF1AB !important;
-    text-decoration: underline;
-
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .btn_pager {
     display: inline-block;
     width: 61px;
     height: 35px;
-    margin: 3px 2px 0 2px;
     background: url(../img/btn_pager.gif) no-repeat;
-    border: 1px solid #d8d8d8;
+    border: 1px solid #555;
     cursor: pointer;
+    vertical-align: middle;
 }
 
-.btn_pager.next {
-    margin-left: 16px;
-    padding: 0 24px 0 10px;
-    vertical-align: top;
-    background-position: calc(100% - 2px)-73px;
-    border-radius: 4px;
-}
-
-.btn_pager.end {
-    width: 40px;
-    padding: 0;
-    vertical-align: top;
-    background-position: 12px -176px;
-    font: 0/0 a;
-    zoom: 1;
-    border-radius: 4px;
-}
-
-.btn_pager.prev {
-    margin-right: 16px;
-    padding: 0 10px 0 24px;
-    vertical-align: top;
-    background-position: 2px -21px;
-    border-radius: 4px;
-}
-
-.btn_pager.first {
-    width: 40px;
-    padding: 0;
-    vertical-align: top;
-    background-position: 12px -125px;
-    font: 0/0 a;
-    zoom: 1;
-    border-radius: 4px;
-}
-
-.write_btn {
-    width: 100px;
-    height: 35px;
-    background: #FEF1AB;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-top: 10px;
-    text-align: center;
-    line-height: 35px;
-    color: rgb(120, 120, 120);
-    float: right;
-    margin-bottom: 10px;
-}
+.btn_pager.first { background-position: 12px -125px; width: 40px; }
+.btn_pager.prev { background-position: 2px -21px; }
+.btn_pager.next { background-position: calc(100% - 2px) -73px; }
+.btn_pager.end { background-position: 12px -176px; width: 40px; }

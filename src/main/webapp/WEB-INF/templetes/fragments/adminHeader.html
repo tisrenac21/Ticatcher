@@ -50,6 +50,11 @@
 							<span class="menu_span">관리자 관리</span>
 						</a>
 					</li>
+					<li th:if="${session.admin.getAdmin_grade() == 'super'}">
+						<a href="#">
+							<span class="menu_span">공연장 관리</span>
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>

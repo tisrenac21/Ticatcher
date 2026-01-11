@@ -23,4 +23,30 @@
             resultType="co.kr.ticatcher.vo.PriceVO">
         select * from tcc_price where schedule_idx = #{schedule_idx}
     </select>
+    <insert id="saveStage" statementType="PREPARED"
+            parameterType="co.kr.ticatcher.vo.StageVO">
+        insert into tcc_stage (
+            stage_idx,
+            stage_name,
+            stage_grade,
+            stage_runtime,
+            stage_host,
+            stage_posterName,
+            stage_posterPath,
+            stage_imgInfoName,
+            stage_imgInfoPath,
+            stage_info
+        ) values (
+            #{stage_idx},
+            #{stage_name},
+            #{stage_grade},
+            #{stage_runtime},
+            #{stage_host},
+            #{stage_posterName},
+            #{stage_posterPath},
+            #{stage_imgInfoName},
+            #{stage_imgInfoPath},
+            #{stage_info}
+        )
+    </insert>
 </mapper>

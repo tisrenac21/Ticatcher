@@ -33,4 +33,9 @@ public class StageDAOImpl implements StageDAO {
 	public List<PriceVO> getAllPriceBySchedule(long schedule_idx) {
 		return sqlSession.selectList("stage.getAllPriceBySchedule",schedule_idx);
 	}
+
+	@Override
+	public int saveStage(StageVO svo) {
+		return sqlSession.insert("stage.saveStage", svo);
+	}
 }
