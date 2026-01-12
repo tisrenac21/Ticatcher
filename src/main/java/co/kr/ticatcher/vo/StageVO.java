@@ -21,4 +21,5 @@ public class StageVO {
 	private String stage_imgInfoName;
 	private String stage_imgInfoPath;
 	private String stage_info;
+	private long theater_idx;
 }

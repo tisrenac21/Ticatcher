@@ -35,7 +35,8 @@
             stage_posterPath,
             stage_imgInfoName,
             stage_imgInfoPath,
-            stage_info
+            stage_info,
+            theater_idx
         ) values (
             #{stage_idx},
             #{stage_name},
@@ -46,7 +47,16 @@
             #{stage_posterPath},
             #{stage_imgInfoName},
             #{stage_imgInfoPath},
-            #{stage_info}
+            #{stage_info},
+            #{theater_idx}
         )
     </insert>
+
+    <select id="seleteTheaters" statementType="PREPARED" resultType="map">
+        select
+            theater_idx as id,
+            theater_name as name
+        from
+            tcc_theater
+    </select>
 </mapper>

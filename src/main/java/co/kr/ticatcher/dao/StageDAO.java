@@ -3,6 +3,7 @@ package co.kr.ticatcher.dao;
 import co.kr.ticatcher.vo.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StageDAO {
 
@@ -16,4 +17,6 @@ public interface StageDAO {
     List<PriceVO> getAllPriceBySchedule(long schedule_idx);
 
     int saveStage(StageVO svo);
+
+    List<Map<String, Object>> seleteTheaters();
 }

@@ -391,3 +391,108 @@ select.inp_common {
         padding: 0px 0px 20px 0px;
     }
 }
+
+/* 모달 팝업 스타일 */
+.modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* 배경 어둡게 */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal_content {
+    width: 500px;
+    background: #1a1a1a; /* 팝업 배경색 */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(254, 241, 171, 0.1);
+    overflow: hidden;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal_header {
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal_header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #FEF1AB; /* 포인트 컬러 */
+    font-weight: bold;
+    background: none;
+}
+
+.close_btn {
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+    transition: color 0.3s;
+    background: none;
+}
+
+.close_btn:hover {
+    color: #FEF1AB;
+}
+
+.modal_body {
+    padding: 20px;
+}
+
+.modal_search {
+    margin-bottom: 15px;
+}
+
+.theater_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+
+/* 스크롤바 커스텀 */
+.theater_list::-webkit-scrollbar {
+    width: 8px;
+}
+.theater_list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+.theater_list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.theater_item {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 14px;
+}
+
+.theater_item:last-child {
+    border-bottom: none;
+}
+
+.theater_item:hover {
+    background: rgba(254, 241, 171, 0.15); /* 호버 시 포인트 컬러 배경 */
+    color: #FEF1AB;
+}

@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface StageService {
     StageVO getStageByIdx(long stage_idx);
@@ -14,4 +15,5 @@ public interface StageService {
     List<StageVO> getNewStage();
     PriceVO getCheapOfSchedule(long scheduleIdx);
     int saveStage(StageVO svo, MultipartFile posterFile, List<MultipartFile> detailFiles) throws IOException;
+    List<Map<String, Object>> seleteTheaters();
 }

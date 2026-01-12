@@ -35,15 +35,16 @@
                                         </td>
                                     </tr>
 
-<!--                                    <tr>-->
-<!--                                        <th class="form_th">-->
-<!--                                            <label for="inp_location">장소 <em><img src="static/img/ico_star.png" alt="필수"></em></label>-->
-<!--                                        </th>-->
-<!--                                        <td class="form_td">-->
-<!--                                            <input style="width: 80%;" type="text" id="" name="" class="inp_common" placeholder="공연장을 선택해주세요" readonly>-->
-<!--                                            <div style="float: right;" class="file_custom_btn">공연장 선택</div>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
+                                    <tr>
+                                        <th class="form_th">
+                                            <label for="selectTheater">장소 <em><img src="static/img/ico_star.png" alt="필수"></em></label>
+                                        </th>
+                                        <td class="form_td">
+                                            <input style="width: 80%;" type="text" id="stageLocation" name="stage_location" class="inp_common" placeholder="공연장을 선택해주세요" readonly>
+                                            <input type="hidden" name="theater_idx" id="theater_idx" value="">
+                                            <div style="float: right;" id="selectTheater" class="file_custom_btn">공연장 선택</div>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <th class="form_th">
                                             <label for="stageRuntime">러닝타임 <em><img src="static/img/ico_star.png" alt="필수"></em></label>
@@ -129,11 +130,25 @@
             </div>
         </div>
     </div>
+    <div id="theaterModal" class="modal_overlay" style="display: none;">
+        <div class="modal_content">
+            <div class="modal_header">
+                <h3>공연장 선택</h3>
+                <span class="close_btn" onclick="closeModal()">×</span>
+            </div>
+            <div class="modal_body">
+                <div class="modal_search">
+                    <input type="text" id="theaterSearch" class="inp_common" placeholder="공연장 이름 검색">
+                </div>
+                <ul id="theaterList" class="theater_list">
+                </ul>
+            </div>
+        </div>
+    </div>
 </th:block>
 
 <th:block layout:fragment="myscript">
     <script>
-        // 포스터 이미지 미리보기
         document.getElementById('inp_poster').addEventListener('change', function(e) {
             const file = e.target.files[0];
             const fileNameSpan = document.getElementById('poster_file_name');
@@ -155,7 +170,6 @@
             }
         });
 
-        // 상세 이미지 관리
         let detailImages = [];
         let draggedElement = null;
 
@@ -193,7 +207,6 @@
                     <div class="detail_image_remove" onclick="removeDetailImage(${img.id})">×</div>
                 `;
 
-                // 드래그 이벤트 추가
                 div.addEventListener('dragstart', handleDragStart);
                 div.addEventListener('dragover', handleDragOver);
                 div.addEventListener('drop', handleDrop);
@@ -234,7 +247,6 @@
                 const draggedIndex = detailImages.findIndex(img => img.id === draggedId);
                 const targetIndex = detailImages.findIndex(img => img.id === targetId);
 
-                // 배열 순서 변경
                 const temp = detailImages[draggedIndex];
                 detailImages[draggedIndex] = detailImages[targetIndex];
                 detailImages[targetIndex] = temp;
@@ -249,39 +261,506 @@
             this.classList.remove('dragging');
         }
 
+        let theaterData = [];
+
+        addEventListener("DOMContentLoaded", () => {
+            fetch("/stage/api/selectTheaters", {
+                method: "POST"
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("네트워크 응답이 올바르지 않습니다.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    theaterData = data;
+                })
+                .catch(error => console.error("에러 발생:", error));
+        });
+        const modal = document.getElementById('theaterModal');
+        const theaterListUl = document.getElementById('theaterList');
+        const theaterSearch = document.getElementById('theaterSearch');
+
+        document.getElementById('selectTheater').addEventListener('click', function() {
+            renderTheaterList(theaterData);
+            modal.style.display = 'flex';
+            theaterSearch.value = '';
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('theaterSearch').value = '';
+        }
+
+        function renderTheaterList(data) {
+            theaterListUl.innerHTML = '';
+
+            if (data.length === 0) {
+                theaterListUl.innerHTML = '<li class="theater_item" style="text-align:center; cursor:default;">검색 결과가 없습니다.</li>';
+                return;
+            }
+
+            data.forEach(theater => {
+                const li = document.createElement('li');
+                li.className = 'theater_item';
+                li.textContent = theater.name;
+                li.setAttribute('data-rel', theater.id)
+
+                li.addEventListener('click', function() {
+                    document.getElementById('stageLocation').value = theater.name;
+                    document.getElementById('theater_idx').value = theater.id;
+                    closeModal();
+                });
+
+                theaterListUl.appendChild(li);
+            });
+        }
+
+        theaterSearch.addEventListener('keyup', function(e) {
+            const keyword = e.target.value.toLowerCase();
+            const filtered = theaterData.filter(v =>
+                v.name.toLowerCase().includes(keyword)
+            );
+            renderTheaterList(filtered);
+        });
+
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
         document.getElementById("okbtn").addEventListener("click", function() {
             const form = document.getElementById("boardform");
 
-            if(!form.stage_name.value) {
+            if (!form.stage_name.value) {
                 alert("공연 제목을 입력하세요.");
                 form.stage_name.focus();
                 return;
             }
-            if(!form.stage_host.value) {
+            if (!form.stage_host.value) {
                 alert("공연 주최사를 입력하세요.");
                 form.stage_host.focus();
                 return;
             }
-            if(!form.stage_runtime.value) {
+            if (!form.stage_runtime.value) {
                 alert("공연 러닝타임을 입력하세요.");
                 form.stage_runtime.focus();
                 return;
             }
 
-            if(!form.stage_grade.value) {
+            if (!form.stage_grade.value) {
                 alert("관람 등급을 선택하세요.");
                 form.stage_grade.focus();
                 return;
             }
 
-            if(!form.poster_file.value) {
+            if (!form.poster_file.value) {
                 alert("포스터 이미지를 등록하세요.");
                 return;
             }
 
-            alert("공연 등록이 요청되었습니다.");
-            form.submit();
+            if(!form.theater_idx.value) {
+                alert("공연장을 선택하세요");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("stage_name", document.getElementById("stageName").value);
+            formData.append("stage_host", document.getElementById("stageHost").value);
+            formData.append("stage_runtime", document.getElementById("stageRuntime").value);
+            formData.append("stage_grade", document.getElementById("stageGrade").value);
+            formData.append("stage_info", document.getElementById("stageInfo").value);
+            formData.append("theater_idx", document.getElementById("theater_idx").value);
+
+            const poster = document.getElementById("inp_poster").files[0];
+            if (poster) formData.append("poster_file", poster);
+
+            detailImages.forEach(function (item) {
+                formData.append("detail_files", item.file);
+            });
+
+            fetch("/stage/api/saveStage", {
+                method: "POST",
+                body: formData
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    if (data.success) {
+                        alert(data.message);
+                        location.href = "/managestage";
+                    } else {
+                        alert("실패: " + data.message);
+                    }
+                })
+                .catch(function (err) {
+                    console.error(err);
+                    alert("통신 오류가 발생했습니다.");
+                });
         });
+
+//
+//         /**
+//          * [모듈화 구조]
+//          * 1. PosterManager: 포스터 이미지 처리
+//          * 2. DetailImageManager: 상세 이미지 및 드래그 앤 드롭 처리
+//          * 3. TheaterManager: 공연장 목록 로드 및 모달 처리
+//          * 4. StageFormManager: 폼 유효성 검사 및 전송
+//          * 5. App: 전체 초기화
+//          */
+//
+// // 1. 포스터 관리 클래스
+//         class PosterManager {
+//             constructor() {
+//                 this.input = document.getElementById('inp_poster');
+//                 this.fileNameSpan = document.getElementById('poster_file_name');
+//                 this.preview = document.getElementById('poster_preview');
+//                 this.previewImg = document.getElementById('poster_preview_img');
+//
+//                 this.init();
+//             }
+//
+//             init() {
+//                 if (this.input) {
+//                     this.input.addEventListener('change', (e) => this.handleFileChange(e));
+//                 }
+//             }
+//
+//             handleFileChange(e) {
+//                 const file = e.target.files[0];
+//                 if (file) {
+//                     this.fileNameSpan.textContent = file.name;
+//                     const reader = new FileReader();
+//                     reader.onload = (e) => {
+//                         this.previewImg.src = e.target.result;
+//                         this.preview.style.display = 'block';
+//                     };
+//                     reader.readAsDataURL(file);
+//                 } else {
+//                     this.fileNameSpan.textContent = '선택된 파일 없음';
+//                     this.preview.style.display = 'none';
+//                 }
+//             }
+//
+//             getFile() {
+//                 return this.input.files[0];
+//             }
+//         }
+//
+//         // 2. 상세 이미지(드래그 앤 드롭) 관리 클래스
+//         class DetailImageManager {
+//             constructor() {
+//                 this.input = document.getElementById('inp_details');
+//                 this.container = document.getElementById('detail_images_container');
+//                 this.images = []; // { file, dataUrl, id }
+//                 this.draggedItem = null;
+//
+//                 this.init();
+//             }
+//
+//             init() {
+//                 if (this.input) {
+//                     this.input.addEventListener('change', (e) => this.handleFiles(e));
+//                 }
+//             }
+//
+//             handleFiles(e) {
+//                 const files = Array.from(e.target.files);
+//                 files.forEach((file, index) => {
+//                     const reader = new FileReader();
+//                     reader.onload = (readEvent) => {
+//                         const imageData = {
+//                             file: file,
+//                             dataUrl: readEvent.target.result,
+//                             id: Date.now() + Math.random() // 고유 ID 생성 강화
+//                         };
+//                         this.images.push(imageData);
+//                         this.render();
+//                     };
+//                     reader.readAsDataURL(file);
+//                 });
+//                 // 입력값 초기화 (동일 파일 재업로드 가능하게)
+//                 e.target.value = '';
+//             }
+//
+//             render() {
+//                 this.container.innerHTML = '';
+//                 this.images.forEach((img, index) => {
+//                     const div = document.createElement('div');
+//                     div.className = 'detail_image_item';
+//                     div.draggable = true;
+//                     div.dataset.id = img.id;
+//                     div.innerHTML = `
+//                 <div class="detail_image_order">${index + 1}</div>
+//                 <img src="${img.dataUrl}" alt="상세 이미지 ${index + 1}">
+//                 <div class="detail_image_remove">×</div>
+//             `;
+//
+//                     // 삭제 버튼 이벤트 (HTML onclick 제거하고 리스너로 바인딩)
+//                     div.querySelector('.detail_image_remove').addEventListener('click', () => {
+//                         this.removeImage(img.id);
+//                     });
+//
+//                     // 드래그 앤 드롭 이벤트 바인딩
+//                     this.addDragEvents(div);
+//
+//                     this.container.appendChild(div);
+//                 });
+//             }
+//
+//             removeImage(id) {
+//                 this.images = this.images.filter(img => img.id !== id);
+//                 this.render();
+//             }
+//
+//             addDragEvents(el) {
+//                 el.addEventListener('dragstart', (e) => {
+//                     this.draggedItem = el; // this가 아닌 el 저장
+//                     el.classList.add('dragging');
+//                     e.dataTransfer.effectAllowed = 'move';
+//                 });
+//
+//                 el.addEventListener('dragover', (e) => {
+//                     e.preventDefault(); // 드롭 허용
+//                     e.dataTransfer.dropEffect = 'move';
+//                 });
+//
+//                 el.addEventListener('drop', (e) => {
+//                     e.stopPropagation();
+//                     if (this.draggedItem !== el) {
+//                         this.swapImages(this.draggedItem.dataset.id, el.dataset.id);
+//                     }
+//                     return false;
+//                 });
+//
+//                 el.addEventListener('dragend', () => {
+//                     el.classList.remove('dragging');
+//                     this.draggedItem = null;
+//                 });
+//             }
+//
+//             swapImages(draggedId, targetId) {
+//                 // 문자열 ID를 숫자로 변환 (id 생성 방식에 따라 조정)
+//                 draggedId = parseFloat(draggedId);
+//                 targetId = parseFloat(targetId);
+//
+//                 const draggedIndex = this.images.findIndex(img => img.id === draggedId);
+//                 const targetIndex = this.images.findIndex(img => img.id === targetId);
+//
+//                 if (draggedIndex > -1 && targetIndex > -1) {
+//                     // 배열 순서 변경
+//                     const temp = this.images[draggedIndex];
+//                     this.images[draggedIndex] = this.images[targetIndex];
+//                     this.images[targetIndex] = temp;
+//
+//                     this.render();
+//                 }
+//             }
+//
+//             getFiles() {
+//                 return this.images.map(img => img.file);
+//             }
+//         }
+//
+//         // 3. 공연장(Theater) 관리 클래스
+//         class TheaterManager {
+//             constructor() {
+//                 this.theaterData = [];
+//                 this.modal = document.getElementById('theaterModal');
+//                 this.listUl = document.getElementById('theaterList');
+//                 this.searchInput = document.getElementById('theaterSearch');
+//                 this.triggerBtn = document.getElementById('selectTheater');
+//
+//                 // 폼 입력 필드
+//                 this.inputName = document.getElementById('stageLocation');
+//                 this.inputId = document.getElementById('theater_idx');
+//
+//                 this.init();
+//             }
+//
+//             init() {
+//                 // 데이터 로드
+//                 this.fetchData();
+//
+//                 // 모달 열기
+//                 if (this.triggerBtn) {
+//                     this.triggerBtn.addEventListener('click', () => this.openModal());
+//                 }
+//
+//                 // 검색 기능
+//                 if (this.searchInput) {
+//                     this.searchInput.addEventListener('keyup', (e) => this.handleSearch(e));
+//                 }
+//
+//                 // 모달 닫기 (배경 클릭)
+//                 window.addEventListener('click', (e) => {
+//                     if (e.target === this.modal) this.closeModal();
+//                 });
+//             }
+//
+//             fetchData() {
+//                 fetch("/stage/api/selectTheaters", { method: "POST" })
+//                     .then(res => {
+//                         if (!res.ok) throw new Error("네트워크 응답 오류");
+//                         return res.json();
+//                     })
+//                     .then(data => {
+//                         this.theaterData = data;
+//                     })
+//                     .catch(err => console.error("공연장 로드 실패:", err));
+//             }
+//
+//             openModal() {
+//                 this.renderList(this.theaterData);
+//                 this.modal.style.display = 'flex';
+//                 this.searchInput.value = '';
+//                 document.body.style.overflow = 'hidden';
+//             }
+//
+//             closeModal() {
+//                 this.modal.style.display = 'none';
+//                 document.body.style.overflow = 'auto';
+//                 this.searchInput.value = '';
+//             }
+//
+//             renderList(data) {
+//                 this.listUl.innerHTML = '';
+//
+//                 if (!data || data.length === 0) {
+//                     this.listUl.innerHTML = '<li class="theater_item" style="text-align:center; cursor:default;">검색 결과가 없습니다.</li>';
+//                     return;
+//                 }
+//
+//                 data.forEach(theater => {
+//                     const li = document.createElement('li');
+//                     li.className = 'theater_item';
+//                     li.textContent = theater.name;
+//                     li.setAttribute('data-rel', theater.id);
+//
+//                     li.addEventListener('click', () => {
+//                         this.selectTheater(theater);
+//                     });
+//
+//                     this.listUl.appendChild(li);
+//                 });
+//             }
+//
+//             selectTheater(theater) {
+//                 this.inputName.value = theater.name;
+//                 this.inputId.value = theater.id;
+//                 this.closeModal();
+//             }
+//
+//             handleSearch(e) {
+//                 const keyword = e.target.value.toLowerCase();
+//                 const filtered = this.theaterData.filter(t => t.name.toLowerCase().includes(keyword));
+//                 this.renderList(filtered);
+//             }
+//         }
+//
+//         // 4. 폼 전송 관리 클래스
+//         class StageFormManager {
+//             constructor(posterManager, detailImageManager) {
+//                 this.posterManager = posterManager;
+//                 this.detailImageManager = detailImageManager;
+//                 this.submitBtn = document.getElementById("okbtn");
+//
+//                 this.init();
+//             }
+//
+//             init() {
+//                 if (this.submitBtn) {
+//                     this.submitBtn.addEventListener("click", () => this.handleSubmit());
+//                 }
+//             }
+//
+//             validate() {
+//                 const form = document.getElementById("boardform");
+//                 const requiredFields = [
+//                     { field: form.stage_name, msg: "공연 제목을 입력하세요." },
+//                     { field: form.stage_host, msg: "공연 주최사를 입력하세요." },
+//                     { field: form.stage_runtime, msg: "공연 러닝타임을 입력하세요." },
+//                     { field: form.stage_grade, msg: "관람 등급을 선택하세요." },
+//                     { field: form.poster_file, msg: "포스터 이미지를 등록하세요.", checkValue: () => !!form.poster_file.value },
+//                     { field: form.theater_idx, msg: "공연장을 선택하세요.", checkValue: () => !!form.theater_idx.value }
+//                 ];
+//
+//                 for (const item of requiredFields) {
+//                     const isValid = item.checkValue ? item.checkValue() : !!item.field.value;
+//                     if (!isValid) {
+//                         alert(item.msg);
+//                         if (item.field.focus && item.field.type !== 'hidden') item.field.focus();
+//                         return false;
+//                     }
+//                 }
+//                 return true;
+//             }
+//
+//             handleSubmit() {
+//                 if (!this.validate()) return;
+//
+//                 const formData = new FormData();
+//
+//                 // 기본 텍스트 필드
+//                 formData.append("stage_name", document.getElementById("stageName").value);
+//                 formData.append("stage_host", document.getElementById("stageHost").value);
+//                 formData.append("stage_runtime", document.getElementById("stageRuntime").value);
+//                 formData.append("stage_grade", document.getElementById("stageGrade").value);
+//                 formData.append("stage_info", document.getElementById("stageInfo").value);
+//                 formData.append("theater_idx", document.getElementById("theater_idx").value);
+//
+//                 // 포스터 이미지
+//                 const posterFile = this.posterManager.getFile();
+//                 if (posterFile) {
+//                     formData.append("poster_file", posterFile);
+//                 }
+//
+//                 // 상세 이미지들 (순서가 반영된 배열 가져오기)
+//                 const detailFiles = this.detailImageManager.getFiles();
+//                 detailFiles.forEach(file => {
+//                     formData.append("detail_files", file);
+//                 });
+//
+//                 // 서버 전송
+//                 this.sendData(formData);
+//             }
+//
+//             sendData(formData) {
+//                 fetch("/stage/api/saveStage", {
+//                     method: "POST",
+//                     body: formData
+//                 })
+//                     .then(response => response.json())
+//                     .then(data => {
+//                         if (data.success) {
+//                             alert(data.message);
+//                             location.href = "/managestage";
+//                         } else {
+//                             alert("실패: " + data.message);
+//                         }
+//                     })
+//                     .catch(err => {
+//                         console.error(err);
+//                         alert("통신 오류가 발생했습니다.");
+//                     });
+//             }
+//         }
+//
+//         // 5. App 초기화 (모든 스크립트 실행 진입점)
+//         document.addEventListener('DOMContentLoaded', () => {
+//             // 각 매니저 인스턴스 생성
+//             const posterManager = new PosterManager();
+//             const detailImageManager = new DetailImageManager();
+//             const theaterManager = new TheaterManager();
+//
+//             // 폼 매니저에는 이미지 매니저들을 의존성으로 주입
+//             new StageFormManager(posterManager, detailImageManager);
+//         });
     </script>
 </th:block>
 </html>

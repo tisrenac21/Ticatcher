@@ -377,9 +377,13 @@ public class AdminController {
 
 			String period = "-";
 
-			String[] infoImg = svo.getStage_imgInfoPath().split(",");
-			if((dateList != null) && (!dateList.isEmpty())) {
-				period = Collections.min(dateList) + " ~ " + Collections.max(dateList);
+			String imgInfoPath = svo.getStage_imgInfoPath();
+
+			String[] infoImg;
+			if (imgInfoPath != null && !imgInfoPath.isEmpty()) {
+				infoImg = imgInfoPath.split(",");
+			} else {
+				infoImg = new String[0]; // 또는 null 대신 빈 배열
 			}
 
 			model.addAttribute("stage", svo);

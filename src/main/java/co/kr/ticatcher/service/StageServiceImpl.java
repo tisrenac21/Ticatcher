@@ -7,11 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service("ssrv")
 public class StageServiceImpl implements StageService {
@@ -21,6 +20,8 @@ public class StageServiceImpl implements StageService {
 
 	@Autowired
 	private IndexDAO idao;
+    @Autowired
+    private ServletContext servletContext;
 
 	@Override
 	public StageVO getStageByIdx(long stage_idx) {
@@ -94,14 +95,22 @@ public class StageServiceImpl implements StageService {
 		return sdao.saveStage(svo);
 	}
 
+	@Override
+	public List<Map<String, Object>> seleteTheaters() {
+		return sdao.seleteTheaters();
+	}
+
 	private String saveFile(MultipartFile file) throws IOException {
-			String projectpath = this.getClass().getResource("").getPath();
-			projectpath = projectpath.split("/ticatcher/")[0];
-			projectpath = projectpath + "\\ticatcher\\src\\main\\webapp\\resources\\static\\stageImage\\";
-			UUID uuid = UUID.randomUUID();
-			String fileName = uuid + "_" + file.getOriginalFilename();
-			File saveFile = new File(projectpath+fileName);
-			file.transferTo(saveFile);
+		String realPath = servletContext.getRealPath("/resources/static/stageImage/");
+		File dir = new File(realPath);
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		UUID uuid = UUID.randomUUID();
+		String fileName = uuid + "_" + file.getOriginalFilename();
+		File saveFile = new File(realPath, fileName);
+		file.transferTo(saveFile);
+
 		return fileName;
 	}
 }
