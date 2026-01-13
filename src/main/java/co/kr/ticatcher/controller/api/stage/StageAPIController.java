@@ -1,6 +1,7 @@
 package co.kr.ticatcher.controller.api.stage;
 
 import co.kr.ticatcher.service.StageService;
+import co.kr.ticatcher.vo.ScheduleSaveDTO;
 import co.kr.ticatcher.vo.StageVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -75,7 +78,7 @@ public class StageAPIController {
         exampleRow.createCell(3).setCellValue(150000);
         exampleRow.createCell(4).setCellValue("예시 데이터입니다. 지워주세요.");
 
-        String fileName = URLEncoder.encode("공연편성_일괄등록_양식.xlsx", StandardCharsets.UTF_8);
+        String fileName = URLEncoder.encode("공연편성_일괄등록_양식.xlsx", StandardCharsets.UTF_8.name());
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 
@@ -190,5 +193,6 @@ public class StageAPIController {
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
     
 }

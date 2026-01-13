@@ -129,5 +129,14 @@ public class AdminDAOImpl implements AdminDAO {
 		return sqlSession.selectList("admin.selectFullScheduleByStageIdx", stage_idx);
 	}
 	
+	@Override
+	public int deletePriceByStageIdx(long stage_idx) {
+	    return sqlSession.delete("admin.deletePriceByStageIdx", stage_idx);
+	}
+	
+	@Override
+	public int insertPriceBatch(List<PriceVO> priceList) {
+	    return sqlSession.insert("admin.insertPriceBatch", priceList);
+	}
 	
 }

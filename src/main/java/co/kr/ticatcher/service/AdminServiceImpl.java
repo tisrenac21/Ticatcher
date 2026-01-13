@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -141,48 +142,65 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	@Override
-    @Transactional
-    public int registerSchedule(ScheduleSaveDTO dto) {
-		int result = 0;
-        long stageIdx = dto.getStage_idx();
-        if (dto.getSchedules() != null) {
-            for (ScheduleSaveDTO.DateGroupDTO dateGroup : dto.getSchedules().values()) {
-                String dateStr = dateGroup.getDate();
+	@Transactional
+	public int registerSchedule(ScheduleSaveDTO dto) {
+	    long stageIdx = dto.getStage_idx();
 
-                if (dateGroup.getRounds() != null) {
-                    for (ScheduleSaveDTO.RoundDTO round : dateGroup.getRounds().values()) {
-                        String timeStr = round.getTime();
-                        
-                        ScheduleVO svo = new ScheduleVO();
-                        svo.setStage_idx((int) stageIdx);
-                        svo.setSchedule_date(dateStr);
-                        svo.setSchedule_time(timeStr);
+	    adao.deletePriceByStageIdx(stageIdx);
+	    adao.deleteScheduleByStageIdx(stageIdx);
 
-                        result += adao.insertSchedule(svo); 
-                        long generatedScheduleIdx = svo.getSchedule_idx();
+	    int result = 0;
+	    
+	    if (dto.getSchedules() == null || dto.getSchedules().isEmpty()) {
+	        return 1; 
+	    }
 
-                        List<String> names = round.getTicket_name();
-                        List<Integer> prices = round.getTicket_price();
+	    List<PriceVO> allPriceList = new ArrayList<>();
 
-                        if (names != null && prices != null) {
-                            for (int i = 0; i < names.size(); i++) {
-                                String tName = names.get(i);
-                                Integer tPrice = prices.get(i);
+	    for (ScheduleSaveDTO.DailyScheduleDTO dayDto : dto.getSchedules()) {
+	        String dateStr = dayDto.getDate();
 
-                                if(tName == null || tName.isEmpty() || tPrice == null) continue;
-                                PriceVO pvo = new PriceVO();
-                                pvo.setSchedule_idx(generatedScheduleIdx);
-                                pvo.setPrice_name(tName);
-                                pvo.setPrice_price(tPrice);
-                                result += adao.insertPrice(pvo);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return result;
-    }
+	        if (dayDto.getRounds() != null) {
+	            for (ScheduleSaveDTO.RoundDTO roundDto : dayDto.getRounds()) {
+	                
+	                ScheduleVO svo = new ScheduleVO();
+	                svo.setStage_idx((int) stageIdx);
+	                svo.setSchedule_date(dateStr);
+	                svo.setSchedule_time(roundDto.getTime());
+
+	                adao.insertSchedule(svo);
+	                result++;
+
+	                long currentScheduleIdx = svo.getSchedule_idx();
+
+	                List<String> names = roundDto.getTicket_name();
+	                List<Integer> prices = roundDto.getTicket_price();
+
+	                if (names != null && prices != null) {
+	                    for (int i = 0; i < names.size(); i++) {
+	                        String tName = names.get(i);
+	                        if(tName == null || tName.trim().isEmpty()) continue;
+	                        Integer tPrice = (i < prices.size()) ? prices.get(i) : 0;
+
+	                        PriceVO pvo = new PriceVO();
+	                        pvo.setSchedule_idx((int) currentScheduleIdx);
+	                        pvo.setPrice_name(tName);
+	                        pvo.setPrice_price(tPrice);
+	                        
+	                        allPriceList.add(pvo);
+	                    }
+	                }
+	            }
+	        }
+	    }
+
+	    if (allPriceList.size() > 0) {
+	        adao.insertPriceBatch(allPriceList);
+	        result += allPriceList.size();
+	    }
+
+	    return result;
+	}
 	
 	@Override
 	public List<Map<String, Object>> getFullSchedule(long stage_idx) {

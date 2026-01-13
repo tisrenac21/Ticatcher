@@ -4,7 +4,7 @@
       layout:decorate="~{fragments/adminLayout}">
 
 <th:block layout:fragment="mystyle">
-    <link rel="stylesheet" href="static/css/schmng.css">
+    <link rel="stylesheet" href="/static/css/schmng.css">
 </th:block>
 
 <th:block layout:fragment="main">
@@ -18,6 +18,7 @@
                 <div class="info_area">
                     <h2 class="stage_name" th:text="${stage.stage_name}"></h2>
                     <div class="info_row"><span class="label">장소</span><span class="value" th:text="${stage.theater_name}"></span></div>
+                    <div class="info_row"><span class="label">러닝타임</span><span class="value" th:text="${stage.stage_runtime}"></span></div>
                 </div>
             </div>
 
@@ -37,7 +38,7 @@
                     </div>
                 </div>
 
-                <form action="/stage/api/saveStage" method="post" id="scheduleForm" onsubmit="prepareSubmit(event)">
+                <form action="/schmng/save" method="post" id="scheduleForm" onsubmit="return prepareSubmit(event)">
                     <input type="hidden" name="stage_idx" th:value="${stage.stage_idx}">
                     
                     <div class="calendar_layout">
@@ -53,7 +54,7 @@
                                 <div class="cal_day_name">화</div><div class="cal_day_name">수</div>
                                 <div class="cal_day_name">목</div><div class="cal_day_name">금</div>
                                 <div class="cal_day_name">토</div>
-                                </div>
+                            </div>
                             <div id="calendarBody" class="cal_grid"></div>
                         </div>
 
@@ -95,6 +96,7 @@
     let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth() + 1;
     let selectedDate = null;
+    
     /*<![CDATA[*/
     const dbList = /*[[${existList}]]*/ [];
     /*]]>*/
@@ -200,17 +202,17 @@
 
             rounds.forEach((round, rIndex) => {
                 const html = `
-                    <div class="round_row" style="background:#000; padding:15px; border:1px solid #333; margin-bottom:10px; position:relative;">
-                        <button type="button" class="btn_del_round" onclick="deleteRound('${dateStr}', ${rIndex})" style="position:absolute; right:10px; top:10px;">×</button>
+                    <div class="round_row">
+                        <button type="button" class="btn_del_round" onclick="deleteRound('${dateStr}', ${rIndex})">×</button>
                         
-                        <div class="round_time_area" style="margin-bottom:10px;">
-                            <label style="color:#888; font-size:12px;">시간</label>
+                        <div class="round_time_area">
+                            <label>시간</label>
                             <input type="time" class="input_time" value="${round.time}" onchange="updateTime('${dateStr}', ${rIndex}, this.value)">
                         </div>
                         
                         <div class="ticket_list_area">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                                <span style="font-size:12px; color:#ccc;">티켓 설정</span>
+                            <div class="ticket_header">
+                                <span>티켓 등급 및 가격 설정</span>
                                 <button type="button" class="btn_mini" onclick="addTicketToRound('${dateStr}', ${rIndex})">+ 등급 추가</button>
                             </div>
                             <div id="tickets_${dateStr}_${rIndex}">
@@ -229,8 +231,8 @@
 
         function getTicketHtml(tickets, dateStr, rIndex) {
             return tickets.map((t, tIndex) => `
-                <div class="ticket_row" style="display:flex; gap:5px; margin-bottom:5px;">
-                    <input type="text" value="${t.name}" class="input_t_name" placeholder="등급" 
+                <div class="ticket_row">
+                    <input type="text" value="${t.name}" class="input_t_name" placeholder="등급명(예: VIP)" 
                         onchange="updateTicket('${dateStr}', ${rIndex}, ${tIndex}, 'name', this.value)">
                     <input type="text" value="${t.price}" class="input_t_price" placeholder="가격" 
                         oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -246,7 +248,7 @@
             
             scheduleData[selectedDate].push({
                 time: '14:00',
-                tickets: [{name: 'R석', price: ''}]
+                tickets: [{name: '전석', price: ''}]
             });
             renderDailyForm(selectedDate);
             renderCalendar(currentYear, currentMonth);
@@ -292,15 +294,10 @@
 
         function downloadTemplate() {
             fetch('/stage/api/downloadTemplate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json' 
-                }
+                method: 'POST'
             })
             .then(response => {
-                if (response.ok) {
-                    return response.blob();
-                }
+                if (response.ok) return response.blob();
                 throw new Error('Network response was not ok.');
             })
             .then(blob => {
@@ -345,68 +342,8 @@
                     if(dates.length > 0) {
                         const firstDate = dates[0];
                         const parts = firstDate.split('-');
-                        const y = parseInt(parts[0], 10);
-                        const m = parseInt(parts[1], 10);
-                        const d = parseInt(parts[2], 10);
-
-                        currentYear = y;
-                        currentMonth = m;
-                        
-                        renderCalendar(currentYear, currentMonth);
-                        selectDate(firstDate);
-                        
-                        alert("엑셀 등록이 완료되었습니다.\n가장 빠른 일정(" + firstDate + ")으로 이동합니다.");
-                    } else {
-                        renderCalendar(currentYear, currentMonth);
-                        document.getElementById('editPanel').style.display = 'none';
-                        document.getElementById('emptyPanel').style.display = 'block';
-                        alert("엑셀에 유효한 데이터가 없습니다.");
-                    }
-                } else {
-                    alert("업로드 실패: " + result.message);
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                alert("서버 통신 중 오류가 발생했습니다.");
-            })
-            .finally(() => {
-                input.value = '';
-            });
-        }
-
-        function uploadExcel(input) {
-            if(input.files.length === 0) return;
-
-            const file = input.files[0];
-            const formData = new FormData();
-            formData.append('file', file);
-
-            if(!confirm("엑셀 파일을 업로드하시겠습니까?\n기존 설정은 덮어씌워집니다.")) {
-                input.value = '';
-                return;
-            }
-
-            fetch('/stage/api/uploadExcel', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(result => {
-                if(result.success) {
-                    scheduleData = result.data;
-                    
-                    const dates = Object.keys(scheduleData).sort();
-                    
-                    if(dates.length > 0) {
-                        const firstDate = dates[0];
-                        const parts = firstDate.split('-');
-                        const y = parseInt(parts[0], 10);
-                        const m = parseInt(parts[1], 10);
-                        const d = parseInt(parts[2], 10);
-
-                        currentYear = y;
-                        currentMonth = m;
+                        currentYear = parseInt(parts[0], 10);
+                        currentMonth = parseInt(parts[1], 10);
                         
                         renderCalendar(currentYear, currentMonth);
                         selectDate(firstDate);
@@ -435,19 +372,31 @@
             const container = document.getElementById('hiddenParamsContainer');
             container.innerHTML = '';
             
-            Object.keys(scheduleData).forEach(dateKey => {
+            const sortedDates = Object.keys(scheduleData).sort();
+
+            if(sortedDates.length === 0) {
+                if(!confirm("등록된 일정이 없습니다. 모든 일정을 초기화 하시겠습니까?")) {
+                    e.preventDefault();
+                    return false;
+                }
+                return true;
+            }
+            
+            sortedDates.forEach((dateKey, dateIdx) => {
                 const rounds = scheduleData[dateKey];
-                if(rounds.length === 0) return;
+                if(!rounds || rounds.length === 0) return;
 
-                container.innerHTML += `<input type="hidden" name="schedules['${dateKey}'].date" value="${dateKey}">`;
+                container.innerHTML += `<input type="hidden" name="schedules[${dateIdx}].date" value="${dateKey}">`;
 
-                rounds.forEach((round, rIdx) => {
-                    const roundKey = rIdx;
+                rounds.forEach((round, roundIdx) => {
+                    container.innerHTML += `<input type="hidden" name="schedules[${dateIdx}].rounds[${roundIdx}].time" value="${round.time}">`;
                     
-                    container.innerHTML += `<input type="hidden" name="schedules['${dateKey}'].rounds['${roundKey}'].time" value="${round.time}">`;
-                    round.tickets.forEach(ticket => {
-                        container.innerHTML += `<input type="hidden" name="schedules['${dateKey}'].rounds['${roundKey}'].ticket_name" value="${ticket.name}">`;
-                        container.innerHTML += `<input type="hidden" name="schedules['${dateKey}'].rounds['${roundKey}'].ticket_price" value="${ticket.ticket_price || ticket.price}">`;
+                    round.tickets.forEach((ticket, ticketIdx) => {
+                        const tName = ticket.name || "";
+                        const tPrice = ticket.price || "0";
+                        
+                        container.innerHTML += `<input type="hidden" name="schedules[${dateIdx}].rounds[${roundIdx}].ticket_name[${ticketIdx}]" value="${tName}">`;
+                        container.innerHTML += `<input type="hidden" name="schedules[${dateIdx}].rounds[${roundIdx}].ticket_price[${ticketIdx}]" value="${tPrice}">`;
                     });
                 });
             });

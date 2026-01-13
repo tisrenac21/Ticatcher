@@ -437,4 +437,20 @@ public class AdminController {
         
         return resultPage;
     }
+	
+	@PostMapping("/schmng/save")
+    public String saveSchedule(HttpSession session, ScheduleSaveDTO scheduleDto) {
+        if (session.getAttribute("admin") == null) {
+            return "redirect:/admin";
+        }
+        try {
+            asrv.registerSchedule(scheduleDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/schmng?stage_idx=" + scheduleDto.getStage_idx();
+        }
+
+        return "redirect:/manageStageView?stage_idx=" + scheduleDto.getStage_idx();
+    }
+	
 }

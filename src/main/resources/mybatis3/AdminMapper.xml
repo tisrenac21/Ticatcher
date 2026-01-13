@@ -117,7 +117,7 @@
         select * from tcc_member order by mem_idx desc limit #{snum}, 10
     </select>
     
-    <insert id="insertSchedule" parameterType="co.kr.ticatcher.vo.ScheduleVO" 
+	<insert id="insertSchedule" parameterType="co.kr.ticatcher.vo.ScheduleVO" 
             useGeneratedKeys="true" keyProperty="schedule_idx">
         INSERT INTO tcc_schedule (
             schedule_date, 
@@ -142,7 +142,14 @@
         )
     </insert>
     
-    <delete id="deleteScheduleByStageIdx">
+	<delete id="deletePriceByStageIdx" parameterType="long">
+        DELETE FROM tcc_price 
+        WHERE schedule_idx IN (
+            SELECT schedule_idx FROM tcc_schedule WHERE stage_idx = #{stage_idx}
+        )
+    </delete>
+
+ 	<delete id="deleteScheduleByStageIdx" parameterType="long">
         DELETE FROM tcc_schedule WHERE stage_idx = #{stage_idx}
     </delete>
     
@@ -157,5 +164,20 @@
         WHERE s.stage_idx = #{stage_idx}
         ORDER BY s.schedule_date ASC, s.schedule_time ASC
     </select>
+    
+    <insert id="insertPriceBatch" parameterType="java.util.List">
+        INSERT INTO tcc_price (
+            schedule_idx, 
+            price_name, 
+            price_price
+        ) VALUES 
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.schedule_idx}, 
+                #{item.price_name}, 
+                #{item.price_price}
+            )
+        </foreach>
+    </insert>
 
 </mapper>

@@ -27,6 +27,8 @@ public interface AdminDAO {
     List<MemberVO> readMember(int snum);
     int insertSchedule(ScheduleVO scheduleVO);
     int insertPrice(PriceVO priceVO);
+    int deletePriceByStageIdx(long stage_idx);
     int deleteScheduleByStageIdx(long stage_idx);
     List<Map<String, Object>> selectFullScheduleByStageIdx(long stage_idx);
+    int insertPriceBatch(List<PriceVO> priceList);
 }
