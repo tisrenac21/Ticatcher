@@ -17,7 +17,7 @@
                     <h2>공연 목록 관리</h2>
 
                     <div class="header_right_group">
-                        <form action="/manageStage" method="get" class="search_box_wrap">
+                        <form action="/managestage" method="get" class="search_box_wrap">
                             <select name="searchType" class="search_select">
                                 <option value="name">공연명</option>
                                 <option value="host">주최사</option>
@@ -42,7 +42,7 @@
                     <div class="list_body">
                         <th:block th:each="stage: ${stageList}">
                             <div class="list_row">
-                                <div class="col col_idx" th:text="${stage.stage_idx}"></div>
+                                <div class="col col_idx" th:text="${stage.rownum}"></div>
 
                                 <div class="col col_title">
                                     <a th:text="${stage.stage_name}" th:href="@{/manageStageView(stage_idx=${stage.stage_idx})}"></a>
@@ -51,19 +51,13 @@
                                 <div class="col col_host" th:text="${stage.stage_host}"></div>
 
                                 <div class="col col_status">
-                                    <span class="status_badge warning"
-                                          th:if="${stage.stage_idx % 3 == 1}">가격 미설정</span>
+                                    <span class="status_badge warning" th:if="${stage.schedule_yn.toString() == 'N'}">미편성</span>
 
-                                    <span class="status_badge caution"
-                                          th:if="${stage.stage_idx % 3 == 2}">일정 미설정</span>
-
-                                    <span class="status_badge complete"
-                                          th:if="${stage.stage_idx % 3 == 0}">등록 완료</span>
+                                    <span class="status_badge complete" th:if="${stage.schedule_yn.toString() == 'Y'}">편성 완료</span>
                                 </div>
 
                                 <div class="col col_manage btn_group">
-                                    <a th:href="@{/manageSchedule(stage_idx=${stage.stage_idx})}" class="btn_action schedule">일정관리</a>
-                                    <a th:href="@{/managePrice(stage_idx=${stage.stage_idx})}" class="btn_action venue">가격관리</a>
+                                    <a th:href="@{/schmng(stage_idx=${stage.stage_idx})}" class="btn_action schedule">편성 관리</a>
                                 </div>
                             </div>
                         </th:block>
@@ -72,22 +66,22 @@
                 </div>
 
                 <div class="list_pager">
-                    <a th:if="${cpg > 1}" th:href="@{'/manageStage?cpg=1'}"><button class="btn_pager first" type="button">처음</button></a>
-                    <a th:if="${cpg > 1}" th:href="@{'/manageStage?cpg=' + ${cpg - 1}}"><button class="btn_pager prev" type="button">이전</button></a>
+                    <a th:if="${cpg > 1}" th:href="@{'/managestage?cpg=1'}"><button class="btn_pager first" type="button"></button></a>
+                    <a th:if="${cpg > 1}" th:href="@{'/managestage?cpg=' + ${cpg - 1}}"><button class="btn_pager prev" type="button"></button></a>
                     <ul>
                         <th:block th:each="i: ${#numbers.sequence(0, 9)}">
                             <th:block th:if="${(stpgn + i) <= pages}">
                                 <li>
                                     <span th:text="${stpgn + i}" th:if="${cpg == (stpgn + i)}" class="on"></span>
                                     <span th:unless="${cpg == (stpgn + i)}">
-                                        <a th:href="@{/manageStage(cpg=${stpgn+i})}">[[${stpgn + i}]]</a>
+                                        <a th:href="@{/managestage(cpg=${stpgn+i})}">[[${stpgn + i}]]</a>
                                     </span>
                                 </li>
                             </th:block>
                         </th:block>
                     </ul>
-                    <a th:if="${cpg < pages}" th:href="@{'/manageStage?cpg=' + ${cpg + 1}}"><button class="btn_pager next" type="button">다음</button></a>
-                    <a th:if="${cpg < pages}" th:href="@{'/manageStage?cpg='+${pages}}"><button class="btn_pager end" type="button">끝</button></a>
+                    <a th:if="${cpg < pages}" th:href="@{'/managestage?cpg=' + ${cpg + 1}}"><button class="btn_pager next" type="button"></button></a>
+                    <a th:if="${cpg < pages}" th:href="@{'/managestage?cpg='+${pages}}"><button class="btn_pager end" type="button"></button></a>
                 </div>
 
             </div>

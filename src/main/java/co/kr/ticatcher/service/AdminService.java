@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface AdminService {
 
@@ -25,4 +26,6 @@ public interface AdminService {
     List<StageVO> readStage(int snum);
     int readCountMember();
     List<MemberVO> readMember(int snum);
+    int registerSchedule(ScheduleSaveDTO dto);
+    List<Map<String, Object>> getFullSchedule(long stage_idx);
 }

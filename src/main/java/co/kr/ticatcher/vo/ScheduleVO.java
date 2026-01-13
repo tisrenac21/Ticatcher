@@ -12,11 +12,8 @@ import java.sql.Time;
 @ToString
 public class ScheduleVO {
 	private long schedule_idx;
-	private Date schedule_date;
-	private Time schedule_time;
+	private String schedule_date;
+	private String schedule_time;
 	private long stage_idx;
-	private StageVO stageVo;
 	private long theater_idx;
-	private TheaterVO theaterVo;
-
 }

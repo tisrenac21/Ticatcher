@@ -3,6 +3,7 @@ package co.kr.ticatcher.dao;
 import co.kr.ticatcher.vo.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AdminDAO {
 
@@ -24,4 +25,8 @@ public interface AdminDAO {
     List<StageVO> readStage(int snum);
     int readCountMember();
     List<MemberVO> readMember(int snum);
+    int insertSchedule(ScheduleVO scheduleVO);
+    int insertPrice(PriceVO priceVO);
+    int deleteScheduleByStageIdx(long stage_idx);
+    List<Map<String, Object>> selectFullScheduleByStageIdx(long stage_idx);
 }

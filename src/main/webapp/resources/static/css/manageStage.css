@@ -1,10 +1,8 @@
-/* 레이아웃 초기화 및 설정 */
 .full_wrap {
     width: 100%;
     padding: 0 10px;
 }
 
-/* 페이지 헤더 영역 */
 .page_header {
     display: flex;
     justify-content: space-between;
@@ -20,14 +18,12 @@
     color: #fff;
 }
 
-/* 우측 상단 그룹 (검색창 + 등록버튼) */
 .header_right_group {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-/* 검색창 스타일 */
 .search_box_wrap {
     display: flex;
     align-items: center;
@@ -74,7 +70,6 @@
     color: #000;
 }
 
-/* 공연 등록 버튼 스타일 */
 .btn_register {
     display: inline-block;
     padding: 8px 20px;
@@ -91,20 +86,17 @@
     color: #000 !important;
 }
 
-/* 리스트 컨테이너 (Flexbox 기반) */
 .stage_list_container {
     width: 100%;
     border-top: 1px solid #555;
 }
 
-/* 공통 Flex Row 스타일 */
 .list_header, .list_row {
     display: flex;
     align-items: center;
     border-bottom: 1px solid #333;
 }
 
-/* 헤더 스타일 */
 .list_header {
     font-weight: bold;
     height: 50px;
@@ -115,7 +107,6 @@
     text-align: center;
 }
 
-/* 리스트 바디 스타일 */
 .list_row {
     padding: 15px 0;
     transition: background 0.2s;
@@ -125,14 +116,13 @@
     background: rgba(254, 241, 171, 0.05);
 }
 
-/* --- 컬럼 너비 정의 (상태창 추가로 조정됨) --- */
 .col_idx {
     flex: 0 0 60px;
     text-align: center;
 }
 
 .col_title {
-    flex: 1; /* 남은 공간 차지 */
+    flex: 1;
     padding: 0 15px;
     text-align: left !important;
     white-space: nowrap;
@@ -157,13 +147,11 @@
     font-size: 14px;
 }
 
-/* 상태 컬럼 (신규) */
 .col_status {
     flex: 0 0 130px;
     text-align: center;
 }
 
-/* 상태 배지 디자인 */
 .status_badge {
     display: inline-block;
     padding: 4px 10px;
@@ -174,28 +162,20 @@
     text-align: center;
 }
 
-/* 상태별 색상 */
-.status_badge.warning { /* 공연장 미설정 (빨강) */
+.status_badge.warning { 
     background: rgba(255, 82, 82, 0.15);
     color: #ff8a80;
     border: 1px solid #ff5252;
 }
 
-.status_badge.caution { /* 일정 미설정 (주황) */
-    background: rgba(255, 152, 0, 0.15);
-    color: #ffb74d;
-    border: 1px solid #ff9800;
-}
-
-.status_badge.complete { /* 등록 완료 (초록/민트) */
+.status_badge.complete { 
     background: rgba(76, 175, 80, 0.15);
     color: #69f0ae;
     border: 1px solid #00e676;
 }
 
-/* 관리 버튼 컬럼 */
 .col_manage {
-    flex: 0 0 200px;
+    flex: 0 0 100px;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -232,7 +212,6 @@
     color: #000;
 }
 
-/* 페이징 */
 .list_pager {
     text-align: center;
     margin-top: 30px;

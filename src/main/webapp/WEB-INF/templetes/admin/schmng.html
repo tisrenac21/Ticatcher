@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/adminLayout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/schmng.css">
+</th:block>
+
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+            
+            <div class="stage_info_wrap">
+                <div class="poster_area">
+                    <img th:src="${stage.stage_posterPath}" alt="공연 포스터">
+                </div>
+                <div class="info_area">
+                    <h2 class="stage_name" th:text="${stage.stage_name}"></h2>
+                    <div class="info_row"><span class="label">장소</span><span class="value" th:text="${stage.theater_name}"></span></div>
+                </div>
+            </div>
+
+            <div class="schedule_manager_wrap">
+                
+                <div class="manager_header">
+                    <h3>회차 및 티켓 가격 편성</h3>
+                    
+                    <div class="excel_btn_group">
+                        <button type="button" class="btn_excel btn_down" onclick="downloadTemplate()">
+                            💾 양식 다운로드
+                        </button>
+                        <button type="button" class="btn_excel btn_up" onclick="document.getElementById('excelFile').click()">
+                            📂 엑셀 일괄 등록
+                        </button>
+                        <input type="file" id="excelFile" style="display:none" onchange="uploadExcel(this)">
+                    </div>
+                </div>
+
+                <form action="/stage/api/saveStage" method="post" id="scheduleForm" onsubmit="prepareSubmit(event)">
+                    <input type="hidden" name="stage_idx" th:value="${stage.stage_idx}">
+                    
+                    <div class="calendar_layout">
+                        
+                        <div class="calendar_side">
+                            <div class="cal_header">
+                                <button type="button" class="btn_cal_nav" onclick="moveMonth(-1)">&lt;</button>
+                                <h4 id="currentMonthStr">2026.01</h4>
+                                <button type="button" class="btn_cal_nav" onclick="moveMonth(1)">&gt;</button>
+                            </div>
+                            <div class="cal_grid">
+                                <div class="cal_day_name">일</div><div class="cal_day_name">월</div>
+                                <div class="cal_day_name">화</div><div class="cal_day_name">수</div>
+                                <div class="cal_day_name">목</div><div class="cal_day_name">금</div>
+                                <div class="cal_day_name">토</div>
+                                </div>
+                            <div id="calendarBody" class="cal_grid"></div>
+                        </div>
+
+                        <div class="detail_side">
+                            <div id="emptyPanel" class="empty_msg">
+                                <p>👈 달력에서 날짜를 선택해주세요.</p>
+                            </div>
+
+                            <div id="editPanel" style="display:none;">
+                                <h4 class="selected_date_title">
+                                    <span id="displayDate"></span> 설정
+                                </h4>
+
+                                <div id="daily_schedule_list"></div>
+                                
+                                <div style="margin-top:20px; text-align:center;">
+                                    <button type="button" class="btn_add_date" onclick="addRoundToCurrentDate()">+ 회차 추가</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form_actions">
+                        <a href="/managestage" class="btn_cancel">취소</a>
+                        <button type="submit" class="btn_save">전체 편성 저장</button>
+                    </div>
+
+                    <div id="hiddenParamsContainer"></div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="myscript">
+    <script th:inline="javascript">
+    let scheduleData = {}; 
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth() + 1;
+    let selectedDate = null;
+    /*<![CDATA[*/
+    const dbList = /*[[${existList}]]*/ [];
+    /*]]>*/
+
+    if(dbList && dbList.length > 0) {
+        dbList.forEach(row => {
+            const date = row.date;
+            const time = row.time;
+            const name = row.price_name; 
+            const price = row.price_price;
+
+            if(!scheduleData[date]) {
+                scheduleData[date] = [];
+            }
+
+            let targetRound = scheduleData[date].find(r => r.time === time);
+
+            if(!targetRound) {
+                targetRound = {
+                    time: time,
+                    tickets: []
+                };
+                scheduleData[date].push(targetRound);
+            }
+
+            if(name) {
+                targetRound.tickets.push({
+                    name: name,
+                    price: price
+                });
+            }
+        });
+
+        const sortedDates = Object.keys(scheduleData).sort();
+        if(sortedDates.length > 0) {
+            const firstDate = sortedDates[0];
+            const parts = firstDate.split('-');
+            currentYear = parseInt(parts[0], 10);
+            currentMonth = parseInt(parts[1], 10);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderCalendar(currentYear, currentMonth);
+        
+        const sortedDates = Object.keys(scheduleData).sort();
+        if(sortedDates.length > 0) {
+            selectDate(sortedDates[0]);
+        }
+    });
+
+        function moveMonth(step) {
+            currentMonth += step;
+            if(currentMonth < 1) { currentMonth = 12; currentYear--; }
+            if(currentMonth > 12) { currentMonth = 1; currentYear++; }
+            renderCalendar(currentYear, currentMonth);
+        }
+
+        function renderCalendar(year, month) {
+            const container = document.getElementById('calendarBody');
+            document.getElementById('currentMonthStr').innerText = `${year}.${String(month).padStart(2,'0')}`;
+            container.innerHTML = '';
+
+            const firstDay = new Date(year, month-1, 1).getDay();
+            const lastDate = new Date(year, month, 0).getDate();
+            
+            for(let i=0; i<firstDay; i++) {
+                container.innerHTML += `<div class="cal_date other_month"></div>`;
+            }
+
+            for(let d=1; d<=lastDate; d++) {
+                const dateStr = `${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                const hasData = scheduleData[dateStr] && scheduleData[dateStr].length > 0;
+                const isSelected = (selectedDate === dateStr);
+                
+                const div = document.createElement('div');
+                div.className = `cal_date ${hasData ? 'has_data' : ''} ${isSelected ? 'selected' : ''}`;
+                div.innerHTML = `
+                    <span>${d}</span>
+                    <div class="has_schedule_dot"></div>
+                `;
+                div.onclick = () => selectDate(dateStr);
+                container.appendChild(div);
+            }
+        }
+
+        function selectDate(dateStr) {
+            selectedDate = dateStr;
+            renderCalendar(currentYear, currentMonth);
+
+            document.getElementById('emptyPanel').style.display = 'none';
+            document.getElementById('editPanel').style.display = 'block';
+            document.getElementById('displayDate').innerText = dateStr;
+
+            renderDailyForm(dateStr);
+        }
+
+        function renderDailyForm(dateStr) {
+            const listContainer = document.getElementById('daily_schedule_list');
+            listContainer.innerHTML = '';
+
+            const rounds = scheduleData[dateStr] || [];
+
+            rounds.forEach((round, rIndex) => {
+                const html = `
+                    <div class="round_row" style="background:#000; padding:15px; border:1px solid #333; margin-bottom:10px; position:relative;">
+                        <button type="button" class="btn_del_round" onclick="deleteRound('${dateStr}', ${rIndex})" style="position:absolute; right:10px; top:10px;">×</button>
+                        
+                        <div class="round_time_area" style="margin-bottom:10px;">
+                            <label style="color:#888; font-size:12px;">시간</label>
+                            <input type="time" class="input_time" value="${round.time}" onchange="updateTime('${dateStr}', ${rIndex}, this.value)">
+                        </div>
+                        
+                        <div class="ticket_list_area">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                                <span style="font-size:12px; color:#ccc;">티켓 설정</span>
+                                <button type="button" class="btn_mini" onclick="addTicketToRound('${dateStr}', ${rIndex})">+ 등급 추가</button>
+                            </div>
+                            <div id="tickets_${dateStr}_${rIndex}">
+                                ${getTicketHtml(round.tickets, dateStr, rIndex)}
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top:10px; text-align:right;">
+                            <button type="button" class="btn_mini btn_apply_all" onclick="copyConfigToAll('${dateStr}', ${rIndex})">이 설정을 이 날짜 전체 적용</button>
+                        </div>
+                    </div>
+                `;
+                listContainer.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        function getTicketHtml(tickets, dateStr, rIndex) {
+            return tickets.map((t, tIndex) => `
+                <div class="ticket_row" style="display:flex; gap:5px; margin-bottom:5px;">
+                    <input type="text" value="${t.name}" class="input_t_name" placeholder="등급" 
+                        onchange="updateTicket('${dateStr}', ${rIndex}, ${tIndex}, 'name', this.value)">
+                    <input type="text" value="${t.price}" class="input_t_price" placeholder="가격" 
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        onchange="updateTicket('${dateStr}', ${rIndex}, ${tIndex}, 'price', this.value)">
+                    <button type="button" class="btn_del_ticket" onclick="deleteTicket('${dateStr}', ${rIndex}, ${tIndex})">-</button>
+                </div>
+            `).join('');
+        }
+
+        function addRoundToCurrentDate() {
+            if(!selectedDate) return;
+            if(!scheduleData[selectedDate]) scheduleData[selectedDate] = [];
+            
+            scheduleData[selectedDate].push({
+                time: '14:00',
+                tickets: [{name: 'R석', price: ''}]
+            });
+            renderDailyForm(selectedDate);
+            renderCalendar(currentYear, currentMonth);
+        }
+
+        function deleteRound(date, rIndex) {
+            scheduleData[date].splice(rIndex, 1);
+            if(scheduleData[date].length === 0) delete scheduleData[date];
+            renderDailyForm(date);
+            renderCalendar(currentYear, currentMonth);
+        }
+
+        function updateTime(date, rIndex, val) {
+            scheduleData[date][rIndex].time = val;
+        }
+
+        function addTicketToRound(date, rIndex) {
+            scheduleData[date][rIndex].tickets.push({name:'', price:''});
+            renderDailyForm(date);
+        }
+
+        function updateTicket(date, rIndex, tIndex, field, val) {
+            scheduleData[date][rIndex].tickets[tIndex][field] = val;
+        }
+
+        function deleteTicket(date, rIndex, tIndex) {
+            scheduleData[date][rIndex].tickets.splice(tIndex, 1);
+            renderDailyForm(date);
+        }
+
+        function copyConfigToAll(date, sourceIdx) {
+            if(!confirm("해당 날짜의 다른 모든 회차에 티켓 정보를 복사하시겠습니까?")) return;
+            const sourceTickets = JSON.parse(JSON.stringify(scheduleData[date][sourceIdx].tickets));
+            
+            scheduleData[date].forEach((round, idx) => {
+                if(idx !== sourceIdx) {
+                    round.tickets = JSON.parse(JSON.stringify(sourceTickets));
+                }
+            });
+            renderDailyForm(date);
+            alert("적용되었습니다.");
+        }
+
+        function downloadTemplate() {
+            fetch('/stage/api/downloadTemplate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' 
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = "공연편성_일괄등록_양식.xlsx";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                console.error('Download error:', error);
+                alert("양식 다운로드 중 오류가 발생했습니다.");
+            });
+        }
+
+        function uploadExcel(input) {
+            if(input.files.length === 0) return;
+
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            if(!confirm("엑셀 파일을 업로드하시겠습니까?\n기존 설정은 덮어씌워집니다.")) {
+                input.value = '';
+                return;
+            }
+
+            fetch('/stage/api/uploadExcel', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if(result.success) {
+                    scheduleData = result.data;
+                    
+                    const dates = Object.keys(scheduleData).sort();
+                    
+                    if(dates.length > 0) {
+                        const firstDate = dates[0];
+                        const parts = firstDate.split('-');
+                        const y = parseInt(parts[0], 10);
+                        const m = parseInt(parts[1], 10);
+                        const d = parseInt(parts[2], 10);
+
+                        currentYear = y;
+                        currentMonth = m;
+                        
+                        renderCalendar(currentYear, currentMonth);
+                        selectDate(firstDate);
+                        
+                        alert("엑셀 등록이 완료되었습니다.\n가장 빠른 일정(" + firstDate + ")으로 이동합니다.");
+                    } else {
+                        renderCalendar(currentYear, currentMonth);
+                        document.getElementById('editPanel').style.display = 'none';
+                        document.getElementById('emptyPanel').style.display = 'block';
+                        alert("엑셀에 유효한 데이터가 없습니다.");
+                    }
+                } else {
+                    alert("업로드 실패: " + result.message);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("서버 통신 중 오류가 발생했습니다.");
+            })
+            .finally(() => {
+                input.value = '';
+            });
+        }
+
+        function uploadExcel(input) {
+            if(input.files.length === 0) return;
+
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            if(!confirm("엑셀 파일을 업로드하시겠습니까?\n기존 설정은 덮어씌워집니다.")) {
+                input.value = '';
+                return;
+            }
+
+            fetch('/stage/api/uploadExcel', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if(result.success) {
+                    scheduleData = result.data;
+                    
+                    const dates = Object.keys(scheduleData).sort();
+                    
+                    if(dates.length > 0) {
+                        const firstDate = dates[0];
+                        const parts = firstDate.split('-');
+                        const y = parseInt(parts[0], 10);
+                        const m = parseInt(parts[1], 10);
+                        const d = parseInt(parts[2], 10);
+
+                        currentYear = y;
+                        currentMonth = m;
+                        
+                        renderCalendar(currentYear, currentMonth);
+                        selectDate(firstDate);
+                        
+                        alert("엑셀 등록이 완료되었습니다.\n가장 빠른 일정(" + firstDate + ")으로 이동합니다.");
+                    } else {
+                        renderCalendar(currentYear, currentMonth);
+                        document.getElementById('editPanel').style.display = 'none';
+                        document.getElementById('emptyPanel').style.display = 'block';
+                        alert("엑셀에 유효한 데이터가 없습니다.");
+                    }
+                } else {
+                    alert("업로드 실패: " + result.message);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("서버 통신 중 오류가 발생했습니다.");
+            })
+            .finally(() => {
+                input.value = '';
+            });
+        }
+
+        function prepareSubmit(e) {
+            const container = document.getElementById('hiddenParamsContainer');
+            container.innerHTML = '';
+            
+            Object.keys(scheduleData).forEach(dateKey => {
+                const rounds = scheduleData[dateKey];
+                if(rounds.length === 0) return;
+
+                container.innerHTML += `<input type="hidden" name="schedules['${dateKey}'].date" value="${dateKey}">`;
+
+                rounds.forEach((round, rIdx) => {
+                    const roundKey = rIdx;
+                    
+                    container.innerHTML += `<input type="hidden" name="schedules['${dateKey}'].rounds['${roundKey}'].time" value="${round.time}">`;
+                    round.tickets.forEach(ticket => {
+                        container.innerHTML += `<input type="hidden" name="schedules['${dateKey}'].rounds['${roundKey}'].ticket_name" value="${ticket.name}">`;
+                        container.innerHTML += `<input type="hidden" name="schedules['${dateKey}'].rounds['${roundKey}'].ticket_price" value="${ticket.ticket_price || ticket.price}">`;
+                    });
+                });
+            });
+
+            return true;
+        }
+
+    </script>
+</th:block>
+</html>

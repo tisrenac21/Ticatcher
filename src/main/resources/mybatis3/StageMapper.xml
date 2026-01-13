@@ -3,10 +3,30 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="stage">
-    <select id="getStageByIdx" statementType="PREPARED"
-            parameterType="long"
-            resultType="co.kr.ticatcher.vo.StageVO">
-        select * from tcc_stage where stage_idx = #{stage_idx}
+    <select id="getStageByIdx" statementType="PREPARED" parameterType="long" resultType="co.kr.ticatcher.vo.StageVO">
+        select
+			stage_idx,
+			stage_name,
+			stage_grade,
+			stage_runtime,
+			stage_host,
+			stage_posterName,
+			stage_posterPath,
+			stage_imgInfoName,
+			stage_imgInfoPath,
+			stage_info,
+			theater_idx,
+			(
+			select
+				theater_name
+			from
+				tcc_theater tt
+			where
+				tt.theater_idx = ts.theater_idx ) as theater_name
+		from
+			tcc_stage ts
+		where
+			stage_idx = #{stage_idx}
     </select>
     <select id="getAllScheduleByStageIdx" statementType="PREPARED"
             parameterType="long"

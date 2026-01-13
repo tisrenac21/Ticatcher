@@ -1,0 +1,537 @@
+.schedule_manager_wrap *, .stage_info_wrap * {
+	background-color: transparent;
+	box-sizing: border-box;
+}
+
+.schedule_manager_wrap input, .schedule_manager_wrap button,
+	.stage_info_wrap img {
+	background-color: initial;
+}
+
+.stage_info_wrap {
+	display: flex;
+	gap: 30px;
+	background-color: #1a1a1a !important;
+	border: 1px solid #333;
+	padding: 20px;
+	margin-bottom: 30px;
+	border-radius: 4px;
+}
+
+.poster_area {
+	width: 150px;
+	flex-shrink: 0;
+}
+
+.poster_area img {
+	width: 100%;
+	height: auto;
+	border-radius: 2px;
+	border: 1px solid #444;
+}
+
+.info_area {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.stage_title {
+	font-size: 24px;
+	font-weight: bold;
+	color: #fff;
+	margin-bottom: 15px;
+	border-bottom: 1px solid #FEF1AB;
+	padding-bottom: 10px;
+	display: inline-block;
+}
+
+.info_row {
+	margin-bottom: 8px;
+	font-size: 14px;
+}
+
+.info_row .label {
+	display: inline-block;
+	width: 80px;
+	color: #888;
+	font-weight: bold;
+}
+
+.info_row .value {
+	color: #ccc;
+}
+
+.schedule_manager_wrap {
+	margin-top: 10px;
+}
+
+.manager_header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+	padding-bottom: 10px;
+	border-bottom: 2px solid #555;
+}
+
+.manager_header h3 {
+	font-size: 18px;
+	color: #FEF1AB;
+	font-weight: bold;
+}
+
+.excel_btn_group {
+	display: flex;
+	gap: 10px;
+}
+
+.calendar_layout {
+	display: flex;
+	gap: 20px;
+	align-items: flex-start;
+}
+
+.calendar_side {
+	width: 400px;
+	flex-shrink: 0;
+	background-color: #1a1a1a !important;
+	padding: 20px;
+	border-radius: 4px;
+	border: 1px solid #444;
+}
+
+.cal_header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.cal_header h4 {
+	color: #fff;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.btn_cal_nav {
+	background-color: #333 !important;
+	border: 1px solid #555;
+	color: #fff;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.btn_cal_nav:hover {
+	background-color: #555 !important;
+}
+
+.cal_grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 5px;
+	text-align: center;
+}
+
+.cal_day_name {
+	color: #888;
+	font-size: 13px;
+	padding-bottom: 10px;
+	font-weight: bold;
+}
+
+.cal_date {
+	height: 45px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	border-radius: 4px;
+	border: 1px solid transparent;
+	color: #ddd;
+	background-color: #222 !important;
+}
+
+.cal_date:hover {
+	background-color: #333 !important;
+	border-color: #555;
+}
+
+.cal_date.other_month {
+	opacity: 0.3;
+	pointer-events: none;
+	background-color: #111 !important;
+}
+
+.cal_date.selected {
+	background-color: rgba(254, 241, 171, 0.1) !important;
+	border-color: #FEF1AB;
+	color: #FEF1AB;
+	font-weight: bold;
+}
+
+.cal_date.today {
+	border: 1px dashed #FEF1AB;
+}
+
+.has_schedule_dot {
+	width: 6px;
+	height: 6px;
+	background-color: #FEF1AB !important;
+	border-radius: 50%;
+	margin-top: 4px;
+	display: none;
+}
+
+.cal_date.has_data .has_schedule_dot {
+	display: block;
+}
+
+.detail_side {
+	flex-grow: 1;
+	background-color: #1a1a1a !important;
+	padding: 20px;
+	border-radius: 4px;
+	border: 1px solid #333;
+	min-height: 500px;
+}
+
+.empty_msg {
+	text-align: center;
+	color: #777;
+	padding-top: 150px;
+	font-size: 16px;
+}
+
+.selected_date_title {
+	font-size: 20px;
+	color: #FEF1AB;
+	border-bottom: 2px solid #555;
+	padding-bottom: 15px;
+	margin-bottom: 20px;
+}
+
+.round_row {
+	background-color: #0d0d0d !important;
+	border: 1px solid #333;
+	padding: 15px;
+	border-radius: 4px;
+	margin-bottom: 15px;
+	position: relative;
+}
+
+.round_time_area {
+	margin-bottom: 15px;
+}
+
+.round_time_area label {
+	display: block;
+	font-size: 12px;
+	color: #888;
+	margin-bottom: 5px;
+}
+
+input[type="text"], input[type="number"], input[type="time"], input[type="date"]
+	{
+	background-color: #222 !important;
+	border: 1px solid #444 !important;
+	color: #fff !important;
+	padding: 6px 10px;
+	border-radius: 3px;
+	outline: none;
+}
+
+input:focus {
+	border-color: #FEF1AB !important;
+}
+
+.ticket_list_area {
+	background-color: #151515 !important;
+	padding: 10px;
+	border-radius: 4px;
+}
+
+.ticket_header {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 8px;
+	font-size: 13px;
+	color: #ccc;
+}
+
+.ticket_row {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 5px;
+}
+
+.input_t_name {
+	width: 120px;
+}
+
+.input_t_price {
+	width: 120px;
+	text-align: right;
+}
+
+button {
+	cursor: pointer;
+	font-family: inherit;
+	border: none;
+	transition: all 0.2s;
+}
+
+.btn_excel {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 6px 15px;
+	font-size: 13px;
+	border-radius: 4px;
+	font-weight: bold;
+	color: #fff;
+}
+
+.btn_down {
+	background-color: #217346 !important;
+}
+
+.btn_up {
+	background-color: #444 !important;
+	border: 1px solid #666;
+}
+
+.btn_add_date {
+	background-color: #FEF1AB !important;
+	color: #000 !important;
+	padding: 8px 20px;
+	font-weight: bold;
+	border-radius: 4px;
+}
+
+.btn_save {
+	background-color: #FEF1AB !important;
+	color: #000 !important;
+	padding: 12px 40px;
+	font-size: 16px;
+	font-weight: bold;
+	border-radius: 4px;
+}
+
+.btn_cancel {
+	background-color: #333 !important;
+	color: #fff !important;
+	border: 1px solid #555;
+	padding: 12px 30px;
+	font-size: 16px;
+	border-radius: 4px;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.btn_mini {
+	padding: 4px 10px;
+	font-size: 11px;
+	border-radius: 2px;
+	border: 1px solid #555;
+	background-color: #222 !important;
+	color: #ccc !important;
+}
+
+.btn_mini:hover {
+	border-color: #FEF1AB;
+	color: #fff !important;
+}
+
+.btn_apply_all {
+	color: #FEF1AB !important;
+	border-color: #FEF1AB;
+}
+
+.btn_del_round {
+	background: transparent !important;
+	color: #555 !important;
+	font-size: 20px;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+
+.btn_del_round:hover {
+	color: #ff5252 !important;
+}
+
+.btn_del_ticket {
+	background-color: #222 !important;
+	border: 1px solid #444;
+	color: #ff5252 !important;
+	width: 28px;
+	border-radius: 3px;
+}
+
+.btn_del_ticket:hover {
+	background-color: #ff5252 !important;
+	color: #fff !important;
+}
+
+.form_actions {
+	margin-top: 40px;
+	text-align: center;
+	padding-bottom: 50px;
+}
+
+.calendar_layout {
+	display: flex;
+	gap: 20px;
+	align-items: flex-start;
+}
+
+.calendar_side {
+	width: 400px;
+	flex-shrink: 0;
+	background: #1a1a1a;
+	padding: 15px;
+	border-radius: 4px;
+	border: 1px solid #444;
+}
+
+.detail_side {
+	flex-grow: 1;
+	background: #111;
+	padding: 20px;
+	border-radius: 4px;
+	border: 1px solid #333;
+	min-height: 500px;
+}
+
+.cal_header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.cal_header h4 {
+	color: #fff;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.btn_cal_nav {
+	background: transparent;
+	border: 1px solid #555;
+	color: #fff;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.cal_grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 5px;
+	text-align: center;
+}
+
+.cal_day_name {
+	color: #888;
+	font-size: 12px;
+	padding-bottom: 10px;
+	font-weight: bold;
+}
+
+.cal_date {
+	height: 45px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	border-radius: 4px;
+	border: 1px solid transparent;
+	position: relative;
+	color: #ddd;
+}
+
+.cal_date:hover {
+	background: #333;
+}
+
+.cal_date.other_month {
+	opacity: 0.3;
+	pointer-events: none;
+}
+
+.cal_date.selected {
+	background: rgba(254, 241, 171, 0.2);
+	border-color: #FEF1AB;
+	color: #FEF1AB;
+	font-weight: bold;
+}
+
+.cal_date.today {
+	border: 1px dashed #FEF1AB;
+}
+
+.has_schedule_dot {
+	width: 6px;
+	height: 6px;
+	background: #FEF1AB;
+	border-radius: 50%;
+	margin-top: 4px;
+	display: none;
+}
+
+.cal_date.has_data .has_schedule_dot {
+	display: block;
+}
+
+.excel_btn_group {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 15px;
+	justify-content: flex-end;
+}
+
+.btn_excel {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 6px 12px;
+	font-size: 13px;
+	border-radius: 4px;
+	border: none;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.btn_down {
+	background: #217346;
+	color: #fff;
+}
+
+.btn_up {
+	background: #444;
+	color: #fff;
+	border: 1px solid #666;
+}
+
+.empty_msg {
+	text-align: center;
+	color: #777;
+	padding-top: 100px;
+}
+
+.selected_date_title {
+	font-size: 20px;
+	color: #FEF1AB;
+	border-bottom: 2px solid #555;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
+}

@@ -108,4 +108,26 @@ public class AdminDAOImpl implements AdminDAO {
 	public List<MemberVO> readMember(int snum) {
 		return sqlSession.selectList("admin.readMember",snum);
 	}
+	
+	@Override
+	public int insertSchedule(ScheduleVO scheduleVO) {
+		return sqlSession.insert("admin.insertSchedule", scheduleVO);
+	}
+	
+	@Override
+	public int insertPrice(PriceVO priceVO) {
+		return sqlSession.insert("admin.insertPrice", priceVO);
+	}
+	
+	@Override
+	public int deleteScheduleByStageIdx(long stage_idx) {
+		return sqlSession.delete("admin.deleteScheduleByStageIdx", stage_idx);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectFullScheduleByStageIdx(long stage_idx) {
+		return sqlSession.selectList("admin.selectFullScheduleByStageIdx", stage_idx);
+	}
+	
+	
 }

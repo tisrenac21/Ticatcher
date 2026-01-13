@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class StageVO {
+	private int rownum;
 	private long stage_idx;
 	private String stage_name;
 	private String stage_grade;
@@ -21,5 +22,7 @@ public class StageVO {
 	private String stage_imgInfoName;
 	private String stage_imgInfoPath;
 	private String stage_info;
+	private char schedule_yn;
 	private long theater_idx;
+	private String theater_name;
 }

@@ -323,7 +323,6 @@ public class AdminController {
 			int cpage = Integer.parseInt(cpg);
 			int snum = (cpage-1) * perPage;
 			int stpgn = ((cpage - 1) / 10) * 10 + 1;
-			String board_config = "notice";
 
 			model.addAttribute("pages",asrv.readCountStage());
 			model.addAttribute("stageList", asrv.readStage(snum));
@@ -383,7 +382,7 @@ public class AdminController {
 			if (imgInfoPath != null && !imgInfoPath.isEmpty()) {
 				infoImg = imgInfoPath.split(",");
 			} else {
-				infoImg = new String[0]; // 또는 null 대신 빈 배열
+				infoImg = new String[0];
 			}
 
 			model.addAttribute("stage", svo);
@@ -394,11 +393,8 @@ public class AdminController {
 			model.addAttribute("prices",realPriceList);
 
 			returnPage = "admin/manageStageView";
-
 		}
-
 		return returnPage;
-
 	}
 
 	@GetMapping("/manageMember")
@@ -425,4 +421,20 @@ public class AdminController {
 	public String goIntmngstg(HttpSession session, Model model, String cpg){
 		return "admin/writeStage";
 	}
+	
+	@GetMapping("/schmng")
+    public String schmng(HttpSession session, Model model, @RequestParam("stage_idx") long stage_idx) {
+        String resultPage = "admin/schmng";
+        
+        if (session.getAttribute("admin") == null) {
+            resultPage = "redirect:/admin";
+        } else {
+            StageVO svo = ssrv.getStageByIdx(stage_idx);
+            model.addAttribute("stage", svo);
+            List<Map<String, Object>> existList = asrv.getFullSchedule(stage_idx);
+            model.addAttribute("existList", existList);
+        }
+        
+        return resultPage;
+    }
 }

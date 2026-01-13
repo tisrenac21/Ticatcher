@@ -68,10 +68,44 @@
             resultType="int">
         select ceil(count(stage_idx)/10) pages from tcc_stage
     </select>
-    <select id="readStage" statementType="PREPARED"
-            parameterType="int"
-            resultType="co.kr.ticatcher.vo.StageVO">
-        select * from tcc_stage order by stage_idx desc limit #{snum}, 10
+    <select id="readStage" statementType="PREPARED" parameterType="int" resultType="co.kr.ticatcher.vo.StageVO">
+		select
+			@rownum := @rownum + 1 as rownum,
+			ta.*
+		from
+			(
+			select
+				tst.stage_idx,
+				tst.stage_name,
+				tst.stage_grade,
+				tst.stage_runtime,
+				tst.stage_host,
+				tst.stage_posterName,
+				tst.stage_posterPath,
+				tst.stage_imgInfoName,
+				tst.stage_imgInfoPath,
+				tst.stage_info,
+				tst.theater_idx,
+				case
+					when (
+					select
+						COUNT(*)
+					from
+						tcc_schedule ts
+					where
+						ts.stage_idx = tst.stage_idx) > 0 then 'Y'
+					else 'N'
+				end as schedule_yn
+			from
+				tcc_stage tst
+			order by
+				stage_idx desc) ta,
+			(
+			select
+				@rownum := #{snum}) r
+		order by
+			stage_idx desc
+		limit #{snum}, 10
     </select>
     <select id="readCountMember" statementType="PREPARED"
             resultType="int">
@@ -81,6 +115,47 @@
             parameterType="int"
             resultType="co.kr.ticatcher.vo.MemberVO">
         select * from tcc_member order by mem_idx desc limit #{snum}, 10
+    </select>
+    
+    <insert id="insertSchedule" parameterType="co.kr.ticatcher.vo.ScheduleVO" 
+            useGeneratedKeys="true" keyProperty="schedule_idx">
+        INSERT INTO tcc_schedule (
+            schedule_date, 
+            schedule_time, 
+            stage_idx
+        ) VALUES (
+            #{schedule_date}, 
+            #{schedule_time}, 
+            #{stage_idx}
+        )
+    </insert>
+
+    <insert id="insertPrice" parameterType="co.kr.ticatcher.vo.PriceVO">
+        INSERT INTO tcc_price (
+            schedule_idx, 
+            price_name, 
+            price_price
+        ) VALUES (
+            #{schedule_idx}, 
+            #{price_name}, 
+            #{price_price}
+        )
+    </insert>
+    
+    <delete id="deleteScheduleByStageIdx">
+        DELETE FROM tcc_schedule WHERE stage_idx = #{stage_idx}
+    </delete>
+    
+    <select id="selectFullScheduleByStageIdx" parameterType="long" resultType="map">
+        SELECT 
+            DATE_FORMAT(s.schedule_date, '%Y-%m-%d') as date,
+            DATE_FORMAT(s.schedule_time, '%H:%i') as time,
+            p.price_name,
+            p.price_price
+        FROM tcc_schedule s
+        LEFT JOIN tcc_price p ON s.schedule_idx = p.schedule_idx
+        WHERE s.stage_idx = #{stage_idx}
+        ORDER BY s.schedule_date ASC, s.schedule_time ASC
     </select>
 
 </mapper>
