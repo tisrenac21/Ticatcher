@@ -347,7 +347,7 @@ public class AdminController {
 			List<PriceVO> priceList = new ArrayList<>();
 
 			for(int i = 0 ; i < stageSchedule.size() ; i++){
-				long theaterIdx = stageSchedule.get(i).getTheater_idx();
+				long theaterIdx = svo.getTheater_idx();
 				long scheduleIdx = stageSchedule.get(i).getSchedule_idx();
 				List<PriceVO> prices = ssrv.getAllPriceBySchedule(scheduleIdx);
 				if(!theaterIdxs.contains(theaterIdx)){
@@ -369,12 +369,11 @@ public class AdminController {
 				}
 			}
 			List<String> dateList = new ArrayList<>();
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			for(ScheduleVO sc : stageSchedule){
-				dateList.add(format.format(sc.getSchedule_date()));
+				dateList.add(sc.getSchedule_date());
 			}
 
-			String period = "-";
+			String period = Collections.min(dateList) + " ~ " + Collections.max(dateList);
 
 			String imgInfoPath = svo.getStage_imgInfoPath();
 

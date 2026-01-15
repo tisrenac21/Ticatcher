@@ -15,5 +15,4 @@ public class ScheduleVO {
 	private String schedule_date;
 	private String schedule_time;
 	private long stage_idx;
-	private long theater_idx;
 }
