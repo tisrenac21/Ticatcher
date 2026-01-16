@@ -2,83 +2,230 @@
 <html xmlns:th = "http://www.thymeleaf.org"
       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/layout}">
+      
+<th:block layout:fragment="mystyle">
+	<style>
+		.board_section {
+		    width: 980px;
+		    margin: 0 auto;
+		}
+		
+		.board_box {
+		    width: 1000px;
+		    margin: auto;
+		    margin-top: 20px;
+		    border: 1px solid #333;
+		    padding: 20px;
+		    border-radius: 10px;
+		}
+		
+		.board_title {
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    border-bottom: 1px solid #333;
+		    padding-bottom: 15px;
+		    margin-bottom: 15px;
+		}
+		
+		.board_title h3 {
+		    font-size: 18px;
+		    font-weight: bold;
+		}
+		
+		.more_btn {
+		    font-size: 12px;
+		    color: #999;
+		}
+		
+		/* 리스트 스타일 */
+		.board_list li {
+		    margin-bottom: 12px;
+		}
+		
+		.board_list li a {
+		    display: flex;
+		    justify-content: space-between;
+		    font-size: 14px;
+		    color: #ddd;
+		    transition: color 0.3s;
+		}
+		
+		.board_list li a:hover {
+		    color: #FEF1AB; /* 하이라이트 색상 활용 */
+		    text-decoration: underline;
+		}
+		
+		.board_list .txt {
+		    width: 320px;
+		    white-space: nowrap;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		}
+		
+		.board_list .date {
+		    font-size: 12px;
+		    color: #666;
+		}
+		
+		/* 고객센터 스타일 */
+		.cs_center {
+		    text-align: center;
+		}
+		
+		.cs_tel {
+		    font-size: 32px;
+		    font-weight: bold;
+		    color: #FEF1AB;
+		    margin-bottom: 10px;
+		}
+		
+		.cs_time {
+		    font-size: 13px;
+		    color: #999;
+		    margin-bottom: 20px;
+		}
+		
+		.faq_shortcut {
+		    display: flex;
+		    justify-content: center;
+		    gap: 10px;
+		}
+		
+		.faq_shortcut a {
+		    display: block;
+		    padding: 8px 20px;
+		    border: 1px solid #555;
+		    border-radius: 20px;
+		    font-size: 13px;
+		    color: #fff;
+		    transition: all 0.3s;
+		}
+		
+		.faq_shortcut a:hover {
+		    background: #fff;
+		    color: #000;
+		    font-weight: bold;
+		}
+	</style>
+</th:block>
 
 <th:block layout:fragment="main">
-<div class="container">
-    <div class="play_chart">
-        <div class="contents">
-            <div class="play_swiper slider">
-                <div class="chart_text"
-                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <div class="select_chart" style="display: inline-flex;">
+	<div class="container">
+    	<div class="play_chart">
+        	<div class="contents">
+            	<div class="play_swiper slider">
+                	<div class="chart_text" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    	<div class="select_chart" style="display: inline-flex;">
 <!--                        <h3>인기순</h3>-->
 <!--                        <h3 class="txt_div">|</h3>-->
 <!--                        <h3>평점순</h3>-->
-                        <h3>
-                               최신 공연
-                        </h3>
+                        	<h3>최신 공연</h3>
+                    	</div>
+                    	<a href="/stage" style="font-size: 14px;">전체보기 ></a>
                     </div>
-                    <a href="/stage" style="font-size: 14px;">전체보기 ></a>
-                </div>
-                <div class="chart-list" style="margin-left: 10px;">
-                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
-                        <tbody>
-                        <tr>
-                            <td th:each="stage : ${stages}" valign="top" align="center">
-                                <table cellspacing="0" width="220" style="margin-bottom: 30px;">
-                                    <tbody>
-                                    <tr style="height: 300px">
-                                        <td>
-                                            <div style="margin-bottom: 10px;">
-                                                <a th:href="@{/payment(stage_idx=${stage.getStage_idx()})}">
-                                                    <img th:src="${stage.getStage_posterPath()}"
-                                                         alt="공연 썸네일"
-                                                         style="border-radius: 10px; height: 290px; width: 100%">
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: center; font-size: 19px;">
-                                            <strong th:text="${stage.getStage_name()}"></strong>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="show_info" style="justify-content: space-evenly;">
-                                                <div class="show_info_left">
-                                                    <span>
-<!--                                                        <img src="static/img/ico_star2.png" alt="별점">-->
-                                                        <input type="hidden" class="sdx" name="stageIdx" th:value="${stage.getStage_idx()}">
-                                                        <span class="priceName"></span>
-                                                    </span>
-                                                </div>
-                                                <div class="show_info_right">
+                    <div class="chart-list" style="margin-left: 10px;">
+                    	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    		<tbody>
+                    			<tr>
+                    				<td th:each="stage : ${stages}" valign="top" align="center">
+                    					<table cellspacing="0" width="220" style="margin-bottom: 30px;">
+                    						<tbody>
+                    							<tr style="height: 300px">
+                    								<td>
+                    									<div style="margin-bottom: 10px;">
+                    										<a th:href="@{/payment(stage_idx=${stage.getStage_idx()})}">
+                    											<img th:src="${stage.getStage_posterPath()}" alt="공연 썸네일" style="border-radius: 10px; height: 290px; width: 100%">
+                    										</a>
+                    									</div>
+                    								</td>
+                    							</tr>
+                    							<tr>
+                    								<td style="text-align: center; font-size: 19px;">
+                    									<strong th:text="${stage.getStage_name()}"></strong>
+                    								</td>
+                    							</tr>
+                    							<tr>
+                    								<td>
+                    									<div class="show_info" style="justify-content: space-evenly;">
+                    										<div class="show_info_left">
+                    											<span>
+                    												<input type="hidden" class="sdx" name="stageIdx" th:value="${stage.getStage_idx()}">
+                    												<span class="priceName"></span>
+                                                    			</span>
+                                                			</div>
+                                                			<div class="show_info_right">
 <!--                                                    <strong class="highlight">72%</strong>-->
-                                                    <span class="pricePrice"></span> 원
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                                    			<span class="pricePrice"></span> 원
+                                                			</div>
+                                            			</div>
+                                        			</td>
+                                    			</tr>
+                                    		</tbody>
+                                		</table>
+                            		</td>
+                            	</tr>
+                            </tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="board_box left">
+			<div class="board_title">
+				<h3>공지사항</h3>
+				<a href="/notice" class="more_btn">+ 더보기</a>
+			</div>
+			<ul class="board_list">
+				<li>
+					<a href="#">
+						<span class="txt">[시스템] 서버 점검 안내 (03/15)</span>
+						<span class="date">2023.03.10</span>
+					</a>
+				</li>
+                <li>
+                    <a href="#">
+                        <span class="txt">[이벤트] 봄맞이 뮤지컬 할인 쿠폰 지급</span>
+                        <span class="date">2023.03.08</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="txt">[안내] 티켓 배송 지연 관련 공지</span>
+                        <span class="date">2023.03.05</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="txt">[공지] 개인정보 처리방침 변경 안내</span>
+                        <span class="date">2023.03.01</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="board_box right">
+            <div class="board_title">
+                <h3>고객센터 / FAQ</h3>
+                <a href="/faq" class="more_btn">+ 더보기</a>
+            </div>
+            <div class="cs_center">
+                <p class="cs_tel">1544-0000</p>
+                <p class="cs_time">평일 09:00 ~ 18:00 (주말/공휴일 휴무)</p>
+                
+                <div class="faq_shortcut">
+                    <a href="#">예매취소</a>
+                    <a href="#">환불규정</a>
+                    <a href="#">티켓수령</a>
                 </div>
             </div>
         </div>
     </div>
-    <div class="ad" style="
-    text-align: center;
-    margin-top: 100px;
-">
+    <div class="ad" style="text-align: center; margin-top: 100px;">
         <a target="_blank" href="https://www.samsung.com/sec/galaxy-s23/launching/">
             <img src="static/adimg/samsung_galaxy_s23.jpg" style="width: 980px">
         </a>
     </div>
-</div>
 </th:block>
 <th:block layout:fragment="myscript">
     <script>
