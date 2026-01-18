@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/adminLayout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/manageDeleteMember.css">
+</th:block>     
+
+<th:block layout:fragment="main">	
+	<div id="container">
+	    <div class="contents">
+	        <div class="left_wrap">
+	            <p>회원 관리</p>
+	            <ul>
+	                <a href="/manageMember">
+	                    <li class="left_wrap_btn">
+	                        <span>회원 목록 관리</span>
+	                    </li>
+	                </a>
+	                <a href="/manageDeleteMember">
+	                    <li class="left_wrap_btn">
+	                        <span class="select_btn">탈퇴 회원 리스트</span>
+	                    </li>
+	                </a>
+	            </ul>
+	        </div>
+	        <div class="right_wrap" th:with="cpg=${(param.cpg == null or #strings.equals(param.cpg,''))? 1: T(java.lang.Integer).parseInt(param.cpg)}">
+	            <p class="right_title">
+	                탈퇴 회원 리스트
+	            </p>
+	            <div class="right_list">
+	                <ul class="list_header">
+	                    <li>
+	                        &nbsp;
+	                    </li>
+	                    <li>
+	                        아이디
+	                    </li>
+	                    <li>
+	                        이름
+	                    </li>
+	                    <li>
+	                        가입날짜
+	                    </li>
+	                </ul>
+	                <ul class="list_contents">
+	                    <table width="100%">
+	                        <tbody>
+	                        <tr th:if="${not #lists.isEmpty(memberList)}" th:each="member: ${memberList}">
+	                            <td valign="top" align="center">
+	                                <li><input class="checkId" type="checkbox" th:value="${member.mem_id}"></li>
+	                                <!-- <li th:if="${member.mem_idx} == 1"><input type="checkbox" style="background: #6a6a6a" disabled th:value="${member.mem_idx}"></li> -->
+	                                <li style="cursor: pointer;" id="memberId" th:onclick="showMemberInfo([[${member}]])" th:text="${member.mem_id}">
+	                                    <!--                                        <a th:text="${member.mem_id}" th:href="@{/getInfoMember(mem_idx=${member.mem_idx})}"></a>-->
+	                                </li>
+	                                <li th:text="${member.mem_name}"></li>
+	                                <li th:text="${member.mem_regDate}"></li>
+	                            </td>
+	                        </tr>
+	                        
+	                        <tr th:if="${#lists.isEmpty(memberList)}">
+				                <td align="center" style="padding: 20px;">
+				                    탈퇴한 회원이 없습니다.
+				                </td>
+				            </tr>
+	                        </tbody>
+	                    </table>
+	                </ul>
+	                <a id="restoreBtn">
+	                    <div class="write_btn" style="width: 70px; margin-left: 10px;">
+	                        복원
+	                    </div>
+	                </a>
+	                <div class="list_pager">
+	                    <a th:if="${cpg > 1}" th:href="@{'/manageMember?cpg=1'}"><button class="btn_pager first" type="button">처음</button></a>
+	                    <a th:if="${cpg > 1}" th:href="@{'/manageMember?cpg=' + ${cpg - 1}}"><button class="btn_pager prev" type="button">이전</button></a>
+	                    <ul>
+	                        <th:block th:each="i: ${#numbers.sequence(0, 9)}">
+	                            <th:block th:if="${(stpgn + i) <= pages}">
+	                                <li>
+	                                    <span th:text="${stpgn + i}" th:if="${cpg == (stpgn + i)}" class="on"></span>
+	                                    <span th:unless="${cpg == (stpgn + i)}">
+	                                        <a th:href="@{/manageMember(cpg=${stpgn+i})}">[[${stpgn + i}]]</a>
+	                                    </span>
+	                                </li>
+	                            </th:block>
+	                        </th:block>
+	
+	                    </ul>
+	
+	                    <a th:if="${cpg < pages}" th:href="@{'/manageMember?cpg=' + ${cpg + 1}}"><button class="btn_pager next" type="button">다음</button></a>
+	                    <a th:if="${cpg < pages}" th:href="@{'/manageMember?cpg='+${pages}}"><button class="btn_pager end" type="button">끝</button></a>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	
+<div id="modalForInfo" class="modal">
+    <div id="modal-content">
+        <h3 style="margin: 0 0 20px 0; color: #FEF1AB;">회원 상세 정보</h3>
+        <table class="mypageTable">
+            <tbody>
+            <tr>
+                <th>아이디</th>
+                <td><input type="text" id="modalId" class="modal-input" disabled="disabled">
+                <input type="hidden" id="modalIdx"></td>
+            </tr>
+            <tr>
+                <th>이름</th>
+                <td><input type="text" id="modalName" class="modal-input" disabled="disabled"></td>
+            </tr>
+            <tr>
+                <th>닉네임</th>
+                <td><input type="text" id="modalNickname" class="modal-input" disabled="disabled"></td>
+            </tr>
+            <tr>
+                <th>이메일</th>
+                <td><input type="email" id="modalEmail" class="modal-input" disabled="disabled"></td>
+            </tr>
+            <tr>
+                <th>휴대폰</th>
+                <td>
+                    <div class="tel-inputs">
+                        <input type="tel" maxlength="3" id="modalTel1" class="modal-input" disabled="disabled">
+                        <span>-</span>
+                        <input type="tel" maxlength="4" id="modalTel2" class="modal-input" disabled="disabled">
+                        <span>-</span>
+                        <input type="tel" maxlength="4" id="modalTel3" class="modal-input" disabled="disabled">
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="modalbtn" id="modalbtn">
+            <button class="btn-in-modal btn-close" id="close-modal">닫기</button>
+        </div>
+    </div>
+</div>
+</div>
+</th:block>
+
+<th:block layout:fragment="myscript">
+	<script type="text/javascript">
+		var modalIdx = document.getElementById("modalIdx");
+	    var modalId = document.getElementById("modalId");
+	    var modalName = document.getElementById("modalName");
+	    var modalNickname = document.getElementById("modalNickname");
+	    var modalEmail = document.getElementById("modalEmail");
+	    var modalTel1 = document.getElementById("modalTel1");
+	    var modalTel2 = document.getElementById("modalTel2");
+	    var modalTel3 = document.getElementById("modalTel3");
+	    var modelForInfo = document.getElementById("modalForInfo");
+	    var closeModal = document.getElementById("close-modal");
+	    var haveChange = false;
+	    
+	    window.onload = modelForInfo.style.display = 'none';
+	
+	    closeModal.addEventListener("click", function (){
+	        modelForInfo.style.display = 'none'
+	    })
+	
+	    function showMemberInfo(data){
+	    	modalIdx.value = data.mem_idx;
+	        modalId.value = data.mem_id;
+	        modalName.value = data.mem_name;
+	        modalNickname.value = data.mem_aka;
+	        modalEmail.value = data.mem_email;
+	        modalTel1.value = data.mem_tel.substr(0, 3);
+	        if(data.mem_tel.length == 11){ // 11자 휴대폰 번호 (010 - XXXX - XXXX)
+	            modalTel2.value = data.mem_tel.substr(3, 4);
+	            modalTel3.value = data.mem_tel.substr(7, 4);
+	        } else if(data.mem_tel.length == 10) { // 10자 휴대폰 번호 (01X - XXX - XXXX)
+	            modalTel2.value = data.mem_tel.substr(3, 3);
+	            modalTel3.value = data.mem_tel.substr(6, 4);
+	        }
+	        
+	        haveChange = false;
+	        modelForInfo.style.display = 'block';
+	    }
+	    
+	    function restoreAct(checkedIdList) {
+	    	fetch("/api/member/restore", {
+	    		method: "POST", 
+	    		headers: { "Content-Type": "application/json" },
+	    		body: JSON.stringify(checkedIdList)
+	    	})
+	    	.then(response => response.json())
+	    	.then(data => {
+	            alert(data.message);
+	            if (data.result === "success") {
+	                window.location.reload(); 
+	            }
+	        })
+	        .catch(error => {
+	            console.error("Error:", error);
+	            alert("서버 통신 중 오류가 발생했습니다.");
+	        });
+	    }
+	    
+	    $("#restoreBtn").off("click").on("click", function(e) {
+	    	const checkedIds = document.querySelectorAll(".checkId:checked");
+	    	const checkedIdList = Array.from(checkedIds).map(checkbox => checkbox.value);
+	    	if(confirm("선택한 회원을 탈퇴 처리하시겠습니까?")) {
+	    		restoreAct(checkedIdList);
+	    	};
+	    });
+	   
+	</script>
+</th:block>
+</body>
+</html>

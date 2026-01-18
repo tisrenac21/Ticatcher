@@ -5,7 +5,7 @@
 <mapper namespace="board">
     <select id="selectNoticeBoard" statementType="PREPARED"
             parameterType="Map"
-            resultType="co.kr.ticatcher.vo.BoardVO">
+            resultType="kr.co.ticatcher.vo.BoardVO">
         select board_idx, board_conidx, board_name, board_regdate from tcc_board where board_config='notice'
         order by board_conidx desc limit #{snum}, 10
     </select>
@@ -17,7 +17,7 @@
     </select>
     <select id="selectFAQBoard" statementType="PREPARED"
             parameterType="Map"
-            resultType="co.kr.ticatcher.vo.BoardVO">
+            resultType="kr.co.ticatcher.vo.BoardVO">
         select board_idx, board_conidx, board_name, board_regdate from tcc_board where board_config='FAQ'
         order by board_conidx desc limit #{snum}, 10
     </select>
@@ -35,16 +35,16 @@
 
     <select id="selectOneBoard" statementType="PREPARED"
             parameterType="String"
-            resultType="co.kr.ticatcher.vo.BoardVO">
+            resultType="kr.co.ticatcher.vo.BoardVO">
         select * from tcc_board where board_idx = #{board_idx}
     </select>
     <insert id="registerQnaPost" statementType="PREPARED"
-            parameterType="co.kr.ticatcher.vo.QnaVO">
+            parameterType="kr.co.ticatcher.vo.QnaVO">
         insert into tcc_qna (qna_memidx, qna_name, qna_contents, qna_attachName, qna_attachPath, mem_idx) values (#{qna_memidx}, #{qna_name}, #{qna_contents}, #{qna_attachName}, #{qna_attachPath}, #{mem_idx})
     </insert>
     <select id="selectMyQna" statementType="PREPARED"
             parameterType="Map"
-            resultType="co.kr.ticatcher.vo.QnaVO">
+            resultType="kr.co.ticatcher.vo.QnaVO">
         select * from tcc_qna where mem_idx=#{mem_idx}
         order by qna_memidx desc limit #{snum}, 10
     </select>
@@ -55,7 +55,7 @@
     </select>
     <select id="readOneQna" statementType="PREPARED"
             parameterType="long"
-            resultType="co.kr.ticatcher.vo.QnaVO">
+            resultType="kr.co.ticatcher.vo.QnaVO">
         select * from tcc_qna where qna_idx = #{qna_idx}
     </select>
     <select id="countMemidx" statementType="PREPARED"

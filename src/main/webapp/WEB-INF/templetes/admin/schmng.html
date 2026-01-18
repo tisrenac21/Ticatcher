@@ -293,7 +293,7 @@
         }
 
         function downloadTemplate() {
-            fetch('/stage/api/downloadTemplate', {
+            fetch('/api/stage/downloadTemplate', {
                 method: 'POST'
             })
             .then(response => {
@@ -328,7 +328,7 @@
                 return;
             }
 
-            fetch('/stage/api/uploadExcel', {
+            fetch('/api/stage/uploadExcel', {
                 method: 'POST',
                 body: formData
             })

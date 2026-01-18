@@ -18,12 +18,7 @@
 	                        <span class="select_btn">회원 목록 관리</span>
 	                    </li>
 	                </a>
-	                <a href="#">
-	                    <li class="left_wrap_btn">
-	                        <span>징계 회원 리스트</span>
-	                    </li>
-	                </a>
-	                <a href="#">
+	                <a href="/manageDeleteMember">
 	                    <li class="left_wrap_btn">
 	                        <span>탈퇴 회원 리스트</span>
 	                    </li>
@@ -54,8 +49,8 @@
 	                        <tbody>
 	                        <tr th:each="member: ${memberList}">
 	                            <td valign="top" align="center">
-	                                <li th:unless="${member.mem_idx} == 1"><input type="checkbox" th:value="${member.mem_idx}"></li>
-	                                <li th:if="${member.mem_idx} == 1"><input type="checkbox" style="background: #6a6a6a" disabled th:value="${member.mem_idx}"></li>
+	                                <li><input class="checkId" type="checkbox" th:value="${member.mem_id}"></li>
+	                                <!-- <li th:if="${member.mem_idx} == 1"><input type="checkbox" style="background: #6a6a6a" disabled th:value="${member.mem_idx}"></li> -->
 	                                <li style="cursor: pointer;" id="memberId" th:onclick="showMemberInfo([[${member}]])" th:text="${member.mem_id}">
 	                                    <!--                                        <a th:text="${member.mem_id}" th:href="@{/getInfoMember(mem_idx=${member.mem_idx})}"></a>-->
 	                                </li>
@@ -66,14 +61,9 @@
 	                        </tbody>
 	                    </table>
 	                </ul>
-	                <a href="#">
-	                    <div class="write_btn" id="uptbtn"style="width: 70px; margin-left: 10px;">
-	                        탈퇴
-	                    </div>
-	                </a>
-	                <a href="#">
+	                <a id="deleteSelectedMember">
 	                    <div class="write_btn" style="width: 70px; margin-left: 10px;">
-	                        정지
+	                        탈퇴
 	                    </div>
 	                </a>
 	                <div class="list_pager">
@@ -107,7 +97,8 @@
             <tbody>
             <tr>
                 <th>아이디</th>
-                <td><input type="text" id="modalId" disabled="disabled"></td>
+                <td><input type="text" id="modalId" disabled="disabled">
+                <input type="hidden" id="modalIdx"></td>
             </tr>
             <tr>
                 <th>이름</th>
@@ -133,21 +124,11 @@
                     </div>
                 </td>
             </tr>
-            <tr>
-                <th>계정 상태</th>
-                <td>
-                    <select id="modalStatus">
-                        <option value="정상">정상</option>
-                        <option value="휴면">휴면</option>
-                        <option value="정지">정지</option>
-                    </select>
-                </td>
-            </tr>
             </tbody>
         </table>
         <div class="modalbtn" id="modalbtn">
-            <button class="btn-in-modal btn-edit">수정</button>
-            <button class="btn-in-modal btn-withdraw">강제 탈퇴</button>
+            <button class="btn-in-modal btn-edit" id="reset-pwd">비밀번호 초기화</button>
+            <button class="btn-in-modal btn-edit" id="save-update">수정</button>
             <button class="btn-in-modal btn-close" id="close-modal">닫기</button>
         </div>
     </div>
@@ -157,6 +138,7 @@
 
 <th:block layout:fragment="myscript">
 	<script type="text/javascript">
+		var modalIdx = document.getElementById("modalIdx");
 	    var modalId = document.getElementById("modalId");
 	    var modalName = document.getElementById("modalName");
 	    var modalNickname = document.getElementById("modalNickname");
@@ -166,7 +148,8 @@
 	    var modalTel3 = document.getElementById("modalTel3");
 	    var modelForInfo = document.getElementById("modalForInfo");
 	    var closeModal = document.getElementById("close-modal");
-	
+	    var haveChange = false;
+	    
 	    window.onload = modelForInfo.style.display = 'none';
 	
 	    closeModal.addEventListener("click", function (){
@@ -174,6 +157,7 @@
 	    })
 	
 	    function showMemberInfo(data){
+	    	modalIdx.value = data.mem_idx;
 	        modalId.value = data.mem_id;
 	        modalName.value = data.mem_name;
 	        modalNickname.value = data.mem_aka;
@@ -186,8 +170,126 @@
 	            modalTel2.value = data.mem_tel.substr(3, 3);
 	            modalTel3.value = data.mem_tel.substr(6, 4);
 	        }
+	        
+	        haveChange = false;
 	        modelForInfo.style.display = 'block';
 	    }
+	    
+	    function deleteIdList(checkedIdList) {
+	    	fetch("/api/member/deleteIdList", {
+	    		method: "POST",
+	    		headers: { "Content-Type": "application/json" },
+	    		body: JSON.stringify(checkedIdList)
+	    	})
+	    	.then(response => response.json())
+	        .then(data => {
+	            alert(data.message);
+	            if (data.result === "success") {
+	                window.location.reload(); 
+	            }
+	        })
+	        .catch(error => {
+	            console.error("Error:", error);
+	            alert("서버 통신 중 오류가 발생했습니다.");
+	        });
+	    }
+	    
+	    function updateMember(param) {
+	    	fetch("/api/member/uptmem", {
+	    		method: "POST",
+	    		headers: { "Content-Type": "application/json" },
+	    		body: JSON.stringify(param)
+	    	})
+	    	.then(response => response.json())
+	        .then(data => {
+	            alert(data.message);
+	            if (data.result === "success") {
+	                window.location.reload(); 
+	            }
+	        })
+	        .catch(error => {
+	            console.error("Error:", error);
+	            alert("서버 통신 중 오류가 발생했습니다.");
+	        });
+	    }
+	    
+	    function resetPwd(mem_id) {
+	    	fetch("/api/member/resetPwd", {
+	    		method: "POST", 
+	    		headers: { "Content-Type": "application/json" },
+	    		body: mem_id
+	    	})
+	    	.then(response => response.json())
+	    	.then(data => {
+	            alert(data.message);
+	            if (data.result === "success") {
+	                window.location.reload(); 
+	            }
+	        })
+	        .catch(error => {
+	            console.error("Error:", error);
+	            alert("서버 통신 중 오류가 발생했습니다.");
+	        });
+	    }
+	    
+	    $("#deleteSelectedMember").off("click").on("click", function(e) {
+	    	const checkedIds = document.querySelectorAll(".checkId:checked");
+	    	const checkedIdList = Array.from(checkedIds).map(checkbox => checkbox.value);
+	    	if(confirm("선택한 회원을 탈퇴 처리하시겠습니까?")) {
+	    		deleteIdList(checkedIdList);
+	    	};
+	    });
+	    
+	    $("#save-update").off("click").on("click", function(e) {
+	    	var modalIdxChangeVal = document.getElementById("modalIdx").value;
+		    var modalIdChangeVal = document.getElementById("modalId").value;
+		    var modalNameChangeVal = document.getElementById("modalName").value;
+		    var modalNicknameChangeVal = document.getElementById("modalNickname").value;
+		    var modalEmailChangeVal = document.getElementById("modalEmail").value;
+		    var modalTel1ChangeVal = document.getElementById("modalTel1").value;
+		    var modalTel2ChangeVal = document.getElementById("modalTel2").value;
+		    var modalTel3ChangeVal = document.getElementById("modalTel3").value;
+
+			if((modalNameChangeVal == null) || (modalNameChangeVal == "")) {
+	    		alert("회원 이름을 입력해주세요.");
+	    		return;
+	    	} else if ((modalNicknameChangeVal == null) || (modalNicknameChangeVal == "")) {
+	    		alert("닉네임을 입력해주세요.");
+	    		return;
+	    	} else if ((modalEmailChangeVal == null) || (modalEmailChangeVal == "")) {
+	    		alert("이메일을 입력해주세요.");
+	    		return;
+	    	} else if(
+	    			(modalTel1ChangeVal == null) || (modalTel1ChangeVal == "") ||
+	    			(modalTel2ChangeVal == null) || (modalTel2ChangeVal == "") ||
+	    			(modalTel3ChangeVal == null) || (modalTel3ChangeVal == "")
+	    			) {
+	    		alert("전화번호를 입력해주세요.");
+	    		return;
+	    	} else {
+	    		let param = {
+	    				"mem_idx" : modalIdxChangeVal,
+	    				"mem_id" : modalIdChangeVal,
+	    				"mem_name" : modalNameChangeVal,
+	    				"mem_email" : modalEmailChangeVal,
+	    				"mem_aka" : modalNicknameChangeVal,
+	    				"mem_tel" : modalTel1ChangeVal + modalTel2ChangeVal + modalTel3ChangeVal
+	    		}
+	    		
+	    		
+	    		const message = "[회원 정보 수정 최종 확인]\n\n1. 당사자 직접 확인 및 증빙 서류 확인\n2. 오기 및 누락 정보 확인\n3. 수정 후 복구 불가 및 오기입 시 고객 불이익 인지\n\n위 내용을 모두 확인하였으며, 발생하는 결과에 책임을 지겠습니까?";
+
+	    	    if (confirm(message)) {
+	    	        updateMember(param);
+	    	    }
+	    	}
+	    });
+	    
+	    $("#reset-pwd").off("click").on("click", function(e) {
+	    	if(confirm("선택한 회원의 비밀번호를 기본 비밀번호로 초기화 하겠습니까? 비밀번호는 아이디 앞 4자리 + 생년월일 뒷 4자리 + 휴대폰 번호 뒷 4자리입니다.")) {
+	    		resetPwd($("#modalId").val());
+	    	}
+	    });
 	</script>
 </th:block>
 </body>

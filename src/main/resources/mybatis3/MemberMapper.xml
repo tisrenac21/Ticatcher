@@ -4,17 +4,17 @@
 
 <mapper namespace="member">
     <select id="selectCountMember" statementType="PREPARED"
-            parameterType="co.kr.ticatcher.vo.MemberVO"
-            resultType="co.kr.ticatcher.vo.MemberVO">
+            parameterType="kr.co.ticatcher.vo.MemberVO"
+            resultType="kr.co.ticatcher.vo.MemberVO">
         select * from tcc_member where mem_id = #{mem_id} and mem_pw = #{mem_pw}
     </select>
     <select id="checkjoin" statementType="PREPARED"
-            parameterType="co.kr.ticatcher.vo.MemberVO"
+            parameterType="kr.co.ticatcher.vo.MemberVO"
             resultType="int">
         select count(mem_idx) cnt from tcc_member where mem_name = #{mem_name} and mem_birth = #{mem_birth} and mem_tel = #{mem_tel}
     </select>
     <insert id="joinMember" statementType="PREPARED"
-            parameterType="co.kr.ticatcher.vo.MemberVO">
+            parameterType="kr.co.ticatcher.vo.MemberVO">
         insert into tcc_member(mem_id, mem_pw, mem_name, mem_gen, mem_aka, mem_email, mem_tel, mem_birth) values (#{mem_id}, #{mem_pw}, #{mem_name}, #{mem_gen}, #{mem_aka}, #{mem_email}, #{mem_tel}, #{mem_birth})
     </insert>
     <select id="checkid" statementType="PREPARED"
@@ -23,22 +23,33 @@
         select count(mem_idx) cnt from tcc_member where mem_id = #{uid}
     </select>
     <select id = "findId" statementType="PREPARED"
-            parameterType="co.kr.ticatcher.vo.MemberVO"
+            parameterType="kr.co.ticatcher.vo.MemberVO"
             resultType="String">
         select mem_id from tcc_member where mem_name = #{mem_name} and mem_tel = #{mem_tel}
     </select>
     <select id="selectCountMemberForFindPw" statementType="PREPARED"
-            parameterType="co.kr.ticatcher.vo.MemberVO"
+            parameterType="kr.co.ticatcher.vo.MemberVO"
             resultType="int">
         select count(mem_idx) cnt from tcc_member where mem_name = #{mem_name} and mem_tel = #{mem_tel} and mem_id = #{mem_id}
     </select>
     <update id="changePw" statementType="PREPARED"
-            parameterType="co.kr.ticatcher.vo.MemberVO">
+            parameterType="kr.co.ticatcher.vo.MemberVO">
         update tcc_member set mem_pw = #{mem_pw} where mem_id = #{mem_id} and mem_tel = #{mem_tel} and mem_name = #{mem_name}
     </update>
-    <update id="uptmember" statementType="PREPARED"
-            parameterType="co.kr.ticatcher.vo.MemberVO">
-        update tcc_member set mem_aka = #{mem_aka}, mem_email = #{mem_email} where mem_idx = #{mem_idx}
+    <update id="uptmember" statementType="PREPARED" parameterType="kr.co.ticatcher.vo.MemberVO">
+        update 
+        	tcc_member 
+        set 
+        	mem_aka = #{mem_aka}, 
+        	mem_email = #{mem_email} 
+        	<if test="mem_name != null">
+        		, mem_name = #{mem_name}
+        	</if>
+        	<if test="mem_tel != null">
+        		, mem_tel = #{mem_tel}
+        	</if>
+        where 
+        	mem_idx = #{mem_idx}
     </update>
     <delete id="deleteMember" statementType="PREPARED"
             parameterType="long">
@@ -55,8 +66,38 @@
     </select>
     <select id="selectInfoByIdx" statementType="PREPARED"
             parameterType="long"
-            resultType="co.kr.ticatcher.vo.MemberVO">
+            resultType="kr.co.ticatcher.vo.MemberVO">
         select * from tcc_member where mem_idx = #{mem_idx}
     </select>
+    
+	<delete id="deleteMembers" parameterType="java.util.List">
+    	update TCC_MEMBER set mem_del_yn = 'Y', mem_del_date = now()
+        WHERE MEM_ID IN 
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    
+    <update id="resetPwd" parameterType="String">
+		update
+			tcc_member
+		set
+			mem_pw = concat(left(mem_id, 4), right(mem_birth, 4), right(mem_Tel, 4))
+		where
+			mem_id = #{mem_id} 
+    </update>
+    
+    <update id="restore" parameterType="java.util.List">
+		update
+			tcc_member
+		set
+			mem_del_yn = "N",
+			mem_del_date = null
+		where
+			mem_id in 
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+	            #{item}
+	        </foreach> 
+    </update>
 
 </mapper>

@@ -193,6 +193,7 @@ p {
     color: rgb(120, 120, 120);
     float: right;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .modal {
@@ -209,7 +210,7 @@ p {
 }
 
 #modal-content {
-    margin: 5% auto;
+    margin: 11% auto;
     padding: 30px;
     border: 1px solid #444;
     width: 500px;
@@ -269,7 +270,6 @@ p {
 #modalId {
     background-color: #333 !important;
     color: #888 !important;
-    cursor: not-allowed;
     border: 1px solid #444;
 }
 

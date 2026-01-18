@@ -15,7 +15,7 @@
                 <div class="right_list">
                     <div class="qna_box">
                         <div class="title_box">
-                            <form name="boardform" id="boardform" method="post" action="/stage/api/saveStage" enctype="multipart/form-data">
+                            <form name="boardform" id="boardform" method="post" action="/api/stage/saveStage" enctype="multipart/form-data">
                                 <table>
                                     <tbody>
                                     <tr>
@@ -264,7 +264,7 @@
         let theaterData = [];
 
         addEventListener("DOMContentLoaded", () => {
-            fetch("/stage/api/selectTheaters", {
+            fetch("/api/stage/selectTheaters", {
                 method: "POST"
             })
                 .then(response => {
@@ -383,7 +383,7 @@
                 formData.append("detail_files", item.file);
             });
 
-            fetch("/stage/api/saveStage", {
+            fetch("/api/stage/saveStage", {
                 method: "POST",
                 body: formData
             })
@@ -604,7 +604,7 @@
 //             }
 //
 //             fetchData() {
-//                 fetch("/stage/api/selectTheaters", { method: "POST" })
+//                 fetch("/api/stage/selectTheaters", { method: "POST" })
 //                     .then(res => {
 //                         if (!res.ok) throw new Error("네트워크 응답 오류");
 //                         return res.json();
@@ -731,7 +731,7 @@
 //             }
 //
 //             sendData(formData) {
-//                 fetch("/stage/api/saveStage", {
+//                 fetch("/api/stage/saveStage", {
 //                     method: "POST",
 //                     body: formData
 //                 })
