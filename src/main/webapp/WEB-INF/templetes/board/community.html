@@ -11,7 +11,7 @@
             <div class="left_wrap">
                 <p>커뮤니티</p>
                 <ul>
-                    <a href="/board">
+                    <a href="/community">
                         <li class="left_wrap_btn">
                             <span class="select_btn">자유게시판</span>
                         </li>
@@ -23,7 +23,7 @@
                     </a>
                 </ul>
             </div>
-            <div class="right_wrap">
+            <div class="right_wrap" th:with="cpg=${(param.cpg == null or #strings.equals(param.cpg,''))? 1: T(java.lang.Integer).parseInt(param.cpg)}">
                 <p class="right_title">
                     자유게시판
                 </p>
@@ -45,227 +45,45 @@
                     <ul class="list_contents">
                         <table width="100%">
                             <tbody>
-                            <tr>
-                                <td valign="top" align="center">
-                                    <a href="">
-                                        <li>
-                                            1
-                                        </li>
-                                        <li>
-                                            첫번째
-                                        </li>
-                                        <li>
-                                            작성자1
-                                        </li>
-                                        <li>
-                                            2023-01-01
-                                        </li>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" align="center">
-                                    <a href="">
-                                        <li>
-                                            1
-                                        </li>
-                                        <li>
-                                            첫번째
-                                        </li>
-                                        <li>
-                                            작성자1
-                                        </li>
-                                        <li>
-                                            2023-01-01
-                                        </li>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" align="center">
-                                    <a href="">
-                                        <li>
-                                            1
-                                        </li>
-                                        <li>
-                                            첫번째
-                                        </li>
-                                        <li>
-                                            작성자1
-                                        </li>
-                                        <li>
-                                            2023-01-01
-                                        </li>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" align="center">
-                                    <a href="">
-                                        <li>
-                                            1
-                                        </li>
-                                        <li>
-                                            첫번째
-                                        </li>
-                                        <li>
-                                            작성자1
-                                        </li>
-                                        <li>
-                                            2023-01-01
-                                        </li>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" align="center">
-                                    <a href="">
-                                        <li>
-                                            1
-                                        </li>
-                                        <li>
-                                            첫번째
-                                        </li>
-                                        <li>
-                                            작성자1
-                                        </li>
-                                        <li>
-                                            2023-01-01
-                                        </li>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" align="center">
-                                    <a href="">
-                                        <li>
-                                            1
-                                        </li>
-                                        <li>
-                                            첫번째
-                                        </li>
-                                        <li>
-                                            작성자1
-                                        </li>
-                                        <li>
-                                            2023-01-01
-                                        </li>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" align="center">
-                                    <a href="">
-                                        <li>
-                                            1
-                                        </li>
-                                        <li>
-                                            첫번째
-                                        </li>
-                                        <li>
-                                            작성자1
-                                        </li>
-                                        <li>
-                                            2023-01-01
-                                        </li>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" align="center">
-                                    <a href="">
-                                        <li>
-                                            1
-                                        </li>
-                                        <li>
-                                            첫번째
-                                        </li>
-                                        <li>
-                                            작성자1
-                                        </li>
-                                        <li>
-                                            2023-01-01
-                                        </li>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" align="center">
-                                    <a href="">
-                                        <li>
-                                            1
-                                        </li>
-                                        <li>
-                                            첫번째
-                                        </li>
-                                        <li>
-                                            작성자1
-                                        </li>
-                                        <li>
-                                            2023-01-01
-                                        </li>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" align="center">
-                                    <a href="">
-                                        <li>
-                                            1
-                                        </li>
-                                        <li>
-                                            첫번째
-                                        </li>
-                                        <li>
-                                            작성자1
-                                        </li>
-                                        <li>
-                                            2023-01-01
-                                        </li>
-                                    </a>
-                                </td>
-                            </tr>
+								<tr th:if="${not #lists.isEmpty(data)}" th:each="list : ${data}">
+	                                <td valign="top" align="center">
+	                                	<li th:text="${data.rownum}"></li>
+	                                	<li>
+	                                		<a th:text="${data.board_name}" th:href="@{/communityView(board_idx=${data.board_idx})}"></a>
+	                                	</li>
+	                                	<li th:text="${data.mem_name}"></li>
+	                                	<li th:text="${data.reg_date}"></li>
+	                                </td>
+	                            </tr>
+	                            
+	                            <tr th:if="${#lists.isEmpty(data)}">
+						            <td colspan="4" style="height: 40px;" align="center">
+						                조회된 데이터가 없습니다.
+						            </td>
+						        </tr>
                             </tbody>
                         </table>
+                        <a href="/communityWrite" class="write-btn">작성</a>
                     </ul>
                     <div class="list_pager">
-                        <button class="btn_pager first" type="button" onclick="">처음</button>
-                        <button class="btn_pager prev" type="button" onclick="">이전</button>
+                        <a th:if="${cpg > 1}" th:href="@{'/notice?cpg=1' + ${fqry}}"><button class="btn_pager first" type="button">처음</button></a>
+                        <a th:if="${cpg > 1}" th:href="@{'/notice?cpg=' + ${cpg - 1} + ${fqry}}"><button class="btn_pager prev" type="button">이전</button></a>
                         <ul>
-                            <li>
-                                <a href="" title="1 페이지 선택" class="on">1</a>
-                            </li>
-                            <li>
-                                <a href="">2</a>
-                            </li>
-                            <li>
-                                <a href="">3</a>
-                            </li>
-                            <li>
-                                <a href="">4</a>
-                            </li>
-                            <li>
-                                <a href="">5</a>
-                            </li>
-                            <li>
-                                <a href="">6</a>
-                            </li>
-                            <li>
-                                <a href="">7</a>
-                            </li>
-                            <li>
-                                <a href="">8</a>
-                            </li>
-                            <li>
-                                <a href="">9</a>
-                            </li>
-                            <li>
-                                <a href="">10</a>
-                            </li>
+                            <th:block th:each="i: ${#numbers.sequence(0, 9)}">
+                                <th:block th:if="${(stpgn + i) <= pages}">
+                                    <li>
+                                        <span th:text="${stpgn + i}" th:if="${cpg == (stpgn + i)}" class="on"></span>
+                                        <span th:unless="${cpg == (stpgn + i)}">
+                                            <a th:href="@{/notice(cpg=${stpgn+i},fkey=${param.fkey},fval=${param.fval})}">[[${stpgn + i}]]</a>
+                                        </span>
+                                    </li>
+                                </th:block>
+                            </th:block>
+
                         </ul>
 
-                        <button class="btn_pager next" type="button" onclick="">다음</button>
-                        <button class="btn_pager end" type="button" onclick="">끝</button>
+                        <a th:if="${cpg < pages}" th:href="@{'/notice?cpg=' + ${cpg + 1} + ${fqry}}"><button class="btn_pager next" type="button">다음</button></a>
+                        <a th:if="${cpg < pages}" th:href="@{'/notice?cpg='+${pages} + ${fqry}}"><button class="btn_pager end" type="button">끝</button></a>
                     </div>
                 </div>
             </div>

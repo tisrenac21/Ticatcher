@@ -179,3 +179,13 @@ p {
     zoom: 1;
     border-radius: 4px;
 }
+
+.write-btn {
+	float: right;
+    padding: 10px 20px;
+    background: #fef1ab;
+    margin-top: 20px;
+    border-radius: 20px;
+    color: #535353;
+    cursor: pointer;
+}

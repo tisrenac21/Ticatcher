@@ -63,5 +63,44 @@
             resultType="int">
         select max(qna_memidx) from tcc_qna where mem_idx=#{mem_idx}
     </select>
+    <select id="selectCountCommunityBoard" statementType="PREPARED" parameterType="Map" resultType="int">
+        select 
+        	ceil(count(board_conidx)/10) pages 
+        from 
+        	tcc_board 
+        where 
+        	board_config = 'C' 
+        	<if test="fkey != ''"> 
+        		and ${fkey} like #{fval} 
+        	</if>
+    </select>
+    <select id="selectCommunityBoard" statementType="PREPARED" parameterType="Map" resultType="kr.co.ticatcher.vo.BoardVO">
+    	select 
+    		@rownum := @rownum + 1 as rownum, 
+    		ta.* 
+    	from 
+    		(
+	        select 
+	        	tb.board_idx , 
+	        	tb.board_conidx , 
+	        	tb.board_name , 
+	        	tb.board_regdate , 
+	        	(select mem_name from tcc_member tm where tm.mem_idx = tb.mem_idx) as mem_name
+	        from 
+	        	tcc_board tb
+	        where 
+	        	tb.board_config = 'C' 
+	        	<if test="fkey != ''"> 
+		        	and tb.${fkey} like #{fval} 
+	        	</if>
+	        ) ta, 
+	        (
+	        	select 
+	        		@rownum := #{snum} 
+	        ) r
+		order by 
+	    	board_conidx desc 
+        limit #{snum}, 10
+    </select>
 
 </mapper>

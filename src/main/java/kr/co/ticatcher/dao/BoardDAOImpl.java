@@ -97,4 +97,23 @@ public class BoardDAOImpl implements BoardDAO {
 		}
 		return result;
 	}
+
+	@Override
+	public int readCountCommunityBoard(String fkey, String fval) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("fkey", fkey);
+		params.put("fval", fval);
+		return sqlSession.selectOne("board.selectCountCommunityBoard", params);
+	}
+
+	@Override
+	public List<BoardVO> readCommunityBoard(String fkey, String fval, int snum) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("fkey", fkey);
+		params.put("fval", fval);
+		params.put("snum", snum);
+		return sqlSession.selectList("board.selectCommunityBoard", params);
+	}
 }

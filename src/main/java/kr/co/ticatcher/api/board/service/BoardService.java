@@ -19,6 +19,7 @@ public interface BoardService {
 	List<QnaVO> readMyQna(int snum, long mem_idx);
 	QnaVO readOneQna(long qna_idx);
 	int countMemidx(long mem_idx);
-
+	int readCountCommunityBoard(String fkey, String fval);
+	List<BoardVO> readCommunityBoard(String fkey, String fval, int snum);
 
 }

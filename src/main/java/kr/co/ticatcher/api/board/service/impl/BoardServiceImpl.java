@@ -86,4 +86,14 @@ public class BoardServiceImpl implements BoardService{
 		return bdao.countMemidx(mem_idx);
 	}
 
+	@Override
+	public int readCountCommunityBoard(String fkey, String fval) {
+		return bdao.readCountCommunityBoard(fkey, fval);
+	}
+
+	@Override
+	public List<BoardVO> readCommunityBoard(String fkey, String fval, int snum) {
+		return bdao.readCommunityBoard(fkey, fval, snum);
+	}
+
 }

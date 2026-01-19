@@ -129,9 +129,35 @@ public class BoardController {
 	}
 
 
-	@GetMapping("/board")
-	public String board(){
+	@GetMapping("/community")
+	public String board(Model model, String cpg, String fkey, String fval){
+		int perPage = 10;
+		if(cpg == null || cpg.equals("")) {
+			cpg = "1";
+		}
+		
+		if(fkey == null || fkey.equals("")) {
+			fkey = "";
+		}
+		
+		int cpage = Integer.parseInt(cpg);
+		int snum = (cpage - 1) * perPage;
+		int stpgn = ((cpage - 1) / 10) * 10 + 1;
+		
+		model.addAttribute("pages", bsrv.readCountCommunityBoard(fkey, fval));
+		model.addAttribute("data", bsrv.readCommunityBoard(fkey, fval, snum));
+		model.addAttribute("stpgn", stpgn);
+		model.addAttribute("fqry", "&fkey=" + fkey + "&fval=" + fval);
+		
 		return "board/community";
 	}
-
+	
+	@GetMapping("/communityWrite")
+	public String communityWrite(HttpSession session, Model model){
+		String returnPage = "redirect:/login";
+		if(session.getAttribute("m") != null){
+			returnPage = "board/writeCommunity";
+		}
+		return returnPage;
+	}
 }
