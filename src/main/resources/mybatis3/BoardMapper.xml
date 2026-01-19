@@ -85,7 +85,7 @@
 	        	tb.board_conidx , 
 	        	tb.board_name , 
 	        	tb.board_regdate , 
-	        	(select mem_name from tcc_member tm where tm.mem_idx = tb.mem_idx) as mem_name
+	        	(select mem_aka from tcc_member tm where tm.mem_idx = tb.mem_idx) as mem_name
 	        from 
 	        	tcc_board tb
 	        where 
@@ -102,5 +102,33 @@
 	    	board_conidx desc 
         limit #{snum}, 10
     </select>
+    
+    <select id="selectCommentByBoardIdx" statementType="PREPARED" parameterType="String" resultType="Map">
+		select
+			tc.comment_idx, 
+			tc.comment_content, 
+			tc.board_idx, 
+			tc.mem_idx, 
+			(select mem_aka from tcc_member tm where tm.mem_idx = tc.mem_idx ) as mem_name, 
+			date_format(tc.comment_regdate, '%Y-%m-%d %H:%i:%s') as comment_regdate 
+		from
+			tcc_comment tc
+		where
+			tc.board_idx = #{board_idx} 
+		order by
+			tc.comment_regdate desc
+    </select> 
+    
+    <insert id="insertComment" statementType="PREPARED" parameterType="Map">
+		insert into tcc_comment (
+		    comment_content, 
+		    board_idx, 
+		    mem_idx
+		) values (
+		    #{comment_content}, 
+		    #{board_idx}, 
+		    #{mem_idx}
+		)
+    </insert>
 
 </mapper>

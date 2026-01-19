@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service("bsrv")
@@ -94,6 +95,16 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public List<BoardVO> readCommunityBoard(String fkey, String fval, int snum) {
 		return bdao.readCommunityBoard(fkey, fval, snum);
+	}
+
+	@Override
+	public List<Map<String, Object>> readComment(String board_idx) {
+		return bdao.readComment(board_idx);
+	}
+
+	@Override
+	public int registerComment(Map<String, Object> param) {
+		return bdao.registerComment(param);
 	}
 
 }

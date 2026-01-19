@@ -1,7 +1,6 @@
 package kr.co.ticatcher.api.stage.controller;
 
 import kr.co.ticatcher.api.stage.service.StageService;
-import kr.co.ticatcher.vo.ScheduleSaveDTO;
 import kr.co.ticatcher.vo.StageVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.net.URLEncoder;

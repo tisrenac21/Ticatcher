@@ -6,6 +6,7 @@ import kr.co.ticatcher.vo.BoardVO;
 import kr.co.ticatcher.vo.QnaVO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BoardService {
 
@@ -21,5 +22,7 @@ public interface BoardService {
 	int countMemidx(long mem_idx);
 	int readCountCommunityBoard(String fkey, String fval);
 	List<BoardVO> readCommunityBoard(String fkey, String fval, int snum);
+	List<Map<String, Object>> readComment(String board_idx);
+	int registerComment(Map<String, Object> param);
 
 }

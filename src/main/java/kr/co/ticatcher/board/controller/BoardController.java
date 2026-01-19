@@ -2,6 +2,8 @@ package kr.co.ticatcher.board.controller;
 
 import kr.co.ticatcher.api.board.service.BoardService;
 import kr.co.ticatcher.api.member.service.MemberService;
+import kr.co.ticatcher.service.AdminService;
+import kr.co.ticatcher.vo.BoardVO;
 import kr.co.ticatcher.vo.MemberVO;
 import kr.co.ticatcher.vo.QnaVO;
 
@@ -12,8 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
 
 import javax.servlet.http.HttpSession;
 
@@ -160,4 +165,15 @@ public class BoardController {
 		}
 		return returnPage;
 	}
+	
+	@GetMapping("/communityView")
+	public ModelAndView communityView(ModelAndView mv, String board_idx, String fkey, String fval) {
+		if (fkey == null) fkey = "";
+		mv.setViewName("board/communityView");
+		mv.addObject("bd", bsrv.readOneBoard(board_idx));
+		mv.addObject("comment", bsrv.readComment(board_idx));
+
+		return mv;
+	}
+	
 }

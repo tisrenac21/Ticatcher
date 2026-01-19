@@ -45,14 +45,14 @@
                     <ul class="list_contents">
                         <table width="100%">
                             <tbody>
-								<tr th:if="${not #lists.isEmpty(data)}" th:each="list : ${data}">
+								<tr th:if="${not #lists.isEmpty(data)}" th:each="data : ${data}">
 	                                <td valign="top" align="center">
 	                                	<li th:text="${data.rownum}"></li>
 	                                	<li>
 	                                		<a th:text="${data.board_name}" th:href="@{/communityView(board_idx=${data.board_idx})}"></a>
 	                                	</li>
 	                                	<li th:text="${data.mem_name}"></li>
-	                                	<li th:text="${data.reg_date}"></li>
+	                                	<li th:text="${data.board_regdate}"></li>
 	                                </td>
 	                            </tr>
 	                            
@@ -63,7 +63,7 @@
 						        </tr>
                             </tbody>
                         </table>
-                        <a href="/communityWrite" class="write-btn">작성</a>
+                        <a th:if="${session.m} != null" href="/communityWrite" class="write-btn">작성</a>
                     </ul>
                     <div class="list_pager">
                         <a th:if="${cpg > 1}" th:href="@{'/notice?cpg=1' + ${fqry}}"><button class="btn_pager first" type="button">처음</button></a>

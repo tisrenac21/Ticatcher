@@ -178,6 +178,7 @@ public class AdminController {
 		String board_config = "notice";
 		bvo.setBoard_conidx((asrv.countConidx(board_config))+1);
 		bvo.setBoard_config(board_config);
+		bvo.setMem_idx(1);
 		asrv.registerPost(bvo, file);
 		return returnPage;
 	}
@@ -199,6 +200,7 @@ public class AdminController {
 		String board_config = "FAQ";
 		bvo.setBoard_conidx((asrv.countConidx(board_config))+1);
 		bvo.setBoard_config(board_config);
+		bvo.setMem_idx(1);
 		asrv.registerPost(bvo, file);
 		return returnPage;
 	}

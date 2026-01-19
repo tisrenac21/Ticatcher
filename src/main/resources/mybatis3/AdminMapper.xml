@@ -26,7 +26,7 @@
     </select>
     <insert id="registerPost" statementType="PREPARED"
             parameterType="kr.co.ticatcher.vo.BoardVO">
-        insert into tcc_board (board_config, board_conidx, board_name, board_contents, board_attachName, board_attachPath, mem_idx) values (#{board_config}, #{board_conidx}, #{board_name}, #{board_contents}, #{board_attachName}, #{board_attachPath}, 1)
+        insert into tcc_board (board_config, board_conidx, board_name, board_contents, board_attachName, board_attachPath, mem_idx) values (#{board_config}, #{board_conidx}, #{board_name}, #{board_contents}, #{board_attachName}, #{board_attachPath}, #{mem_idx})
     </insert>
     <select id="countConidx" statementType="PREPARED"
             parameterType="String"

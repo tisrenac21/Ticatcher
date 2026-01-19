@@ -116,4 +116,14 @@ public class BoardDAOImpl implements BoardDAO {
 		params.put("snum", snum);
 		return sqlSession.selectList("board.selectCommunityBoard", params);
 	}
+
+	@Override
+	public List<Map<String, Object>> readComment(String board_idx) {
+		return sqlSession.selectList("board.selectCommentByBoardIdx", board_idx);
+	}
+
+	@Override
+	public int registerComment(Map<String, Object> param) {
+		return sqlSession.insert("board.insertComment", param);
+	}
 }
