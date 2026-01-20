@@ -126,4 +126,9 @@ public class BoardDAOImpl implements BoardDAO {
 	public int registerComment(Map<String, Object> param) {
 		return sqlSession.insert("board.insertComment", param);
 	}
+
+	@Override
+	public int deleteComment(Map<String, Object> param) {
+		return sqlSession.delete("board.deleteCommentByBoardIdx", param);
+	}
 }

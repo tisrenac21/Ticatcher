@@ -56,4 +56,18 @@ public class BoardAPIController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 등록 중 오류가 발생했습니다.");
 		}
 	}
+	
+	@PostMapping("/deleteComment")
+	public ResponseEntity<?> deleteComment(@RequestBody Map<String, Object> param) {
+		try {
+			if(boardService.deleteComment(param) > 0) {
+				return ResponseEntity.ok("success");
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 삭제 중 오류가 발생했습니다.");
+			}
+		} catch(Exception e) {
+			log.error("Unexpected error in [{}]. Caused by: [{}].", "deleteComment", e.getClass().getSimpleName());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 삭제 중 오류가 발생했습니다.");
+		}
+	}
 }

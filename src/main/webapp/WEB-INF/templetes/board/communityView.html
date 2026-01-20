@@ -5,7 +5,93 @@
 
 <th:block layout:fragment="mystyle">
 	<link rel="stylesheet" href="static/css/communityView.css">
+	
+	<style>
+		.comment_list {
+			border-bottom: 1px solid #333;
+			padding: 15px 10px;
+			background-color: transparent;
+		}
+
+		.comment_top {
+			background: transparent !important;
+			padding: 0 0 5px 0 !important;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.comment_info_left {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.comment_name {
+			background: transparent !important;
+			color: #FEF1AB !important;
+			font-weight: bold;
+			font-size: 15px;
+		}
+
+		.comment_date {
+			background: transparent !important;
+			color: #888 !important;
+			font-size: 12px;
+			float: none !important;
+		}
+
+		.comment_bottom {
+			background: transparent !important;
+			padding: 5px 0 0 0 !important;
+		}
+
+		.comment_content {
+			background: transparent !important;
+			color: #ddd !important;
+			font-size: 14px;
+			line-height: 1.5;
+		}
+
+		.btn_comment_delete {
+			font-size: 12px;
+			color: #ff6b6b;
+			background: transparent;
+			border: 1px solid #555;
+			border-radius: 4px;
+			padding: 2px 6px;
+			cursor: pointer;
+			transition: all 0.3s;
+		}
+
+		.btn_comment_delete:hover {
+			background: #ff6b6b;
+			color: white;
+			border-color: #ff6b6b;
+		}
+		
+		.comment_box {
+			position: relative;
+			display: flex;
+			justify-content: space-between;
+			margin-top: 20px;
+		}
+		
+		.comment_box input {
+			width: 84% !important;
+			margin-top: 0 !important;
+			height: 50px;
+		}
+		
+		.comment_box button {
+			width: 15% !important;
+			height: 50px !important;
+			border-radius: 20px;
+			margin-left: 1%;
+		}
+	</style>
 </th:block>
+
 <th:block layout:fragment="main">
 	<div class="container">
 		<div class="contents">
@@ -29,6 +115,7 @@
 							<li th:text="${bd.getBoard_name()}"></li>
 							<li th:text="${bd.getBoard_regdate()}"></li>
 						</ul>
+						
 						<div class="notice_body">
 							<div class="notice_body_write">
 								<input type="hidden" id="boardIdx" th:value="${bd.board_idx}">
@@ -42,18 +129,28 @@
 							</div>
 						</div>
 						
-						<div class="comment_list" th:each="comment : ${comment}">
-							<div class="notice_body_write comment_top">
-								<span class="comment_name" th:text="${comment.mem_name}"></span>
-								<span class="comment_date" th:text="${comment.comment_regdate}"></span>
-							</div>
-							<div class="notice_body_write comment_bottom">
-								<span class="comment_content" th:text="${comment.comment_content}"></span>
+						<div class="comment_wrap_area">
+							<div class="comment_list" th:each="comment : ${comment}">
+								<div class="comment_top">
+									<div class="comment_info_left">
+										<span class="comment_name" th:text="${comment.mem_name}"></span>
+										<span class="comment_date" th:text="${comment.comment_regdate}"></span>
+									</div>
+									
+									<div th:if="${session.m != null && session.m.mem_idx == comment.mem_idx}">
+										<button type="button" class="btn_comment_delete" th:onclick="|deleteComment(${comment.comment_idx})|">삭제</button>
+									</div>
+								</div>
+								
+								<div class="comment_bottom">
+									<span class="comment_content" th:text="${comment.comment_content}"></span>
+								</div>
 							</div>
 						</div>
+
 						<div th:if="${session.m} != null" class="comment_write">
 							<div class="comment_box">
-								<input type="text" id="commentContent">
+								<input type="text" id="commentContent" placeholder="댓글을 입력하세요...">
 								<input type="hidden" id="mem_idx" th:value=${session.m.mem_idx}>
 								<button id="commentRegisterBtn">등록</button>
 							</div>
@@ -64,7 +161,8 @@
 					<a class="btn_list" href="/community">목록</a>
 					<a th:if="${session.m?.mem_idx != null && bd.mem_idx == session.m.mem_idx}" id="updateBtn" class="btn_list">수정</a>
 					<a th:if="${session.m?.mem_idx != null && bd.mem_idx == session.m.mem_idx}" id="deleteBtn" class="btn_list">삭제</a>
-		</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </th:block>
@@ -81,7 +179,7 @@
 			
 			const param = {
 					"comment_content": commentContent,
-					"board_idx": $("#boardIdx").val(), 
+					"board_idx": $("#boardIdx").val(),
 					"mem_idx": $("#mem_idx").val()
 			}
 			
@@ -92,18 +190,45 @@
 			})
 			.then(async response => {
 				if (response.ok) {
-					alert('댓글이 등록되었습니다.');
-					location.href = '/communityView?board_idx=' + $("#boardIdx").val();
+					location.reload(); 
 				} else {
 					const errorMsg = await response.text();
 					alert(errorMsg);
-					}
-				})
-				.catch(error => {
-					console.error('Error:', error);
-					alert('서버와 통신 중 오류가 발생했습니다.');
-				});
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+				alert('서버와 통신 중 오류가 발생했습니다.');
+			});
 		});
+
+		function deleteComment(commentIdx) {
+			if(!confirm("이 댓글을 삭제하시겠습니까?")) {
+				return;
+			}
+
+			const param = {
+				"comment_idx": commentIdx
+			};
+
+			fetch('/api/board/deleteComment', { 
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(param)
+			})
+			.then(async response => {
+				if (response.ok) {
+					location.reload();
+				} else {
+					const errorMsg = await response.text();
+					alert("삭제 실패: " + errorMsg);
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+				alert('서버와 통신 중 오류가 발생했습니다.');
+			});
+		}
 	</script>
 </th:block>
 </html>

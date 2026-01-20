@@ -23,5 +23,6 @@ public class BoardVO {
 	private int board_readcount;
 	private long mem_idx;
 	private String mem_name;
+	private int comment_count;
 
 }

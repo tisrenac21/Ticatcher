@@ -39,77 +39,154 @@ p {
     margin-top: 15px;
 }
 
+/* --- 리스트 헤더 컬럼 너비 수정 (조회수 추가로 인한 조정) --- */
 .list_header li {
     padding: 10px 0;
-}
-
-.list_header li:first-child {
-    width: 85px;
     float: left;
     text-align: center;
     background: #FEF1AB;
     color: rgb(120, 120, 120);
 }
 
-.list_header li:nth-child(2) {
-    width: 442px;
-    float: left;
-    text-align: center;
-    background: #FEF1AB;
-    color: rgb(120, 120, 120);
-}
+.list_header li:first-child { width: 70px; }       /* 번호 */
+.list_header li:nth-child(2) { width: 400px; }     /* 제목 */
+.list_header li:nth-child(3) { width: 100px; }     /* 작성자 */
+.list_header li:nth-child(4) { width: 120px; }     /* 작성일 */
+.list_header li:last-child   { width: 80px; }      /* 조회수 */
 
-.list_header li:nth-child(3) {
-    width: 115px;
-    float: left;
-    text-align: center;
-    background: #FEF1AB;
-    color: rgb(120, 120, 120);
-}
-
-.list_header li:last-child {
-    width: 128px;
-    float: left;
-    text-align: center;
-    background: #FEF1AB;
-    color: rgb(120, 120, 120)
-}
 
 .list_contents td {
     border-bottom: 1px solid #e2e2e2;
 }
 
-.list_contents li:first-child {
-    width: 85px;
+/* --- 리스트 본문 컬럼 너비 수정 --- */
+.list_contents li {
     float: left;
-    text-align: center;
     padding: 10px 0;
 }
 
-.list_contents li:nth-child(2) {
-    width: 442px;
-    float: left;
+.list_contents li:first-child { 
+    width: 70px; 
+    text-align: center;
+}
+
+.list_contents li:nth-child(2) { 
+    width: 400px; 
     text-align: left;
-    padding: 10px 0 10px 10px;
+    padding-left: 10px;
+    /* 제목이 길 경우 말줄임 처리 (선택사항) */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.list_contents li:nth-child(3) {
-    width: 110px;
-    float: left;
+.list_contents li:nth-child(3) { 
+    width: 100px; 
     text-align: center;
-    padding: 10px 0 10px 10px;
 }
 
-.list_contents li:last-child {
-    width: 130px;
-    float: right;
+.list_contents li:nth-child(4) { 
+    width: 120px; 
     text-align: center;
-    padding: 10px 0 0 10px;
 }
 
+.list_contents li:last-child { 
+    width: 80px; 
+    text-align: center;
+    float: left; /* 기존 right에서 변경하여 순서 유지 */
+}
+
+/* 댓글 수 스타일 */
+.comment_cnt {
+    color: #b9b9b9; /* 눈에 띄는 붉은 계열 */
+    font-size: 13px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+/* --- 검색 및 작성 버튼 영역 (New) --- */
+.search_write_wrap {
+    display: flex;
+    justify-content: center; /* 내부 요소들을 가운데 정렬하되 */
+    align-items: center;
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+    height: 40px;
+}
+
+.search_area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.search_select {
+    height: 35px;
+    background: #fff;
+    border: 1px solid #d8d8d8;
+    border-radius: 4px;
+    color: #333;
+    padding: 0 5px;
+}
+
+.search_input {
+    height: 35px;
+    width: 200px;
+    background: #fff;
+    border: 1px solid #d8d8d8;
+    border-radius: 4px;
+    color: #333;
+    padding: 0 10px;
+}
+
+.search_input::placeholder {
+    color: #999;
+}
+
+.search_btn {
+    height: 35px;
+    padding: 0 15px;
+    background: #333;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.search_btn:hover {
+    background: #555;
+}
+
+/* 작성 버튼 위치 수정 (검색바와 같은 라인 우측 끝) */
+.write-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    float: none; /* float 제거 */
+    margin-top: 0; /* 기존 마진 제거 */
+    padding: 0 20px;
+    height: 35px;
+    line-height: 35px; /* 텍스트 수직 정렬 */
+    background: #FEF1AB;
+    border-radius: 20px;
+    color: #535353;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+.write-btn:hover {
+    background: #fffacd;
+}
+
+/* --- 페이징 스타일 유지 --- */
 .list_pager {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 30px; /* 검색바와의 간격 */
+    clear: both;
 }
 
 .list_pager ul {
@@ -148,7 +225,7 @@ p {
     margin-left: 16px;
     padding: 0 24px 0 10px;
     vertical-align: top;
-    background-position: calc(100% - 2px)-73px;
+    background-position: calc(100% - 2px) -73px;
     border-radius: 4px;
 }
 
@@ -178,14 +255,4 @@ p {
     font: 0/0 a;
     zoom: 1;
     border-radius: 4px;
-}
-
-.write-btn {
-	float: right;
-    padding: 10px 20px;
-    background: #fef1ab;
-    margin-top: 20px;
-    border-radius: 20px;
-    color: #535353;
-    cursor: pointer;
 }

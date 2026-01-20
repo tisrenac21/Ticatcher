@@ -84,8 +84,10 @@
 	        	tb.board_idx , 
 	        	tb.board_conidx , 
 	        	tb.board_name , 
-	        	tb.board_regdate , 
-	        	(select mem_aka from tcc_member tm where tm.mem_idx = tb.mem_idx) as mem_name
+	        	tb.board_regdate ,
+	        	tb.board_readcount ,  
+	        	(select mem_aka from tcc_member tm where tm.mem_idx = tb.mem_idx) as mem_name , 
+	        	(select count(comment_idx) from tcc_comment tc where tc.board_idx = tb.board_idx) as comment_count 
 	        from 
 	        	tcc_board tb
 	        where 
@@ -131,4 +133,7 @@
 		)
     </insert>
 
+	<delete id="deleteCommentByBoardIdx" statementType="PREPARED" parameterType="Map">
+		delete from tcc_comment where comment_idx = #{comment_idx} 
+	</delete>
 </mapper>

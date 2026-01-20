@@ -107,4 +107,9 @@ public class BoardServiceImpl implements BoardService{
 		return bdao.registerComment(param);
 	}
 
+	@Override
+	public int deleteComment(Map<String, Object> param) {
+		return bdao.deleteComment(param);
+	}
+
 }

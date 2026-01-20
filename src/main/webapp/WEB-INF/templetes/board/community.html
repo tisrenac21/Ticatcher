@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th = "http://www. thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/layout}">
 <th:block layout:fragment="mystyle">
@@ -23,48 +23,64 @@
                     </a>
                 </ul>
             </div>
+            
             <div class="right_wrap" th:with="cpg=${(param.cpg == null or #strings.equals(param.cpg,''))? 1: T(java.lang.Integer).parseInt(param.cpg)}">
                 <p class="right_title">
                     자유게시판
                 </p>
                 <div class="right_list">
                     <ul class="list_header">
-                        <li>
-                            번호
-                        </li>
-                        <li>
-                            제목
-                        </li>
-                        <li>
-                            작성자
-                        </li>
-                        <li>
-                            작성일
-                        </li>
-                    </ul>
+                        <li>번호</li>
+                        <li>제목</li>
+                        <li>작성자</li>
+                        <li>작성일</li>
+                        <li>조회수</li> </ul>
+                    
                     <ul class="list_contents">
                         <table width="100%">
                             <tbody>
-								<tr th:if="${not #lists.isEmpty(data)}" th:each="data : ${data}">
-	                                <td valign="top" align="center">
-	                                	<li th:text="${data.rownum}"></li>
-	                                	<li>
-	                                		<a th:text="${data.board_name}" th:href="@{/communityView(board_idx=${data.board_idx})}"></a>
-	                                	</li>
-	                                	<li th:text="${data.mem_name}"></li>
-	                                	<li th:text="${data.board_regdate}"></li>
-	                                </td>
-	                            </tr>
-	                            
-	                            <tr th:if="${#lists.isEmpty(data)}">
-						            <td colspan="4" style="height: 40px;" align="center">
-						                조회된 데이터가 없습니다.
-						            </td>
-						        </tr>
+                                <tr th:if="${not #lists.isEmpty(data)}" th:each="data : ${data}">
+                                    <td valign="top" align="center">
+                                        <li th:text="${data.rownum}"></li>
+                                        
+                                        <li>
+                                            <a th:href="@{/communityView(board_idx=${data.board_idx})}">
+                                                <span th:text="${data.board_name}"></span>
+                                                <span th:if="${data.comment_count > 0}" class="comment_cnt" th:text="'[' + ${data.comment_count} + ']'"></span>
+                                            </a>
+                                        </li>
+                                        
+                                        <li th:text="${data.mem_name}"></li>
+                                        
+                                        <li th:text="${data.board_regdate}"></li>
+
+                                        <li th:text="${data.board_readcount}"></li>
+                                    </td>
+                                </tr>
+                                
+                                <tr th:if="${#lists.isEmpty(data)}">
+                                    <td colspan="5" style="height: 40px;" align="center"> 조회된 데이터가 없습니다.
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
-                        <a th:if="${session.m} != null" href="/communityWrite" class="write-btn">작성</a>
                     </ul>
+
+                    <div class="search_write_wrap">
+                        <div class="search_area">
+                            <form action="/community" method="get">
+                                <select name="fkey" class="search_select">
+                                    <option value="board_name" th:selected="${param.fkey == 'board_name'}">제목</option>
+                                    <option value="board_content" th:selected="${param.fkey == 'board_content'}">내용</option>
+                                    <option value="mem_name" th:selected="${param.fkey == 'mem_name'}">작성자</option>
+                                </select>
+                                <input type="text" name="fval" class="search_input" th:value="${param.fval}" placeholder="검색어를 입력하세요">
+                                <button type="submit" class="search_btn">조회</button>
+                            </form>
+                        </div>
+                        <a th:if="${session.m} != null" href="/communityWrite" class="write-btn">작성</a>
+                    </div>
+
                     <div class="list_pager">
                         <a th:if="${cpg > 1}" th:href="@{'/notice?cpg=1' + ${fqry}}"><button class="btn_pager first" type="button">처음</button></a>
                         <a th:if="${cpg > 1}" th:href="@{'/notice?cpg=' + ${cpg - 1} + ${fqry}}"><button class="btn_pager prev" type="button">이전</button></a>
@@ -79,9 +95,7 @@
                                     </li>
                                 </th:block>
                             </th:block>
-
                         </ul>
-
                         <a th:if="${cpg < pages}" th:href="@{'/notice?cpg=' + ${cpg + 1} + ${fqry}}"><button class="btn_pager next" type="button">다음</button></a>
                         <a th:if="${cpg < pages}" th:href="@{'/notice?cpg='+${pages} + ${fqry}}"><button class="btn_pager end" type="button">끝</button></a>
                     </div>

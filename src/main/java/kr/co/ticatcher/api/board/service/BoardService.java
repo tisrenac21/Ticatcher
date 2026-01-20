@@ -24,5 +24,6 @@ public interface BoardService {
 	List<BoardVO> readCommunityBoard(String fkey, String fval, int snum);
 	List<Map<String, Object>> readComment(String board_idx);
 	int registerComment(Map<String, Object> param);
+	int deleteComment(Map<String, Object> param);
 
 }
