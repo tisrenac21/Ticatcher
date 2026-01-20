@@ -4,7 +4,7 @@
 	layout:decorate="~{fragments/layout}">
 
 <th:block layout:fragment="mystyle">
-	<link rel="stylesheet" href="static/css/communityView.css">
+	<link rel="stylesheet" href="static/css/audiboardView.css">
 	
 	<style>
 		.comment_list {
@@ -99,16 +99,16 @@
 				<p>커뮤니티</p>
 				<ul>
 					<a href="/community">
-						<li class="left_wrap_btn"><span class="select_btn">자유게시판</span>
+						<li class="left_wrap_btn"><span>자유게시판</span>
 					</li>
 					</a>
 					<a href="/audiboard">
-						<li class="left_wrap_btn"><span>오디션 정보</span></li>
+						<li class="left_wrap_btn"><span class="select_btn">오디션 정보</span></li>
 					</a>
 				</ul>
 			</div>
 			<div class="right_wrap">
-				<p class="right_title">자유게시판</p>
+				<p class="right_title">오디션 정보</p>
 				<div class="right_list">
 					<div class="notice_wrap">
 						<ul class="notice_header">
@@ -128,38 +128,11 @@
 									th:src="${bd.getBoard_attachPath()}">
 							</div>
 						</div>
-						
-						<div class="comment_wrap_area">
-							<div class="comment_list" th:each="comment : ${comment}">
-								<div class="comment_top">
-									<div class="comment_info_left">
-										<span class="comment_name" th:text="${comment.mem_name}"></span>
-										<span class="comment_date" th:text="${comment.comment_regdate}"></span>
-									</div>
-									
-									<div th:if="${session.m != null && session.m.mem_idx == comment.mem_idx}">
-										<button type="button" class="btn_comment_delete" th:onclick="|deleteComment(${comment.comment_idx})|">삭제</button>
-									</div>
-								</div>
-								
-								<div class="comment_bottom">
-									<span class="comment_content" th:text="${comment.comment_content}"></span>
-								</div>
-							</div>
-						</div>
-
-						<div th:if="${session.m} != null" class="comment_write">
-							<div class="comment_box">
-								<input type="text" id="commentContent" placeholder="댓글을 입력하세요...">
-								<input type="hidden" id="mem_idx" th:value=${session.m.mem_idx}>
-								<button id="commentRegisterBtn">등록</button>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div>
-					<a class="btn_list" href="/community">목록</a>
-					<a th:if="${session.m?.mem_idx != null && bd.mem_idx == session.m.mem_idx}" th:href="@{'/updateCommunity?board_idx='+${bd.board_idx}}" id="updateBtn" class="btn_list">수정</a>
+					<a class="btn_list" href="/audiboard">목록</a>
+					<a th:if="${session.m?.mem_idx != null && bd.mem_idx == session.m.mem_idx}" th:href="@{'/audiboardUpdate?board_idx='+${bd.board_idx}}" id="updateBtn" class="btn_list">수정</a>
 					<a th:if="${session.m?.mem_idx != null && bd.mem_idx == session.m.mem_idx}" id="deleteBtn" class="btn_list">삭제</a>
 				</div>
 			</div>
@@ -169,38 +142,6 @@
 
 <th:block layout:fragment="myscript">
 	<script>
-		$("#commentRegisterBtn").off("click").on("click", function(e) {
-			let commentContent = $("#commentContent").val();
-			
-			if(commentContent == null || commentContent == "") {
-				alert("댓글을 입력해주세요.");
-				return;
-			}
-			
-			const param = {
-					"comment_content": commentContent,
-					"board_idx": $("#boardIdx").val(),
-					"mem_idx": $("#mem_idx").val()
-			}
-			
-			fetch('/api/board/registerComment', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(param)
-			})
-			.then(async response => {
-				if (response.ok) {
-					location.reload(); 
-				} else {
-					const errorMsg = await response.text();
-					alert(errorMsg);
-				}
-			})
-			.catch(error => {
-				console.error('Error:', error);
-				alert('서버와 통신 중 오류가 발생했습니다.');
-			});
-		});
 		
 		$("#deleteBtn").off("click").on("click", function(e) {
 			e.preventDefault();
@@ -208,33 +149,6 @@
 				deletePost();
 			} 
 		});
-		
-		function deleteComment(commentIdx) {
-			if(!confirm("이 댓글을 삭제하시겠습니까?")) {
-				return;
-			}
-
-			const param = {
-				"comment_idx": commentIdx
-			};
-
-			fetch('/api/board/deleteComment', { 
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(param)
-			})
-			.then(async response => {
-				if (response.ok) {
-					location.reload();
-				} else {
-					const errorMsg = await response.text();
-					alert(errorMsg);
-				}
-			})
-			.catch(error => {
-				alert('서버와 통신 중 오류가 발생했습니다.');
-			});
-		}
 		
 		function deletePost() {
 			const board_idx = $("#boardIdx").val();
@@ -251,7 +165,7 @@
 			.then(async response => {
 				if (response.ok) {
 					alert("게시글이 삭제되었습니다.");
-					location.href = "/community"
+					location.href = "/audiboard"
 				} else {
 					const msg = await response.text();
 					alert(msg);

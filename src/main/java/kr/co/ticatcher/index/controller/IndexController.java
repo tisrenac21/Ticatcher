@@ -1,6 +1,8 @@
 package kr.co.ticatcher.index.controller;
 
+import kr.co.ticatcher.api.board.service.BoardService;
 import kr.co.ticatcher.api.index.service.IndexService;
+import kr.co.ticatcher.vo.BoardVO;
 import kr.co.ticatcher.vo.PriceVO;
 import kr.co.ticatcher.vo.ScheduleVO;
 import kr.co.ticatcher.vo.StageVO;
@@ -24,6 +26,9 @@ public class IndexController {
 	public String index(Model model) {
 		List<StageVO> newStage = isrv.getNewStage();
 		model.addAttribute("stages", newStage);
+		model.addAttribute("notice", isrv.selectFourPost("notice"));
+		model.addAttribute("community", isrv.selectFourPost("C"));
+		model.addAttribute("audiboard", isrv.selectFourPost("D"));
 		return "index";
 	}
 

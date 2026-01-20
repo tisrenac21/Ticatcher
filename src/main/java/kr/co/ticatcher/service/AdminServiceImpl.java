@@ -93,14 +93,21 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public boolean modifyPost(BoardVO bvo, MultipartFile file) throws IOException {
 		boolean isModify = false;
-		if (file.getOriginalFilename() != "") {
-			String projectpath = this.getClass().getResource("").getPath();
-			projectpath = projectpath.split("/Ticatcher/")[0];
-			projectpath = projectpath + "\\Ticatcher\\src\\main\\webapp\\resources\\static\\adminFiles\\";
+		if (file != null && !file.isEmpty()) {
+
+			String uploadPath = servletContext.getRealPath("/resources/static/adminFiles/");
+
+			File dir = new File(uploadPath);
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
+
 			UUID uuid = UUID.randomUUID();
 			String fileName = uuid + "_" + file.getOriginalFilename();
-			File saveFile = new File(projectpath + fileName);
+
+			File saveFile = new File(uploadPath, fileName);
 			file.transferTo(saveFile);
+
 			bvo.setBoard_attachName(fileName);
 			bvo.setBoard_attachPath("static/adminFiles/" + fileName);
 		}

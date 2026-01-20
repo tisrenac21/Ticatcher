@@ -42,6 +42,21 @@ public class BoardAPIController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 저장 중 오류가 발생했습니다.");
 		}
 	}
+
+	@PostMapping("/updateCommunity")
+	public ResponseEntity<String> updateCommunity(BoardVO bvo, MultipartFile file) {
+		bvo.setBoard_conidx(adminService.countConidx(bvo.getBoard_config()) + 1);
+		try {
+			if(adminService.modifyPost(bvo, file)) {
+				return ResponseEntity.ok("success");
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 수정 중 오류가 발생했습니다.");
+			}
+		} catch(IOException e) {
+			log.error("Unexpected error in [{}]. Caused by: [{}].", "communityWrite", e.getClass().getSimpleName());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 수정 중 오류가 발생했습니다.");
+		}
+	}
 	
 	@PostMapping("/registerComment")
 	public ResponseEntity<String> registerComment(@RequestBody Map<String, Object> param) {
@@ -68,6 +83,20 @@ public class BoardAPIController {
 		} catch(Exception e) {
 			log.error("Unexpected error in [{}]. Caused by: [{}].", "deleteComment", e.getClass().getSimpleName());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 삭제 중 오류가 발생했습니다.");
+		}
+	}
+	
+	@PostMapping("/deletePost")
+	public ResponseEntity<?> deletePost(@RequestBody Map<String, Object> param) {
+		try {
+			if(boardService.deletePost(param) > 0) {
+				return ResponseEntity.ok("success");
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 삭제 중 오류가 발생했습니다.");
+			}
+		} catch(Exception e) {
+			log.error("Unexpected error in [{}]. Caused by: [{}].", "deletePost", e.getClass().getSimpleName());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 삭제 중 오류가 발생했습니다.");
 		}
 	}
 }

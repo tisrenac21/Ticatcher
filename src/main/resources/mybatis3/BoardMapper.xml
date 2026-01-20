@@ -6,8 +6,18 @@
     <select id="selectNoticeBoard" statementType="PREPARED"
             parameterType="Map"
             resultType="kr.co.ticatcher.vo.BoardVO">
-        select board_idx, board_conidx, board_name, board_regdate from tcc_board where board_config='notice'
-        order by board_conidx desc limit #{snum}, 10
+        select 
+        	board_idx, 
+        	board_conidx, 
+        	board_name, 
+        	date_format(board_regdate, '%Y-%m-%d') as board_regdate
+        from 
+        	tcc_board 
+        where 
+        	board_config='notice'
+        order by 
+        	board_conidx desc 
+        	limit #{snum}, 10
     </select>
 
     <select id="selectCountNoticeBoard" statementType="PREPARED"
@@ -36,7 +46,20 @@
     <select id="selectOneBoard" statementType="PREPARED"
             parameterType="String"
             resultType="kr.co.ticatcher.vo.BoardVO">
-        select * from tcc_board where board_idx = #{board_idx}
+        select
+			board_idx ,
+			board_config ,
+			board_conidx ,
+			board_name ,
+			board_contents ,
+			board_attachName ,
+			board_attachPath ,
+			date_format(board_regdate, '%Y-%m-%d') as board_regdate , 
+			board_readcount mem_idx
+		from
+			tcc_board
+		where
+			board_idx = #{board_idx} 
     </select>
     <insert id="registerQnaPost" statementType="PREPARED"
             parameterType="kr.co.ticatcher.vo.QnaVO">
@@ -63,37 +86,61 @@
             resultType="int">
         select max(qna_memidx) from tcc_qna where mem_idx=#{mem_idx}
     </select>
-    <select id="selectCountCommunityBoard" statementType="PREPARED" parameterType="Map" resultType="int">
+<select id="selectCountCommunityBoard" statementType="PREPARED" parameterType="Map" resultType="int">
         select 
         	ceil(count(board_conidx)/10) pages 
         from 
         	tcc_board 
         where 
-        	board_config = 'C' 
-        	<if test="fkey != ''"> 
-        		and ${fkey} like #{fval} 
+        	board_config = #{board_config} 
+        	<if test="fkey != '' and fkey != null">
+                <choose>
+                    <when test="fkey == 'mem_name'">
+                        AND EXISTS (
+                            SELECT 1 
+                            FROM tcc_member tm 
+                            WHERE tm.mem_idx = tcc_board.mem_idx 
+                            AND tm.mem_aka like concat ('%',#{fval},'%')
+                        )
+                    </when>
+                    <otherwise>
+        		        and ${fkey} like concat ('%',#{fval},'%')
+                    </otherwise>
+                </choose>
         	</if>
     </select>
+
     <select id="selectCommunityBoard" statementType="PREPARED" parameterType="Map" resultType="kr.co.ticatcher.vo.BoardVO">
     	select 
     		@rownum := @rownum + 1 as rownum, 
-    		ta.* 
-    	from 
+    		ta.* from 
     		(
 	        select 
 	        	tb.board_idx , 
 	        	tb.board_conidx , 
 	        	tb.board_name , 
-	        	tb.board_regdate ,
+	        	date_format(tb.board_regdate, '%Y-%m-%d') as board_regdate , 
 	        	tb.board_readcount ,  
-	        	(select mem_aka from tcc_member tm where tm.mem_idx = tb.mem_idx) as mem_name , 
+                (select mem_aka from tcc_member tm where tm.mem_idx = tb.mem_idx) as mem_name , 
 	        	(select count(comment_idx) from tcc_comment tc where tc.board_idx = tb.board_idx) as comment_count 
 	        from 
 	        	tcc_board tb
 	        where 
-	        	tb.board_config = 'C' 
-	        	<if test="fkey != ''"> 
-		        	and tb.${fkey} like #{fval} 
+	        	tb.board_config = #{board_config} 
+	        	<if test="fkey != '' and fkey != null">
+                    <choose>
+                        <when test="fkey == 'mem_name'">
+                             AND EXISTS (
+                                SELECT 1 
+                                FROM tcc_member tm 
+                                WHERE tm.mem_idx = tb.mem_idx 
+                                AND tm.mem_aka like concat('%',#{fval},'%')
+                             )
+                        </when>
+                        <otherwise>
+        		             and tb.${fkey} like concat('%',#{fval},'%') 
+                        </otherwise>
+                    </choose>
 	        	</if>
 	        ) ta, 
 	        (
@@ -133,7 +180,16 @@
 		)
     </insert>
 
-	<delete id="deleteCommentByBoardIdx" statementType="PREPARED" parameterType="Map">
+	<delete id="deleteCommentByCommentIdx" statementType="PREPARED" parameterType="Map">
 		delete from tcc_comment where comment_idx = #{comment_idx} 
 	</delete>
+	
+	<delete id="deletePost" statementType="PREPARED" parameterType="Map">
+		delete from tcc_board where board_idx = #{board_idx}
+	</delete>
+	
+	<delete id="deleteCommentByBoardIdx" statementType="PREPARED" parameterType="Map">
+		delete from tcc_comment where board_idx = #{board_idx}
+	</delete>
+	
 </mapper>

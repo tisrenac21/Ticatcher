@@ -39,7 +39,12 @@
     </delete>
     <update id="modifyPost" statementType="PREPARED"
             parameterType="kr.co.ticatcher.vo.BoardVO">
-        update tcc_board set board_name = #{board_name}, board_contents = #{board_contents}, board_attachName = #{board_attachName}, board_attachPath = #{board_attachPath} where board_idx = #{board_idx}
+        update tcc_board set board_name = #{board_name}, board_contents = #{board_contents} 
+        <if test="board_attachPath != null">
+	        , board_attachName = #{board_attachName}, 
+	        board_attachPath = #{board_attachPath}
+        </if>
+         where board_idx = #{board_idx}
     </update>
     <select id="readQNA" statementType="PREPARED"
             parameterType="Map"

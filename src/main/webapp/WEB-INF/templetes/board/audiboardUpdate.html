@@ -4,7 +4,7 @@
       layout:decorate="~{fragments/layout}">
 
 <th:block layout:fragment="mystyle">
-    <link rel="stylesheet" href="static/css/writeCommunity.css">
+    <link rel="stylesheet" href="static/css/audiboardUpdate.css">
 </th:block>
 <th:block layout:fragment="main">
     <div class="container">
@@ -14,19 +14,19 @@
                 <ul>
                     <a href="/community">
                         <li class="left_wrap_btn">
-                            <span class="select_btn">자유게시판</span>
+                            <span>자유게시판</span>
                         </li>
                     </a>
                     <a href="/audiboard">
                         <li class="left_wrap_btn">
-                            <span>오디션 정보</span>
+                            <span class="select_btn">오디션 정보</span>
                         </li>
                     </a>
                 </ul>
             </div>
             <div class="right_wrap">
                 <p class="right_title">
-                    자유게시판
+                    오디션 정보
                 </p>
                 <div class="right_list">
                     <div class="board_box">
@@ -47,7 +47,8 @@
                                                 style="width: 85%; display:block;float: right; border-bottom: 1px solid #e2e2e2; height: 65px; padding: 18px 10px 20px 10px;">
                                             <input type="text" id="inp_title" name="board_name"
                                                    style="width:100%; border:1px solid #e2e2e2; height: 30px; padding: 10px 10px;"
-                                                   placeholder="제목을 입력해주세요.">
+                                                   th:value="${bd.board_name}" placeholder="제목을 입력해주세요.">
+                                        	<input type="hidden" name="board_idx" th:value="${bd.board_idx}">
                                         </td>
                                     </tr>
                                     <tr>
@@ -64,7 +65,7 @@
                                                 style="height: 239px; width: 85%; display:block;float: left; padding: 18px 10px 20px 10px;  border-bottom: 1px solid #e2e2e2;">
                                             <textarea id="inp_txt" name="board_contents" cols="60" rows="5"
                                                       style="width:100%; height: 200px; border:1px solid #e2e2e2; padding: 10px 10px;float: left; vertical-align: top; resize: none;"
-                                                      placeholder="내용을 입력해주세요."></textarea>
+                                                      th:text="${bd.board_contents}" placeholder="내용을 입력해주세요."></textarea>
                                         </td>
                                     </tr>
                                     <tr>
@@ -74,11 +75,12 @@
                                                 첨부 이미지
                                             </label>
                                         </th>
-                                                    <td style="width: 85%; display:block;float: right; height: 65px; padding: 18px 10px 20px 10px;">
+                                        <td style="width: 85%; display:block;float: right; height: 65px; padding: 18px 10px 20px 10px;">
     
 									    <div style="display: flex; align-items: center; gap: 10px;">
 									        <input type="text" id="fileName" class="upload-name" readonly
 									               style="width:80%; border:1px solid #e2e2e2; height: 30px; padding: 10px 10px;"
+									               th:value="${bd.board_attachName}" 
 									               placeholder="선택된 파일 없음">
 									               
 									        <label for="inp_file" style="cursor: pointer; background: #999; color: #fff; padding: 5px 10px; border-radius: 4px; height: 30px; line-height: 20px; font-size: 14px;">
@@ -101,7 +103,7 @@
                 </div>
                 <div>
                     <div id="okbtn" class="write_btn">
-                        등록
+                        수정
                     </div>
                 </div>
             </div>
@@ -125,7 +127,7 @@
             return;
         }
 
-        if (!confirm('게시글을 등록하시겠습니까?')) {
+        if (!confirm('게시글을 수정하시겠습니까?')) {
             return;
         }
 
@@ -133,14 +135,14 @@
 
         formData.append("board_config", "C");
         
-        fetch('/api/board/registerPost', {
+        fetch('/api/board/updateCommunity', {
             method: 'POST',
             body: formData
         })
         .then(async response => {
             if (response.ok) {
-                alert('게시글이 성공적으로 등록되었습니다.');
-                location.href = '/community';
+                alert('게시글을 수정하였습니다.');
+                location.href = '/audiboard';
             } else {
                 const errorMsg = await response.text();
                 alert(errorMsg);
@@ -165,6 +167,7 @@
             fileNameInput.value = ""; 
         }
     }
+    
     </script>
 </th:block>
 </html>

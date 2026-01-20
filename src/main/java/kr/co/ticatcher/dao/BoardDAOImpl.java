@@ -59,10 +59,7 @@ public class BoardDAOImpl implements BoardDAO {
 
 	@Override
 	public BoardVO selectOneBoard(String board_idx) {
-		//조회수 증가
 		sqlSession.update("board.viewBoard", board_idx);
-
-		//본문글 가져오기
 		return sqlSession.selectOne("board.selectOneBoard",board_idx);
 	}
 	@Override
@@ -99,22 +96,14 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
-	public int readCountCommunityBoard(String fkey, String fval) {
-		Map<String, Object> params = new HashMap<String, Object>();
-		
-		params.put("fkey", fkey);
-		params.put("fval", fval);
-		return sqlSession.selectOne("board.selectCountCommunityBoard", params);
+	public int readCountCommunityBoard(Map<String, Object> param) {
+		return sqlSession.selectOne("board.selectCountCommunityBoard", param);
 	}
 
 	@Override
-	public List<BoardVO> readCommunityBoard(String fkey, String fval, int snum) {
+	public List<BoardVO> readCommunityBoard(Map<String, Object> param) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		
-		params.put("fkey", fkey);
-		params.put("fval", fval);
-		params.put("snum", snum);
-		return sqlSession.selectList("board.selectCommunityBoard", params);
+		return sqlSession.selectList("board.selectCommunityBoard", param);
 	}
 
 	@Override
@@ -129,6 +118,14 @@ public class BoardDAOImpl implements BoardDAO {
 
 	@Override
 	public int deleteComment(Map<String, Object> param) {
-		return sqlSession.delete("board.deleteCommentByBoardIdx", param);
+		return sqlSession.delete("board.deleteCommentByCommentIdx", param);
+	}
+
+	@Override
+	public int deletePost(Map<String, Object> param) {
+		int result = 0;
+		result += sqlSession.delete("board.deleteCommentByBoardIdx", param);
+		result += sqlSession.delete("board.deletePost", param);
+		return result;
 	}
 }

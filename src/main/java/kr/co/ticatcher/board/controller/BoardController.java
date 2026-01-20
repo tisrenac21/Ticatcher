@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -149,8 +151,15 @@ public class BoardController {
 		int snum = (cpage - 1) * perPage;
 		int stpgn = ((cpage - 1) / 10) * 10 + 1;
 		
-		model.addAttribute("pages", bsrv.readCountCommunityBoard(fkey, fval));
-		model.addAttribute("data", bsrv.readCommunityBoard(fkey, fval, snum));
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		param.put("fkey", fkey);
+		param.put("fval", fval);
+		param.put("snum", snum);
+		param.put("board_config", "C");
+		
+		model.addAttribute("pages", bsrv.readCountCommunityBoard(param));
+		model.addAttribute("data", bsrv.readCommunityBoard(param));
 		model.addAttribute("stpgn", stpgn);
 		model.addAttribute("fqry", "&fkey=" + fkey + "&fval=" + fval);
 		
@@ -173,6 +182,71 @@ public class BoardController {
 		mv.addObject("bd", bsrv.readOneBoard(board_idx));
 		mv.addObject("comment", bsrv.readComment(board_idx));
 
+		return mv;
+	}
+	
+	@GetMapping("/updateCommunity")
+	public ModelAndView updateCommunity(ModelAndView mv, String board_idx) {
+		mv.setViewName("board/updateCommunity");
+		mv.addObject("bd", bsrv.readOneBoard(board_idx));
+		mv.addObject("comment", bsrv.readComment(board_idx));
+
+		return mv;
+	}
+	
+	@GetMapping("/audiboard")
+	public String audiboard(Model model, String cpg, String fkey, String fval){
+		int perPage = 10;
+		if(cpg == null || cpg.equals("")) {
+			cpg = "1";
+		}
+		
+		if(fkey == null || fkey.equals("")) {
+			fkey = "";
+		}
+		
+		int cpage = Integer.parseInt(cpg);
+		int snum = (cpage - 1) * perPage;
+		int stpgn = ((cpage - 1) / 10) * 10 + 1;
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		param.put("fkey", fkey);
+		param.put("fval", fval);
+		param.put("snum", snum);
+		param.put("board_config", "D");
+		
+		model.addAttribute("pages", bsrv.readCountCommunityBoard(param));
+		model.addAttribute("data", bsrv.readCommunityBoard(param));
+		model.addAttribute("stpgn", stpgn);
+		model.addAttribute("fqry", "&fkey=" + fkey + "&fval=" + fval);
+		
+		return "board/audiboard";
+	}
+	
+	@GetMapping("/audiboardWrite")
+	public String audiboardWrite(HttpSession session, Model model){
+		String returnPage = "redirect:/login";
+		if(session.getAttribute("m") != null){
+			returnPage = "board/audiboardWrite";
+		}
+		return returnPage;
+	}
+	
+	@GetMapping("/audiboardView")
+	public ModelAndView audiboardView(ModelAndView mv, String board_idx, String fkey, String fval) {
+		if (fkey == null) fkey = "";
+		mv.setViewName("board/audiboardView");
+		mv.addObject("bd", bsrv.readOneBoard(board_idx));
+		mv.addObject("comment", bsrv.readComment(board_idx));
+
+		return mv;
+	}
+	
+	@GetMapping("/audiboardUpdate")
+	public ModelAndView audiboardUpdate(ModelAndView mv, String board_idx) {
+		mv.setViewName("board/audiboardUpdate");
+		mv.addObject("bd", bsrv.readOneBoard(board_idx));
 		return mv;
 	}
 	

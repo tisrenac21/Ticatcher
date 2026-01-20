@@ -31,4 +31,9 @@ public class IndexDAOImpl implements IndexDAO {
 	public PriceVO getCheapOfSchedule(long schedule_idx) {
 		return sqlSession.selectOne("index.getCheapOfSchedule", schedule_idx);
 	}
+
+	@Override
+	public List<BoardVO> selectFourPost(String boardConfig) {
+		return sqlSession.selectList("index.selectFourPost", boardConfig);
+	}
 }

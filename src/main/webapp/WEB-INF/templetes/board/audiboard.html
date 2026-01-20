@@ -3,7 +3,7 @@
       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/layout}">
 <th:block layout:fragment="mystyle">
-    <link rel="stylesheet" href="static/css/community.css">
+    <link rel="stylesheet" href="static/css/audiboard.css">
 </th:block>
 <th:block layout:fragment="main">
     <div class="container">
@@ -13,12 +13,12 @@
                 <ul>
                     <a href="/community">
                         <li class="left_wrap_btn">
-                            <span class="select_btn">자유게시판</span>
+                            <span>자유게시판</span>
                         </li>
                     </a>
                     <a href="/audiboard">
                         <li class="left_wrap_btn">
-                            <span>오디션 정보</span>
+                            <span class="select_btn">오디션 정보</span>
                         </li>
                     </a>
                 </ul>
@@ -26,7 +26,7 @@
             
             <div class="right_wrap" th:with="cpg=${(param.cpg == null or #strings.equals(param.cpg,''))? 1: T(java.lang.Integer).parseInt(param.cpg)}">
                 <p class="right_title">
-                    자유게시판
+                    오디션 정보
                 </p>
                 <div class="right_list">
                     <ul class="list_header">
@@ -44,9 +44,8 @@
                                         <li th:text="${data.rownum}"></li>
                                         
                                         <li>
-                                            <a th:href="@{/communityView(board_idx=${data.board_idx})}">
+                                            <a th:href="@{/audiboardView(board_idx=${data.board_idx})}">
                                                 <span th:text="${data.board_name}"></span>
-                                                <span th:if="${data.comment_count > 0}" class="comment_cnt" th:text="'[' + ${data.comment_count} + ']'"></span>
                                             </a>
                                         </li>
                                         
@@ -68,7 +67,7 @@
 
                     <div class="search_write_wrap">
                         <div class="search_area">
-                            <form action="/community" method="get">
+                            <form action="/audiboard" method="get">
                                 <select name="fkey" class="search_select">
 							    <option value="board_name" 
 							            th:selected="${#strings.equals(param.fkey, 'board_name')}">제목</option>
@@ -83,26 +82,26 @@
                                 <button type="submit" class="search_btn">조회</button>
                             </form>
                         </div>
-                        <a th:if="${session.m} != null" href="/communityWrite" class="write-btn">작성</a>
+                        <a th:if="${session.m} != null" href="/audiboardWrite" class="write-btn">작성</a>
                     </div>
 
                     <div class="list_pager">
-                        <a th:if="${cpg > 1}" th:href="@{'/community?cpg=1' + ${fqry}}"><button class="btn_pager first" type="button">처음</button></a>
-                        <a th:if="${cpg > 1}" th:href="@{'/community?cpg=' + ${cpg - 1} + ${fqry}}"><button class="btn_pager prev" type="button">이전</button></a>
+                        <a th:if="${cpg > 1}" th:href="@{'/audiboard?cpg=1' + ${fqry}}"><button class="btn_pager first" type="button">처음</button></a>
+                        <a th:if="${cpg > 1}" th:href="@{'/audiboard?cpg=' + ${cpg - 1} + ${fqry}}"><button class="btn_pager prev" type="button">이전</button></a>
                         <ul>
                             <th:block th:each="i: ${#numbers.sequence(0, 9)}">
                                 <th:block th:if="${(stpgn + i) <= pages}">
                                     <li>
                                         <span th:text="${stpgn + i}" th:if="${cpg == (stpgn + i)}" class="on"></span>
                                         <span th:unless="${cpg == (stpgn + i)}">
-                                            <a th:href="@{/community(cpg=${stpgn+i},fkey=${param.fkey},fval=${param.fval})}">[[${stpgn + i}]]</a>
+                                            <a th:href="@{/audiboard(cpg=${stpgn+i},fkey=${param.fkey},fval=${param.fval})}">[[${stpgn + i}]]</a>
                                         </span>
                                     </li>
                                 </th:block>
                             </th:block>
                         </ul>
-                        <a th:if="${cpg < pages}" th:href="@{'/community?cpg=' + ${cpg + 1} + ${fqry}}"><button class="btn_pager next" type="button">다음</button></a>
-                        <a th:if="${cpg < pages}" th:href="@{'/community?cpg='+${pages} + ${fqry}}"><button class="btn_pager end" type="button">끝</button></a>
+                        <a th:if="${cpg < pages}" th:href="@{'/audiboard?cpg=' + ${cpg + 1} + ${fqry}}"><button class="btn_pager next" type="button">다음</button></a>
+                        <a th:if="${cpg < pages}" th:href="@{'/audiboard?cpg='+${pages} + ${fqry}}"><button class="btn_pager end" type="button">끝</button></a>
                     </div>
                 </div>
             </div>

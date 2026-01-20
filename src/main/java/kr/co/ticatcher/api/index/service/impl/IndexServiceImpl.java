@@ -3,6 +3,7 @@ package kr.co.ticatcher.api.index.service.impl;
 import kr.co.ticatcher.api.index.service.IndexService;
 import kr.co.ticatcher.dao.IndexDAO;
 import kr.co.ticatcher.dao.StageDAO;
+import kr.co.ticatcher.vo.BoardVO;
 import kr.co.ticatcher.vo.PriceVO;
 import kr.co.ticatcher.vo.ScheduleVO;
 import kr.co.ticatcher.vo.StageVO;
@@ -53,5 +54,10 @@ public class IndexServiceImpl implements IndexService{
 	@Override
 	public PriceVO getCheapOfSchedule(long schedule_idx) {
 		return idao.getCheapOfSchedule(schedule_idx);
+	}
+
+	@Override
+	public List<BoardVO> selectFourPost(String boardConfig) {
+		return idao.selectFourPost(boardConfig);
 	}
 }

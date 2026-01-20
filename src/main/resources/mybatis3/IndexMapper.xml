@@ -18,4 +18,25 @@
             resultType="kr.co.ticatcher.vo.PriceVO">
         select * from tcc_price where price_idx = #{price_idx}
     </select>
+    
+    <select id="selectFourPost" resultType="kr.co.ticatcher.vo.BoardVO" parameterType="String">
+		select
+			board_idx , 
+			board_config , 
+			board_conidx , 
+			board_name , 
+			board_contents , 
+			board_attachName , 
+			board_attachPath , 
+			date_format(board_regdate, '%Y.%m.%d') as board_regdate , 
+			board_readcount , 
+			mem_idx 
+		from
+			tcc_board
+		where
+			board_config = #{boardConfig} 
+		order by
+			board_regdate desc
+		limit 4
+    </select>
 </mapper>

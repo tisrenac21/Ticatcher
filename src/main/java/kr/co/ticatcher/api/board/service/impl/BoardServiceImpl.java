@@ -88,13 +88,13 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int readCountCommunityBoard(String fkey, String fval) {
-		return bdao.readCountCommunityBoard(fkey, fval);
+	public int readCountCommunityBoard(Map<String, Object> param) {
+		return bdao.readCountCommunityBoard(param);
 	}
 
 	@Override
-	public List<BoardVO> readCommunityBoard(String fkey, String fval, int snum) {
-		return bdao.readCommunityBoard(fkey, fval, snum);
+	public List<BoardVO> readCommunityBoard(Map<String, Object> param) {
+		return bdao.readCommunityBoard(param);
 	}
 
 	@Override
@@ -110,6 +110,11 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int deleteComment(Map<String, Object> param) {
 		return bdao.deleteComment(param);
+	}
+
+	@Override
+	public int deletePost(Map<String, Object> param) {
+		return bdao.deletePost(param);
 	}
 
 }

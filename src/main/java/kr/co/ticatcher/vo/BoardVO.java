@@ -19,7 +19,7 @@ public class BoardVO {
 	private String board_contents;
 	private String board_attachName;
 	private String board_attachPath;
-	private Date board_regdate;
+	private String board_regdate;
 	private int board_readcount;
 	private long mem_idx;
 	private String mem_name;
