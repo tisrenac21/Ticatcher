@@ -14,7 +14,7 @@
         from 
         	tcc_board 
         where 
-        	board_config='notice'
+        	board_config='A'
         order by 
         	board_conidx desc 
         	limit #{snum}, 10
@@ -23,19 +23,19 @@
     <select id="selectCountNoticeBoard" statementType="PREPARED"
                 parameterType="Map"
                 resultType="int">
-        select ceil(count(board_conidx)/10) pages from tcc_board where board_config='notice' <if test="fkey != ''"> and ${fkey} like #{fval} </if>
+        select ceil(count(board_conidx)/10) pages from tcc_board where board_config='A' <if test="fkey != ''"> and ${fkey} like #{fval} </if>
     </select>
     <select id="selectFAQBoard" statementType="PREPARED"
             parameterType="Map"
             resultType="kr.co.ticatcher.vo.BoardVO">
-        select board_idx, board_conidx, board_name, board_regdate from tcc_board where board_config='FAQ'
+        select board_idx, board_conidx, board_name, board_regdate from tcc_board where board_config='B'
         order by board_conidx desc limit #{snum}, 10
     </select>
 
     <select id="selectCountFAQBoard" statementType="PREPARED"
             parameterType="Map"
             resultType="int">
-        select ceil(count(board_conidx)/10) pages from tcc_board where board_config='FAQ' <if test="fkey != ''"> and ${fkey} like #{fval} </if>
+        select ceil(count(board_conidx)/10) pages from tcc_board where board_config='B' <if test="fkey != ''"> and ${fkey} like #{fval} </if>
     </select>
 
     <update id="viewBoard" statementType="PREPARED"

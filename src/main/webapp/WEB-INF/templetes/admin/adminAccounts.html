@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/adminLayout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/adminAccounts.css">
+</th:block>
+
+<th:block layout:fragment="main">
+    <div id="container">
+        <div class="contents">
+            <div class="right_wrap" th:with="cpg=${(param.cpg == null or #strings.equals(param.cpg,''))? 1: T(java.lang.Integer).parseInt(param.cpg)}">
+                <p class="right_title">
+                    관리자 계정 설정
+                </p>
+                <div class="right_list">
+                    <ul class="list_header">
+                        <li><input type="checkbox" id="checkAll"></li>
+                        <li>아이디</li>
+                        <li>이름</li>
+                        <li>연락처</li>
+                        <li>등급</li>
+                        <li>이메일</li>
+                    </ul>
+                    
+                    <ul class="list_contents">
+                        <table width="100%">
+                            <tbody>
+                            <tr th:if="${adminList == null or #lists.isEmpty(adminList)}">
+                                <td colspan="6" style="text-align: center; padding: 40px 0;">등록된 관리자가 없습니다.</td>
+                            </tr>
+                            
+                            <tr th:each="admin : ${adminList}">
+                                <td valign="top" align="center">
+                                    <div class="row-container">
+                                        <div class="col-check">
+                                            <input class="checkId" type="checkbox" th:value="${admin.admin_id}">
+                                        </div>
+                                        <div class="col-id" style="cursor: pointer;" th:onclick="showAdminInfo([[${admin}]])" th:text="${admin.admin_id}">
+                                        </div>
+                                        <div class="col-name" th:text="${admin.admin_name}"></div>
+                                        <div class="col-tel" th:text="${admin.admin_tel}"></div>
+                                        <div class="col-grade">
+                                            <span th:text="${admin.admin_grade == 'A' ? '최고 관리자' : '일반 관리자'}" 
+                                                  th:style="${admin.admin_grade == 'A' ? 'color:#FEF1AB; font-weight:bold;' : ''}"></span>
+                                        </div>
+                                        <div class="col-email" th:text="${admin.admin_email}"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </ul>
+
+                    <div class="btn_area">
+                        <a id="openRegisterModal">
+                            <div class="write_btn">등록</div>
+                        </a>
+                        <a id="deleteSelectedAdmin">
+                            <div class="write_btn delete_btn">삭제</div>
+                        </a>
+                    </div>
+
+                    <div class="list_pager">
+                        <a th:if="${cpg > 1}" th:href="@{'/admin-accounts?cpg=1'}"><button class="btn_pager first" type="button">처음</button></a>
+                        <a th:if="${cpg > 1}" th:href="@{'/admin-accounts?cpg=' + ${cpg - 1}}"><button class="btn_pager prev" type="button">이전</button></a>
+                        <ul>
+                            <th:block th:each="i: ${#numbers.sequence(0, 9)}">
+                                <th:block th:if="${(stpgn + i) <= pages}">
+                                    <li>
+                                        <span th:text="${stpgn + i}" th:if="${cpg == (stpgn + i)}" class="on"></span>
+                                        <span th:unless="${cpg == (stpgn + i)}">
+                                            <a th:href="@{/admin-accounts(cpg=${stpgn+i})}">[[${stpgn + i}]]</a>
+                                        </span>
+                                    </li>
+                                </th:block>
+                            </th:block>
+                        </ul>
+                        <a th:if="${cpg < pages}" th:href="@{'/admin-accounts?cpg=' + ${cpg + 1}}"><button class="btn_pager next" type="button">다음</button></a>
+                        <a th:if="${cpg < pages}" th:href="@{'/admin-accounts?cpg='+${pages}}"><button class="btn_pager end" type="button">끝</button></a>
+                    </div>
+
+                    <div class="search_area">
+                        <form action="admin-accounts" method="get" id="searchForm">
+                            <select name="fkey" class="search-select">
+                                <option value="admin_id" th:selected="${param.searchType == 'id'}">아이디</option>
+                                <option value="admin_name" th:selected="${param.searchType == 'name'}">이름</option>
+                            </select>
+                            <input type="text" name="fval" class="search-input" placeholder="검색어를 입력하세요" th:value="${param.keyword}">
+                            <button type="submit" class="search-btn">검색</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="modalForInfo" class="modal">
+            <div id="modal-content">
+                <h3 id="modalTitle" style="margin: 0 0 20px 0; color: #FEF1AB; background-color: #111;">관리자 상세 정보</h3>
+                <table class="mypageTable">
+                    <tbody>
+                    <tr>
+                        <th>아이디</th>
+                        <td>
+                            <input type="text" id="modalId" placeholder="아이디 입력">
+                            <input type="hidden" id="modalIdx"> 
+                        </td>
+                    </tr>
+                    <tr id="pwd-info-row" style="display:none;">
+                        <th>비밀번호</th>
+                        <td style="color: #888; font-size: 12px;">초기 비밀번호는 '1234'로 설정됩니다.</td>
+                    </tr>
+                    <tr>
+                        <th>이름</th>
+                        <td><input type="text" id="modalName" placeholder="이름 입력"></td>
+                    </tr>
+                    <tr>
+                        <th>등급</th>
+                        <td>
+                            <select id="modalGrade">
+                                <option value="A">최고 관리자</option>
+                                <option value="B" selected>일반 관리자</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>이메일</th>
+                        <td><input type="email" id="modalEmail" placeholder="example@email.com"></td>
+                    </tr>
+                    <tr>
+                        <th>휴대폰</th>
+                        <td>
+                            <div class="tel-inputs">
+                                <input type="tel" maxlength="3" id="modalTel1">
+                                <span>-</span>
+                                <input type="tel" maxlength="4" id="modalTel2">
+                                <span>-</span>
+                                <input type="tel" maxlength="4" id="modalTel3">
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="modalbtn" id="modalbtn">
+                    <button class="btn-in-modal btn-reset" id="reset-pwd" style="display:none;">비밀번호 초기화</button>
+                    <button class="btn-in-modal btn-edit" id="save-update" style="display:none;">수정</button>
+                    
+                    <button class="btn-in-modal btn-edit" id="save-register" style="display:none;">신규 등록</button>
+                    
+                    <button class="btn-in-modal btn-close" id="close-modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="myscript">
+    <script type="text/javascript">
+        var modalIdx = document.getElementById("modalIdx");
+        var modalId = document.getElementById("modalId");
+        var modalName = document.getElementById("modalName");
+        var modalGrade = document.getElementById("modalGrade");
+        var modalEmail = document.getElementById("modalEmail");
+        var modalTel1 = document.getElementById("modalTel1");
+        var modalTel2 = document.getElementById("modalTel2");
+        var modalTel3 = document.getElementById("modalTel3");
+        var modelForInfo = document.getElementById("modalForInfo");
+        var closeModal = document.getElementById("close-modal");
+        var modalTitle = document.getElementById("modalTitle");
+        
+        var btnResetPwd = document.getElementById("reset-pwd");
+        var btnUpdate = document.getElementById("save-update");
+        var btnRegister = document.getElementById("save-register");
+        var pwdInfoRow = document.getElementById("pwd-info-row");
+
+        closeModal.addEventListener("click", function (){
+            modelForInfo.style.display = 'none'
+        });
+
+        $("#checkAll").click(function() {
+            $(".checkId").prop("checked", this.checked);
+        });
+
+        $("#openRegisterModal").click(function(){
+            modalIdx.value = "";
+            modalId.value = "";
+            modalName.value = "";
+            modalGrade.value = "B";
+            modalEmail.value = "";
+            modalTel1.value = "";
+            modalTel2.value = "";
+            modalTel3.value = "";
+            
+            modalTitle.innerText = "관리자 신규 등록";
+            modalId.disabled = false;
+            modalId.style.backgroundColor = "#222";
+            modalId.style.color = "#fff";
+            
+            btnResetPwd.style.display = "none";
+            btnUpdate.style.display = "none";
+            btnRegister.style.display = "inline-block";
+            pwdInfoRow.style.display = "table-row";
+
+            modelForInfo.style.display = 'block';
+        });
+
+        function showAdminInfo(data){
+            if(data.admin_idx) modalIdx.value = data.admin_idx; 
+            modalId.value = data.admin_id;
+            modalName.value = data.admin_name;
+            modalGrade.value = data.admin_grade;
+            modalEmail.value = data.admin_email;
+
+            let tel = data.admin_tel ? data.admin_tel.replace(/-/g, '') : "";
+            if(tel.length >= 3) modalTel1.value = tel.substr(0, 3);
+            if(tel.length === 11){ 
+                modalTel2.value = tel.substr(3, 4);
+                modalTel3.value = tel.substr(7, 4);
+            } else if(tel.length === 10) { 
+                modalTel2.value = tel.substr(3, 3);
+                modalTel3.value = tel.substr(6, 4);
+            } else {
+                 modalTel1.value = ""; modalTel2.value = ""; modalTel3.value = "";
+            }
+            
+            modalTitle.innerText = "관리자 상세 정보";
+            modalId.disabled = true;
+            modalId.style.backgroundColor = "#333";
+            modalId.style.color = "#999";
+
+            btnResetPwd.style.display = "inline-block";
+            btnUpdate.style.display = "inline-block";
+            btnRegister.style.display = "none";
+            pwdInfoRow.style.display = "none";
+
+            modelForInfo.style.display = 'block';
+        }
+
+        $("#save-register").click(function(){
+            let param = getModalData();
+            if(!param) return;
+
+            if (confirm("새로운 관리자를 등록하시겠습니까?")) {
+            	
+            	console.log(param)
+            	
+                fetch("/api/admin/insertAdmin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(param)
+                })
+                .then(async response => {
+                    if(response.ok) {
+                    	alert("관리자가 신규 등록되었습니다.");
+                    	location.href = "/admin-accounts";
+                    } else {
+                    	const errormsg = await response.text();
+                    	alert(errormsg);
+                    }
+                })
+                .catch(error => {
+                    alert("서버 통신 중 오류가 발생했습니다.");
+                });
+            }
+        });
+        
+        $("#save-update").click(function() {
+            let param = getModalData();
+            if(!param) return;
+            param.admin_idx = modalIdx.value;
+            
+            if (confirm("관리자 정보를 수정하시겠습니까?")) {
+                fetch("/api/admin/uptAdmin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(param)
+                })
+                .then(async response => {
+                	if(response.ok) {
+                		alert("수정이 완료되었습니다.");
+                		location.href = "/admin-accounts";
+                	} else {
+                		const errormsg = await response.text();
+                    	alert(errormsg);
+                	}
+                })
+                .catch(err => {
+                	alert("서버 통신 중 오류가 발생하였습니다.");
+                });
+            }
+        });
+
+        $("#deleteSelectedAdmin").click(function() {
+            const checkedIds = document.querySelectorAll(".checkId:checked");
+            if(checkedIds.length === 0) {
+                alert("삭제할 관리자를 선택해주세요.");
+                return;
+            }
+            const checkedIdList = Array.from(checkedIds).map(cb => cb.value);
+            if(confirm("선택한 관리자를 삭제하시겠습니까?")) {
+                fetch("/api/admin/deleteIdList", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(checkedIdList)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.result === "success") window.location.reload(); 
+                })
+                .catch(error => { console.error("Error:", error); alert("오류 발생"); });
+            };
+        });
+
+        $("#reset-pwd").click(function() {
+            if(confirm("해당 관리자의 비밀번호를 초기화하시겠습니까?")) {
+                fetch("/api/admin/resetPwd", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: $("#modalId").val()
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.result === "success") window.location.reload(); 
+                })
+                .catch(error => { console.error("Error:", error); alert("오류 발생"); });
+            }
+        });
+
+        function getModalData() {
+            var mId = modalId.value;
+            var mName = modalName.value;
+            var mGrade = modalGrade.value;
+            var mEmail = modalEmail.value;
+            var t1 = modalTel1.value;
+            var t2 = modalTel2.value;
+            var t3 = modalTel3.value;
+
+            if(!mId) { alert("아이디를 입력해주세요."); return null; }
+            if(!mName) { alert("이름을 입력해주세요."); return null; }
+            if(!mEmail) { alert("이메일을 입력해주세요."); return null; }
+            if(!t1 || !t2 || !t3) { alert("전화번호를 입력해주세요."); return null; }
+
+            return {
+                "adminId" : mId,
+                "adminName" : mName,
+                "adminGrade" : mGrade,
+                "adminEmail" : mEmail,
+                "adminTel" : t1 + t2 + t3
+            };
+        }
+    </script>
+</th:block>
+</body>
+</html>

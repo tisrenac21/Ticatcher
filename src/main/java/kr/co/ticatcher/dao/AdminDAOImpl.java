@@ -149,5 +149,25 @@ public class AdminDAOImpl implements AdminDAO {
 	public List<MemberVO> readDeleteMember(int snum) {
 		return sqlSession.selectList("admin.readDeleteMember", snum);
 	}
+
+	@Override
+	public int readCountAdminAccount(Map<String, Object> param) {
+		return sqlSession.selectOne("admin.readCountAdminAccount", param);
+	}
+
+	@Override
+	public List<Map<String, Object>> readAdminAccount(Map<String, Object> param) {
+		return sqlSession.selectList("admin.readAdminAccount", param);
+	}
+
+	@Override
+	public int insertAdmin(Map<String, Object> param) {
+		return sqlSession.insert("admin.insertAdmin", param);
+	}
+
+	@Override
+	public int uptAdmin(Map<String, Object> param) {
+		return sqlSession.update("admin.updateAdmin", param);
+	}
 	
 }

@@ -81,7 +81,7 @@ public class AdminController {
 			int cpage = Integer.parseInt(cpg);
 			int snum = (cpage-1) * perPage;
 			int stpgn = ((cpage - 1) / 10) * 10 + 1;
-			String board_config = "notice";
+			String board_config = "A";
 
 			m.addAttribute("pages",asrv.readCountPost(board_config));
 			m.addAttribute("boardList", asrv.readPost(snum, board_config));
@@ -104,7 +104,7 @@ public class AdminController {
 			int cpage = Integer.parseInt(cpg);
 			int snum = (cpage-1) * perPage;
 			int stpgn = ((cpage - 1) / 10) * 10 + 1;
-			String board_config = "FAQ";
+			String board_config = "B";
 
 			m.addAttribute("pages",asrv.readCountPost(board_config));
 			m.addAttribute("boardList", asrv.readPost(snum, board_config));
@@ -175,7 +175,7 @@ public class AdminController {
 	@PostMapping("/writeNotice")
 	public String writeNotice(BoardVO bvo, MultipartFile file) throws IOException {
 		String returnPage = "redirect:/manageNotice";
-		String board_config = "notice";
+		String board_config = "A";
 		bvo.setBoard_conidx((asrv.countConidx(board_config))+1);
 		bvo.setBoard_config(board_config);
 		bvo.setMem_idx(1);
@@ -197,7 +197,7 @@ public class AdminController {
 	@PostMapping("/writeFAQ")
 	public String writeFAQ(BoardVO bvo, MultipartFile file) throws IOException {
 		String returnPage = "redirect:/manageFAQ";
-		String board_config = "FAQ";
+		String board_config = "B";
 		bvo.setBoard_conidx((asrv.countConidx(board_config))+1);
 		bvo.setBoard_config(board_config);
 		bvo.setMem_idx(1);
@@ -473,5 +473,38 @@ public class AdminController {
 
         return "redirect:/manageStageView?stage_idx=" + scheduleDto.getStage_idx();
     }
+	
+	@GetMapping("/admin-accounts")
+	public String adminAccounts(HttpSession session, Model model, String cpg, String fkey, String fval){
+		String returnPage = "redirect:/admin";
+		if(session.getAttribute("admin") != null){
+			int perPage = 10;
+			if (cpg == null || cpg.equals("")) cpg = "1";
+			int cpage = Integer.parseInt(cpg);
+			if(fkey == null || fkey == "") {
+				fkey = "";
+			}
+			if(fval == null || fval == "") {
+				fkey = "";
+				fval = "";
+			}
+			int snum = (cpage-1) * perPage;
+			int stpgn = ((cpage - 1) / 10) * 10 + 1;
+			
+			Map<String, Object> param = new HashMap<String, Object>();
+			
+			param.put("fkey", fkey);
+			param.put("fval", fval);
+			param.put("snum", snum);
+			
+			model.addAttribute("pages",asrv.readCountAdminAccount(param));
+			model.addAttribute("adminList", asrv.readAdminAccount(param));
+			model.addAttribute("stpgn", stpgn);
+
+			returnPage = "admin/adminAccounts";
+		}
+
+		return returnPage;
+	}
 	
 }

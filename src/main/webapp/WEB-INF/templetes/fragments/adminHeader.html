@@ -40,17 +40,17 @@
 							<span class="menu_span">회원 관리</span>
 						</a>
 					</li>
-					<li>
+					<!-- <li>
 						<a href="#">
 							<span class="menu_span">수익 관리</span>
 						</a>
-					</li>
-					<li th:if="${session.admin.getAdmin_grade() == 'super'}">
-						<a href="#">
-							<span class="menu_span">관리자 관리</span>
+					</li> -->
+					<li th:if="${session.admin.getAdmin_grade() == 'A'}">
+						<a href="/admin-accounts">
+							<span class="menu_span">관리자 설정</span>
 						</a>
 					</li>
-					<li th:if="${session.admin.getAdmin_grade() == 'super'}">
+					<li th:if="${session.admin.getAdmin_grade() == 'A'}">
 						<a href="#">
 							<span class="menu_span">공연장 관리</span>
 						</a>

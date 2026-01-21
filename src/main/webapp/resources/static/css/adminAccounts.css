@@ -1,0 +1,411 @@
+/* adminAccounts.css */
+
+/* 기본 폰트 및 설정 */
+p {
+	font-size: 20px;
+}
+
+/* 왼쪽 메뉴 영역 (유지) */
+.left_wrap {
+	float: left;
+	width: 150px;
+	padding-left: 10px;
+}
+
+.left_wrap p {
+	padding-bottom: 10px;
+	border-bottom: 1px solid #e2e2e2;
+}
+
+.left_wrap_btn {
+	margin: 10px 0;
+}
+
+.left_wrap_btn span {
+	color: rgba(255, 255, 255, 0.85);
+}
+
+.left_wrap_btn:hover span {
+	color: #FEF1AB;
+}
+
+.select_btn {
+	color: #FEF1AB !important;
+}
+
+/* =======================================================
+   오른쪽 컨텐츠 영역 수정
+   전체 980px 중 왼쪽 160px 제외하고 약 810~820px 공간 활용
+   ======================================================= */
+.right_wrap {
+	padding-left: 10px;
+}
+
+.right_list {
+	margin-top: 15px;
+}
+
+/* 리스트 헤더 스타일 (Flexbox) */
+.list_header {
+	display: flex;
+	text-align: center;
+	border-radius: 4px 4px 0 0;
+}
+
+.list_header li {
+	padding: 12px 0;
+	color: rgb(129, 129, 129);
+	font-weight: bold;
+	font-size: 14px;
+	background: #272727;
+}
+
+/*   컬럼 너비 : 970px */
+.list_header li:nth-child(1), .col-check {
+	width: 70px;
+}
+
+.list_header li:nth-child(2), .col-id {
+	width: 160px;
+}
+
+.list_header li:nth-child(3), .col-name {
+	width: 140px;
+}
+
+.list_header li:nth-child(4), .col-tel {
+	width: 180px;
+}
+
+.list_header li:nth-child(5), .col-grade {
+	width: 120px;
+}
+
+.list_header li:nth-child(6), .col-email {
+	width: 300px;
+}
+
+.list_contents {
+	width: 100%;
+	border-bottom: 1px solid #333;
+}
+
+.list_contents td {
+	border-bottom: 1px solid #333;
+	padding: 0;
+}
+
+.row-container {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	padding: 12px 0;
+	text-align: center;
+	color: #fff;
+}
+
+.row-container:hover, .row-container:hover div {
+	background-color: #1a1a1a;
+}
+
+.col-email {
+	word-break: break-all;
+	padding: 0 5px;
+	font-size: 13px;
+	color: #ccc;
+}
+
+.col-id {
+	font-weight: 500;
+}
+
+.col-id:hover {
+	color: #FEF1AB;
+	text-decoration: underline;
+}
+
+.btn_area {
+	margin-top: 15px;
+	overflow: hidden;
+}
+
+.write_btn {
+	width: 90px;
+	height: 35px;
+	background: #FEF1AB;
+	border-radius: 4px;
+	font-size: 14px;
+	text-align: center;
+	line-height: 35px;
+	color: #333;
+	float: right;
+	margin-left: 10px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: background 0.2s;
+}
+
+.write_btn:hover {
+	background: #e6da9a;
+}
+
+.delete_btn {
+	background: #444;
+	color: #fff;
+}
+
+.delete_btn:hover {
+	background: #d32f2f;
+	color: #fff;
+}
+
+.list_pager {
+	text-align: center;
+	margin-top: 30px;
+	clear: both;
+}
+
+.list_pager ul {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.list_pager li {
+	display: inline-block;
+	padding: 0 5px;
+	line-height: 35px;
+}
+
+.list_pager li a {
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 14px;
+}
+
+.list_pager li a:hover, .on {
+	color: #FEF1AB !important;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+/* 페이징 버튼 (이미지 대신 텍스트/CSS로 깔끔하게 처리 추천하나 기존 스타일 유지) */
+.btn_pager {
+	display: inline-block;
+	width: 50px;
+	height: 35px;
+	background-color: #222;
+	border: 1px solid #444;
+	color: #fff;
+	cursor: pointer;
+	border-radius: 4px;
+	margin: 0 2px;
+}
+
+.btn_pager:hover {
+	border-color: #FEF1AB;
+	color: #FEF1AB;
+}
+
+/* 검색 영역 */
+.search_area {
+	clear: both;
+	text-align: center;
+	margin-top: 30px;
+	padding-top: 20px;
+	border-top: 1px solid #333;
+}
+
+.search-select {
+	height: 38px;
+	padding: 0 10px;
+	border: 1px solid #555;
+	background: #111;
+	color: #fff;
+	border-radius: 4px;
+	vertical-align: middle;
+}
+
+.search-input {
+	height: 38px;
+	width: 250px;
+	padding: 0 10px;
+	border: 1px solid #555;
+	background: #111;
+	color: #fff;
+	border-radius: 4px;
+	vertical-align: middle;
+	margin: 0 5px;
+}
+
+.search-btn {
+	height: 38px;
+	padding: 0 20px;
+	border: none;
+	background: #555;
+	color: #fff;
+	border-radius: 4px;
+	cursor: pointer;
+	vertical-align: middle;
+	font-weight: bold;
+	transition: background 0.2s;
+}
+
+.search-btn:hover {
+	background: #FEF1AB;
+	color: #333;
+}
+
+/* =======================================================
+   모달 스타일
+   ======================================================= */
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 2000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.75);
+	backdrop-filter: blur(3px);
+}
+
+#modal-content {
+	position: relative;
+	margin: 8% auto;
+	padding: 30px 40px;
+	border: 1px solid #444;
+	background-color: #111;
+	width: 480px;
+	max-width: 90%;
+	border-radius: 8px;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.9);
+	color: #eee;
+	animation: fadeIn 0.3s ease-out;
+}
+
+@
+keyframes fadeIn {from { opacity:0;
+	transform: translateY(-30px);
+}
+
+to {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+}
+.mypageTable {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 25px;
+}
+
+.mypageTable th {
+	text-align: left;
+	padding: 12px 5px;
+	color: #FEF1AB;
+	font-weight: 600;
+	width: 90px;
+	vertical-align: middle;
+	font-size: 14px;
+}
+
+.mypageTable td {
+	padding: 8px 0;
+}
+
+/* 모달 인풋 스타일 */
+.mypageTable input[type="text"], .mypageTable input[type="email"],
+	.mypageTable input[type="tel"], .mypageTable select {
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid #444;
+	background-color: #222;
+	color: #fff;
+	border-radius: 4px;
+	box-sizing: border-box;
+	font-size: 14px;
+	transition: all 0.2s;
+}
+
+.mypageTable input:focus, .mypageTable select:focus {
+	border-color: #FEF1AB;
+	outline: none;
+	background-color: #000;
+}
+
+/* 비활성화된 아이디 입력창 */
+#modalId:disabled {
+	background-color: #333 !important;
+	color: #999 !important;
+	border-color: #444;
+	cursor: not-allowed;
+}
+
+.tel-inputs {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.tel-inputs input {
+	text-align: center;
+}
+
+.tel-inputs span {
+	color: #666;
+}
+
+.modalbtn {
+	background-color: #111;
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	border-top: 1px solid #333;
+	padding-top: 25px;
+}
+
+.btn-in-modal {
+	padding: 9px 18px;
+	border: none;
+	border-radius: 4px;
+	font-size: 13px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.btn-edit {
+	background-color: #FEF1AB;
+	color: #333;
+}
+
+.btn-edit:hover {
+	background-color: #e6da9a;
+}
+
+/* 초기화 버튼 (약간 다른 색상) */
+.btn-reset {
+	background-color: #555;
+	color: #fff;
+	margin-right: auto; /* 왼쪽 정렬 */
+}
+
+.btn-reset:hover {
+	background-color: #777;
+}
+
+.btn-close {
+	background-color: #333;
+	color: #ccc;
+	border: 1px solid #444;
+}
+
+.btn-close:hover {
+	background-color: #444;
+	color: #fff;
+}
+
+.mypageTable th, td {
+	background-color: #111;
+}

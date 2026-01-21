@@ -238,4 +238,24 @@ public class AdminServiceImpl implements AdminService {
 	public List<MemberVO> readDeleteMember(int snum) {
 		return adao.readDeleteMember(snum);
 	}
+
+	@Override
+	public int readCountAdminAccount(Map<String, Object> param) {
+		return adao.readCountAdminAccount(param);
+	}
+
+	@Override
+	public List<Map<String, Object>> readAdminAccount(Map<String, Object> param) {
+		return adao.readAdminAccount(param);
+	}
+
+	@Override
+	public int insertAdmin(Map<String, Object> param) {
+		return adao.insertAdmin(param);
+	}
+
+	@Override
+	public int uptAdmin(Map<String, Object> param) {
+		return adao.uptAdmin(param);
+	}
 }

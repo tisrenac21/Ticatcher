@@ -31,4 +31,8 @@ public interface AdminService {
     List<Map<String, Object>> getFullSchedule(long stage_idx);
 	int readCountDeleteMember();
 	List<MemberVO> readDeleteMember(int snum);
+	int readCountAdminAccount(Map<String, Object> param);
+	List<Map<String, Object>> readAdminAccount(Map<String, Object> param);
+	int insertAdmin(Map<String, Object> param);
+	int uptAdmin(Map<String, Object> param);
 }

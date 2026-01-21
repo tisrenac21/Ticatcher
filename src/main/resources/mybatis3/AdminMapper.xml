@@ -205,5 +205,60 @@
             resultType="kr.co.ticatcher.vo.MemberVO">
         select * from tcc_member where mem_del_yn = 'Y' order by mem_idx desc limit #{snum}, 10
     </select>
+    
+    <select id="readCountAdminAccount" resultType="int" parameterType="Map">
+		select
+			ceil(count(admin_idx)/ 10) pages
+		from
+			tcc_admin
+		<if test='fval != ""'>
+			where 
+				${fkey} like concat ('%',#{fval},'%') 
+		</if> 
+    </select>
+    
+    <select id="readAdminAccount" resultType="Map" parameterType="Map">
+		select
+			*
+		from
+			tcc_admin
+		<if test='fval != ""'>
+			where 
+				${fkey} like concat ('%',#{fval},'%')
+		</if> 
+		order by
+			admin_idx desc
+		limit #{snum}, 10
+    </select>
+    
+    <insert id="insertAdmin" parameterType="Map">
+		insert into tcc_admin(
+			admin_id , 
+			admin_pw , 
+			admin_tel , 
+			admin_name , 
+			admin_grade , 
+			admin_email 
+		) values (
+			#{adminId} , 
+			'1234' , 
+			#{adminTel} , 
+			#{adminName} , 
+			#{adminGrade} , 
+			#{adminEmail}
+		)
+    </insert>
+    
+    <update id="updateAdmin" parameterType="Map">
+    	UPDATE 
+    		TCC_ADMIN 
+    	SET 
+    		ADMIN_TEL = #{adminTel} ,
+    		ADMIN_NAME = #{adminName} , 
+    		ADMIN_GRADE = #{adminGrade} , 
+    		ADMIN_EMAIL = #{adminEmail} 
+    	WHERE 
+    		ADMIN_ID = #{adminId} 
+    </update>
 
 </mapper>
