@@ -26,7 +26,7 @@ public class IndexController {
 	public String index(Model model) {
 		List<StageVO> newStage = isrv.getNewStage();
 		model.addAttribute("stages", newStage);
-		model.addAttribute("notice", isrv.selectFourPost("notice"));
+		model.addAttribute("notice", isrv.selectFourPost("A"));
 		model.addAttribute("community", isrv.selectFourPost("C"));
 		model.addAttribute("audiboard", isrv.selectFourPost("D"));
 		return "index";

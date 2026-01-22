@@ -1,6 +1,8 @@
 package kr.co.ticatcher.admin.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,44 @@ public class AdminAPIController {
 		} catch(Exception e) {
 			log.error("Unexpected error in [{}]. Caused by: [{}].", "uptAdmin", e.getClass().getSimpleName());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 중 오류가 발생했습니다.");
+		}
+	}
+	
+	@PostMapping("/deleteAdmin")
+	public ResponseEntity<?> deleteAdmin(@RequestBody List<String> param) {
+		try {
+			if(asrv.deleteAdmin(param) > 0) {
+				return ResponseEntity.ok("success");
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 중 오류가 발생했습니다.");
+			}
+		} catch(Exception e) {
+			log.error("Unexpected error in [{}]. Caused by: [{}].", "deleteAdmin", e.getClass().getSimpleName());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 중 오류가 발생했습니다.");
+		}
+	}
+	
+	@PostMapping("/resetPwd")
+	public ResponseEntity<Map<String, Object>> resetPwd(@RequestBody String admin_id) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			if(asrv.resetPwd(admin_id) > 0) {
+				result.put("result", "success");
+				result.put("message", admin_id + " 관리자의 비밀번호를 초기화 했습니다.");
+				
+				return ResponseEntity.ok(result);
+			} else {
+				result.put("result", "fail");
+				result.put("message", "비밀번호 초기화 중 오류가 발생했습니다.");
+                
+                return ResponseEntity.ok(result);
+			}
+		} catch (Exception e) {
+			log.error("Unexpected error in [{}]. Caused by: [{}].", "resetPwd", e.getClass().getSimpleName());
+			result.put("result", "fail");
+			result.put("message", "비밀번호 초기화 중 오류가 발생했습니다.");
+            
+            return ResponseEntity.ok(result);
 		}
 	}
 	

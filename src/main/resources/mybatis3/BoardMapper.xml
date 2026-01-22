@@ -55,7 +55,8 @@
 			board_attachName ,
 			board_attachPath ,
 			date_format(board_regdate, '%Y-%m-%d') as board_regdate , 
-			board_readcount mem_idx
+			board_readcount , 
+			mem_idx
 		from
 			tcc_board
 		where

@@ -258,4 +258,24 @@ public class AdminServiceImpl implements AdminService {
 	public int uptAdmin(Map<String, Object> param) {
 		return adao.uptAdmin(param);
 	}
+
+	@Override
+	public int deleteAdmin(List<String> param) {
+		return adao.deleteAdmin(param);
+	}
+
+	@Override
+	public int resetPwd(String admin_id) {
+		return adao.resetPwd(admin_id);
+	}
+
+	@Override
+	public int readCountTheater() {
+		return adao.readCountTheater();
+	}
+
+	@Override
+	public List<Map<String, Object>> readTheater(int snum) {
+		return adao.readTheater(snum);
+	}
 }

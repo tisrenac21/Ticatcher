@@ -110,7 +110,7 @@
                     </tr>
                     <tr id="pwd-info-row" style="display:none;">
                         <th>비밀번호</th>
-                        <td style="color: #888; font-size: 12px;">초기 비밀번호는 '1234'로 설정됩니다.</td>
+                        <td style="color: #888; font-size: 12px;">초기 비밀번호는 admin 계정의 비밀번호로 설정됩니다.</td>
                     </tr>
                     <tr>
                         <th>이름</th>
@@ -300,17 +300,23 @@
             }
             const checkedIdList = Array.from(checkedIds).map(cb => cb.value);
             if(confirm("선택한 관리자를 삭제하시겠습니까?")) {
-                fetch("/api/admin/deleteIdList", {
+                fetch("/api/admin/deleteAdmin", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(checkedIdList)
                 })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    if (data.result === "success") window.location.reload(); 
+                .then(async response => {
+                	if(response.ok) {
+                		alert("삭제를 완료했습니다.");
+                		location.href = "/admin-accounts";
+                	} else {
+                		const errmsg = await response.text();
+                		alert(errmsg)
+                	}
                 })
-                .catch(error => { console.error("Error:", error); alert("오류 발생"); });
+                .catch(error => { 
+                	alert("서버 통신 중 오류가 발생하였습니다.");
+                });
             };
         });
 

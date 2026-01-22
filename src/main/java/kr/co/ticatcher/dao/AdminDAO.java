@@ -37,4 +37,8 @@ public interface AdminDAO {
 	List<Map<String, Object>> readAdminAccount(Map<String, Object> param);
 	int insertAdmin(Map<String, Object> param);
 	int uptAdmin(Map<String, Object> param);
+	int deleteAdmin(List<String> param);
+	int resetPwd(String admin_id);
+	int readCountTheater();
+	List<Map<String, Object>> readTheater(int snum);
 }

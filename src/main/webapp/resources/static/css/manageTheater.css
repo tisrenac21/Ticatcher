@@ -1,0 +1,189 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox  */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+
+/* --- 기존 레이아웃 스타일 (이전과 동일) --- */
+.full_wrap { width: 100%; padding: 0 10px; }
+.page_header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #FEF1AB; padding-bottom: 10px; }
+.page_header h2 { font-size: 24px; font-weight: bold; color: #fff; }
+.header_right_group { display: flex; align-items: center; gap: 15px; }
+
+/* 검색창 */
+.search_box_wrap { display: flex; align-items: center; background: #222; border: 1px solid #555; border-radius: 4px; padding: 2px; }
+.search_select { background: #222; color: #fff; border: none; padding: 5px; outline: none; font-size: 13px; border-right: 1px solid #555; cursor: pointer; }
+.search_input { background: transparent; border: none; color: #fff; padding: 5px 10px; width: 180px; outline: none; font-size: 14px; }
+.btn_search { background: #555; color: #fff; border: none; padding: 6px 12px; cursor: pointer; font-size: 13px; border-radius: 2px; transition: background 0.2s; }
+.btn_search:hover { background: #FEF1AB; color: #000; }
+
+/* 신규 등록 버튼 */
+.btn_register {
+    display: inline-block;
+    padding: 8px 20px;
+    background: #FEF1AB;
+    color: #333 !important;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    transition: all 0.3s;
+    cursor: pointer;
+    font-size: 14px;
+}
+.btn_register:hover { background: #fff; color: #000 !important; }
+
+/* 리스트 스타일 */
+.theater_list_container { width: 100%; border-top: 1px solid #555; }
+.list_header, .list_row { display: flex; align-items: center; border-bottom: 1px solid #333; }
+.list_header { font-weight: bold; height: 50px; }
+.list_header .col { color: #FEF1AB; text-align: center; }
+.list_row { padding: 15px 0; transition: background 0.2s; }
+.list_row:hover { background: rgba(254, 241, 171, 0.05); }
+
+/* 컬럼 스타일 */
+.col_idx { flex: 0 0 60px; text-align: center; color: #888; }
+.col_region { flex: 0 0 140px; text-align: center; }
+.region_badge { display: inline-block; padding: 2px 8px; background: #333; border-radius: 4px; font-size: 13px; color: #ddd; }
+.col_name { flex: 1; padding: 0 15px; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.theater_link { color: #fff; font-size: 16px; font-weight: 500; cursor: pointer; }
+.theater_link:hover { color: #FEF1AB; text-decoration: underline; }
+.col_year { flex: 0 0 100px; text-align: center; color: #ccc; }
+.col_hall { flex: 0 0 100px; text-align: center; color: #fff; }
+.col_audience { flex: 0 0 120px; text-align: right; padding-right: 20px; color: #FEF1AB; font-family: sans-serif; }
+
+/* 페이징 (기존 스타일) */
+.list_pager { text-align: center; margin-top: 30px; }
+.list_pager ul { display: inline-block; vertical-align: middle; }
+.list_pager li { display: inline-block; padding: 0 5px; }
+.list_pager li a, .list_pager li span { display: block; min-width: 30px; height: 30px; line-height: 30px; color: #888; }
+.list_pager li a:hover, .list_pager li .on { color: #FEF1AB !important; font-weight: bold; text-decoration: none; }
+.btn_pager { display: inline-block; width: 61px; height: 35px; background: url(../img/btn_pager.gif) no-repeat; border: 1px solid #555; cursor: pointer; vertical-align: middle; }
+.btn_pager.first { background-position: 12px -125px; width: 40px; }
+.btn_pager.prev { background-position: 2px -21px; }
+.btn_pager.next { background-position: calc(100% - 2px) -73px; }
+.btn_pager.end { background-position: 12px -176px; width: 40px; }
+.no_data { justify-content: center; padding: 50px 0; color: #777; }
+
+/* ========================================== */
+/* [팝업(모달) 스타일] 추가된 부분 */
+/* ========================================== */
+.hidden { display: none !important; }
+
+.modal_layer {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal_dimmed {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+.modal_content {
+    position: relative;
+    z-index: 2;
+    background: #222;
+    width: 500px;
+    padding: 30px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.modal_content div, h3, label, #theaterForm {
+	background: #222;
+}
+
+.modal_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 15px;
+}
+
+.modal_header h3 {
+    color: #FEF1AB;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.btn_close {
+    background: transparent;
+    border: none;
+    color: #888;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn_close:hover { color: #fff; }
+
+.modal_body { margin-bottom: 25px; }
+
+.form_group { margin-bottom: 15px; }
+.form_group label { display: block; color: #ccc; margin-bottom: 5px; font-size: 13px; }
+.form_group input {
+    width: 100%;
+    background: #333;
+    border: 1px solid #555;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    outline: none;
+}
+.form_group input:focus { border-color: #FEF1AB; }
+
+.form_group_row { display: flex; gap: 10px; }
+.form_group.half { flex: 1; }
+
+.modal_footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn_submit {
+    width: 100%;
+    padding: 12px;
+    background: #FEF1AB;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn_submit:hover { background: #fff; }
+
+.btn_delete {
+    padding: 12px;
+    background: #d32f2f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn_delete:hover { background: #ff5252; }
+
+#modalLayer {
+	background: none;
+}

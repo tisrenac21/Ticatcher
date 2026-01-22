@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/adminLayout}">
+
+<th:block layout:fragment="mystyle">
+    <link rel="stylesheet" href="static/css/manageTheater.css">
+</th:block>
+
+<th:block layout:fragment="main">
+    <div class="container">
+        <div class="contents">
+
+            <div class="full_wrap" th:with="cpg=${(param.cpg == null or #strings.equals(param.cpg,''))? 1: T(java.lang.Integer).parseInt(param.cpg)}">
+
+                <div class="page_header">
+                    <h2>공연장 관리</h2>
+                    <div class="header_right_group">
+                        <form action="/manageTheater" method="get" class="search_box_wrap">
+                            <select name="searchType" class="search_select">
+                                <option value="theater_name">공연장명</option>
+                                <option value="theater_addr">주소(지역)</option>
+                            </select>
+                            <input type="text" name="keyword" class="search_input" placeholder="검색어 입력">
+                            <button type="submit" class="btn_search">검색</button>
+                        </form>
+                        <button type="button" class="btn_register">신규 공연장 등록</button>
+                    </div>
+                </div>
+
+                <div class="theater_list_container">
+                    <div class="list_header">
+                        <div class="col col_idx">번호</div>
+                        <div class="col col_region">지역</div>
+                        <div class="col col_name">공연장 이름</div>
+                        <div class="col col_year">개관연도</div>
+                        <div class="col col_hall">공연장 수</div>
+                        <div class="col col_audience">총 관객수</div>
+                    </div>
+
+                    <div class="list_body">
+                        <div class="list_row no_data" th:if="${#lists.isEmpty(theaterList)}">
+                            <div class="col" style="width:100%;">등록된 공연장이 없습니다.</div>
+                        </div>
+
+                        <th:block th:each="theater : ${theaterList}">
+                            <div class="list_row">
+                                <div class="col col_idx" th:text="${theater.theater_idx}"></div>
+                                
+                                <div class="col col_region">
+                                    <span class="region_badge" th:text="${theater.theater_sido} + ' ' + ${theater.theater_gugun}"></span>
+                                </div>
+                                
+                                <div class="col col_name">
+                                    <a href="javascript:void(0);" class="theater_link"
+                                       th:text="${theater.theater_name}"
+                                       th:data-idx="${theater.theater_idx}"
+                                       th:data-name="${theater.theater_name}"
+                                       th:data-year="${theater.theater_year}"
+                                       th:data-hall="${theater.theater_hallcount}"
+                                       th:data-audience="${theater.theater_audience}"
+                                       th:data-addr="${theater.theater_addr}"
+                                       th:data-sido="${theater.theater_sido}"
+                                       th:data-gugun="${theater.theater_gugun}"
+                                       onclick="openModal('edit', this)">
+                                    </a>
+                                </div>
+                                
+                                <div class="col col_year" th:text="${theater.theater_year} + '년'"></div>
+                                <div class="col col_hall" th:text="${theater.theater_hallcount} + '개관'"></div>
+                                <div class="col col_audience" th:text="${#numbers.formatInteger(theater.theater_audience, 0, 'COMMA')} + '석'"></div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+
+                <div class="list_pager">
+                   <a th:if="${cpg > 1}" th:href="@{'/manageTheater?cpg=1'}"><button class="btn_pager first" type="button"></button></a>
+                   <a th:if="${cpg > 1}" th:href="@{'/manageTheater?cpg=' + ${cpg - 1}}"><button class="btn_pager prev" type="button"></button></a>
+                   <ul>
+                       <th:block th:each="i: ${#numbers.sequence(0, 9)}">
+                           <th:block th:if="${(stpgn + i) <= pages}">
+                               <li>
+                                   <span th:text="${stpgn + i}" th:if="${cpg == (stpgn + i)}" class="on"></span>
+                                   <span th:unless="${cpg == (stpgn + i)}">
+                                       <a th:href="@{/manageTheater(cpg=${stpgn+i})}">[[${stpgn + i}]]</a>
+                                   </span>
+                               </li>
+                           </th:block>
+                       </th:block>
+                   </ul>
+                   <a th:if="${cpg < pages}" th:href="@{'/manageTheater?cpg=' + ${cpg + 1}}"><button class="btn_pager next" type="button"></button></a>
+                   <a th:if="${cpg < pages}" th:href="@{'/manageTheater?cpg='+${pages}}"><button class="btn_pager end" type="button"></button></a>
+                </div>
+
+            </div> </div> </div> <div id="modalLayer" class="modal_layer hidden">
+        <div class="modal_content">
+            <div class="modal_header">
+                <h3 id="modalTitle">공연장 등록</h3>
+                <button type="button" class="btn_close" onclick="closeModal()">X</button>
+            </div>
+            
+            <form id="theaterForm" action="/saveTheater" method="post">
+                <input type="hidden" id="theater_idx" name="theater_idx" value="0">
+                
+                <div class="modal_body">
+                    <div class="form_group">
+                        <label for="theater_name">공연장 이름</label>
+                        <input type="text" id="theater_name" name="theater_name" placeholder="예: 예술의 전당" required>
+                    </div>
+
+                    <div class="form_group_row">
+                        <div class="form_group half">
+                            <label for="theater_year">개관연도</label>
+                            <input type="number" id="theater_year" name="theater_year" placeholder="YYYY" required>
+                        </div>
+                        <div class="form_group half">
+                            <label for="theater_hallcount">공연장 수</label>
+                            <input type="number" id="theater_hallcount" name="theater_hallcount" placeholder="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form_group">
+                         <label for="theater_audience">총 객석 수</label>
+                         <input type="number" id="theater_audience" name="theater_audience" placeholder="0" required>
+                    </div>
+                    
+                    <div class="form_group_row">
+                        <div class="form_group half">
+                            <label for="theater_sido">시/도</label>
+                            <input type="text" id="theater_sido" name="theater_sido" placeholder="예: 서울" required>
+                        </div>
+                        <div class="form_group half">
+                            <label for="theater_gugun">구/군</label>
+                            <input type="text" id="theater_gugun" name="theater_gugun" placeholder="예: 서초구" required>
+                        </div>
+                    </div>
+
+                    <div class="form_group">
+                        <label for="theater_addr">상세 주소</label>
+                        <input type="text" id="theater_addr" name="theater_addr" placeholder="전체 주소 입력">
+                    </div>
+                </div>
+
+                <div class="modal_footer">
+                    <button type="submit" id="btnSave" class="btn_submit">등록하기</button>
+                    
+                    <div id="editBtnGroup" class="hidden" style="width: 100%; display: flex; gap: 10px;">
+                        <button type="submit" class="btn_submit" style="flex: 2;">수정 저장</button>
+                        <button type="button" class="btn_delete" style="flex: 1;" onclick="deleteTheater()">삭제</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal_dimmed" onclick="closeModal()"></div>
+    </div>
+
+</th:block>
+
+<th:block layout:fragment="myscript">
+    <script th:inline="javascript">
+        // 팝업 열기 (mode: 'register' or 'edit')
+        function openModal(mode, element) {
+            const modal = document.getElementById('modalLayer');
+            const form = document.getElementById('theaterForm');
+            const title = document.getElementById('modalTitle');
+            const btnSave = document.getElementById('btnSave');
+            const editGroup = document.getElementById('editBtnGroup');
+
+            // 폼 초기화
+            form.reset();
+            document.getElementById('theater_idx').value = "0";
+
+            modal.classList.remove('hidden');
+
+            if (mode === 'register') {
+                title.innerText = "신규 공연장 등록";
+                form.action = "/registerTheaterAction"; // 등록 처리 URL
+                
+                btnSave.classList.remove('hidden'); // 등록 버튼 보이기
+                editGroup.classList.add('hidden'); // 수정/삭제 그룹 숨기기
+                
+            } else if (mode === 'edit') {
+                title.innerText = "공연장 정보 수정";
+                form.action = "/updateTheaterAction"; // 수정 처리 URL
+
+                btnSave.classList.add('hidden'); // 등록 버튼 숨기기
+                editGroup.classList.remove('hidden'); // 수정/삭제 그룹 보이기
+                editGroup.style.display = 'flex'; // flex 속성 강제 적용
+
+                // 데이터 채워넣기 (data-* 속성 활용)
+                document.getElementById('theater_idx').value = element.getAttribute('data-idx');
+                document.getElementById('theater_name').value = element.getAttribute('data-name');
+                document.getElementById('theater_year').value = element.getAttribute('data-year');
+                document.getElementById('theater_hallcount').value = element.getAttribute('data-hall');
+                document.getElementById('theater_audience').value = element.getAttribute('data-audience');
+                document.getElementById('theater_sido').value = element.getAttribute('data-sido');
+                document.getElementById('theater_gugun').value = element.getAttribute('data-gugun');
+                document.getElementById('theater_addr').value = element.getAttribute('data-addr');
+            }
+        }
+
+        // 팝업 닫기
+        function closeModal() {
+            document.getElementById('modalLayer').classList.add('hidden');
+        }
+
+        // 삭제 로직
+        function deleteTheater() {
+            const idx = document.getElementById('theater_idx').value;
+            if (confirm("정말로 이 공연장 정보를 삭제하시겠습니까?")) {
+                // 삭제 처리 URL로 이동
+                location.href = '/deleteTheaterAction?theater_idx=' + idx;
+            }
+        }
+        
+        $(".btn_register").off("click").on("click", function() {
+        	openModal('register');
+        })
+    </script>
+</th:block>
+</html>

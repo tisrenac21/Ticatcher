@@ -16,7 +16,15 @@
     <select id="readPost" statementType="PREPARED"
             parameterType="Map"
             resultType="kr.co.ticatcher.vo.BoardVO">
-        select board_idx, board_conidx, board_name, board_regdate from tcc_board where board_config=#{board_config}
+        select 
+        	board_idx, 
+        	board_conidx, 
+        	board_name, 
+        	date_format(board_regdate, '%Y-%m-%d') as board_regdate
+        from 
+        	tcc_board 
+        where 
+        	board_config = #{board_config}
         order by board_conidx desc limit #{snum}, 10
     </select>
     <select id="readOnePost" statementType="PREPARED"
@@ -241,7 +249,7 @@
 			admin_email 
 		) values (
 			#{adminId} , 
-			'1234' , 
+			'ticatcher1234!' , 
 			#{adminTel} , 
 			#{adminName} , 
 			#{adminGrade} , 
@@ -260,5 +268,29 @@
     	WHERE 
     		ADMIN_ID = #{adminId} 
     </update>
+    
+    <delete id="deleteAdmin" parameterType="java.util.List">
+		DELETE FROM TCC_ADMIN WHERE ADMIN_ID IN 
+ 		<foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    
+    <update id="resetPwd" parameterType="String">
+		update
+			tcc_admin 
+		set
+			admin_pw = 'ticatcher1234!'
+		where
+			admin_id = #{admin_id} 
+    </update>
+    
+    <select id="selectCountTheater" statementType="PREPARED" resultType="int">
+    	select ceil(count(theater_idx )/ 10) pages from tcc_theater
+    </select>
+    
+    <select id="selectTheaterList" statementType="PREPARED" parameterType="int" resultType="Map">
+		select * from tcc_theater order by theater_idx desc limit #{snum}, 10
+    </select>
 
 </mapper>

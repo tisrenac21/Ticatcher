@@ -159,6 +159,8 @@
 				</div>
 				<div>
 					<a class="btn_list" href="/community">목록</a>
+					<input type="hidden" id="dd" th:value="${bd.mem_idx}">
+					<input type="hidden" id="gg" th:value="${session.m.mem_idx}">
 					<a th:if="${session.m?.mem_idx != null && bd.mem_idx == session.m.mem_idx}" th:href="@{'/updateCommunity?board_idx='+${bd.board_idx}}" id="updateBtn" class="btn_list">수정</a>
 					<a th:if="${session.m?.mem_idx != null && bd.mem_idx == session.m.mem_idx}" id="deleteBtn" class="btn_list">삭제</a>
 				</div>

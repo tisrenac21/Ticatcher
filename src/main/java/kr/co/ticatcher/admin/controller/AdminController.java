@@ -507,4 +507,24 @@ public class AdminController {
 		return returnPage;
 	}
 	
+
+	@GetMapping("/manageTheater")
+	public String manageTheater(HttpSession session, Model model, String cpg){
+		String returnPage = "redirect:/admin";
+		if(session.getAttribute("admin") != null){
+			int perPage = 10;
+			if (cpg == null || cpg.equals("")) cpg = "1";
+			int cpage = Integer.parseInt(cpg);
+			int snum = (cpage-1) * perPage;
+			int stpgn = ((cpage - 1) / 10) * 10 + 1;
+
+			model.addAttribute("pages", asrv.readCountTheater());
+			model.addAttribute("theaterList", asrv.readTheater(snum));
+			model.addAttribute("stpgn", stpgn);
+
+			returnPage = "admin/manageDeleteMember";
+		}
+		return "admin/manageTheater";
+	}
+	
 }
